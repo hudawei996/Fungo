@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" filepath="$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidRepertory.iml" filepath="$PROJECT_DIR$/AndroidRepertory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" filepath="$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidUtils/androidutils.iml" filepath="$PROJECT_DIR$/AndroidUtils/androidutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidWidght/AndroidWidght.iml" filepath="$PROJECT_DIR$/AndroidWidght/AndroidWidght.iml" />
+    </modules>
+  </component>
+</project>
