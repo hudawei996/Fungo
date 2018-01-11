@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/AndroidBaseLib" />
             <option value="$PROJECT_DIR$/AndroidSimple" />
             <option value="$PROJECT_DIR$/AndroidUtils" />
-            <option value="$PROJECT_DIR$/AndroidWidght" />
+            <option value="$PROJECT_DIR$/AndroidWidget" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

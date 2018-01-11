@@ -1,13 +1,23 @@
 package com.pinger.repertory;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+import com.pinger.baselib.base.BaseActivity;
+import com.pinger.repertory.widget.CustomWidgetActivity;
+
+public class MainActivity extends BaseActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayoutResID() {
+        return R.layout.activity_main;
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_widget:
+                startActivity(CustomWidgetActivity.class);
+                break;
+        }
     }
 }

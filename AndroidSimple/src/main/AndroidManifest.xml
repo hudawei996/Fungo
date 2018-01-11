@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".widget.CustomWidgetActivity" />
+        <activity android:name=".widget.CustomViewActivity" />
+        <activity android:name=".widget.FallingViewActivity" />
     </application>
 
 </manifest>

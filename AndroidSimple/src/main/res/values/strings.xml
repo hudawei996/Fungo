@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AndroidRepertory</string>
+    <string name="widget_view_falling_snow">雪花飘落效果</string>
+    <string name="widget_view_custom">自定义View</string>
+    <string name="widget_custom">自定义控件</string>
 </resources>

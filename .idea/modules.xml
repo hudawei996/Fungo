@@ -3,10 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" filepath="$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidRepertory.iml" filepath="$PROJECT_DIR$/AndroidRepertory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AndroidRepertory.iml" filepath="$PROJECT_DIR$/.idea/AndroidRepertory.iml" />
+      <module fileurl="file://D:\Develop\Project\AndroidRepertory\AndroidRepertory.iml" filepath="D:\Develop\Project\AndroidRepertory\AndroidRepertory.iml" />
       <module fileurl="file://$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" filepath="$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidUtils/androidutils.iml" filepath="$PROJECT_DIR$/AndroidUtils/androidutils.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidWidght/AndroidWidght.iml" filepath="$PROJECT_DIR$/AndroidWidght/AndroidWidght.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidUtils/AndroidUtils.iml" filepath="$PROJECT_DIR$/AndroidUtils/AndroidUtils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidWidget/AndroidWidght.iml" filepath="$PROJECT_DIR$/AndroidWidget/AndroidWidght.iml" />
     </modules>
   </component>
 </project>
