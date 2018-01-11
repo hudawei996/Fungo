@@ -4,6 +4,8 @@ import android.view.View;
 
 import com.pinger.baselib.base.BaseActivity;
 import com.pinger.repertory.R;
+import com.pinger.repertory.widget.banner.BannerViewActivity;
+import com.pinger.repertory.widget.falling.FallingViewActivity;
 
 /**
  * @author Pinger
@@ -19,7 +21,7 @@ public class CustomViewActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        setActionBar(getString(R.string.widget_view_custom),true);
+        setActionBar(getString(R.string.widget_view_custom), true);
     }
 
 
@@ -27,6 +29,9 @@ public class CustomViewActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_falling:
                 startActivity(FallingViewActivity.class);
+                break;
+            case R.id.btn_banner:
+                startActivity(BannerViewActivity.class);
                 break;
         }
     }

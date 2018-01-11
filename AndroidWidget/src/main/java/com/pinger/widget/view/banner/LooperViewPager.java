@@ -1,4 +1,4 @@
-package com.pinger.widght.banner;
+package com.pinger.widget.view.banner;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

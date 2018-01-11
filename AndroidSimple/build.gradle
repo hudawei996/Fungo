@@ -29,5 +29,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':AndroidBaseLib')
     compile project(':AndroidUtils')
-    compile project(':AndroidWidght')
+    compile project(':AndroidWidget')
 }

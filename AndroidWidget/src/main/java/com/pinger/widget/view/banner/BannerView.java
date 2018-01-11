@@ -1,4 +1,4 @@
-package com.pinger.widght.banner;
+package com.pinger.widget.view.banner;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,11 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-import com.pinger.widght.R;
-import com.pinger.widght.banner.holder.BannerHolderCreator;
-import com.pinger.widght.banner.holder.BannerViewHolder;
-import com.pinger.widght.banner.transformer.CoverModeTransformer;
-import com.pinger.widght.banner.transformer.ScaleYTransformer;
+import com.pinger.widget.R;
+import com.pinger.widget.view.banner.holder.BannerHolderCreator;
+import com.pinger.widget.view.banner.holder.BannerViewHolder;
+import com.pinger.widget.view.banner.transformer.CoverModeTransformer;
+import com.pinger.widget.view.banner.transformer.ScaleYTransformer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

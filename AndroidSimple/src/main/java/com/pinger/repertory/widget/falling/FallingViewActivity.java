@@ -1,4 +1,4 @@
-package com.pinger.repertory.widget;
+package com.pinger.repertory.widget.falling;
 
 import com.pinger.baselib.base.BaseActivity;
 import com.pinger.repertory.R;

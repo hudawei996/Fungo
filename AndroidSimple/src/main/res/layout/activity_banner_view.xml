@@ -3,10 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.pinger.widght.banner.BannerView
+    <com.pinger.widget.view.banner.BannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
-
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.pinger.widght.banner.holder;
+package com.pinger.widget.view.banner.holder;
 
 /**
  * @author pinger

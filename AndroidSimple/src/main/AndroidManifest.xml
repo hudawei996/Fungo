@@ -18,8 +18,8 @@
         </activity>
         <activity android:name=".widget.CustomWidgetActivity" />
         <activity android:name=".widget.CustomViewActivity" />
-        <activity android:name=".widget.FallingViewActivity" />
-        <activity android:name=".banner.BannerTestActivity"/>
+        <activity android:name=".widget.falling.FallingViewActivity" />
+        <activity android:name=".widget.banner.BannerViewActivity"/>
     </application>
 
 </manifest>
