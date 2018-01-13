@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">AndroidRepertory</string>
     <string name="widget_view_falling_snow">雪花飘落效果</string>
-    <string name="widget_view_custom">自定义View</string>
     <string name="widget_custom">自定义控件</string>
     <string name="widget_view_banner">Banner效果</string>
+    <string name="recycler_page">功能列表页</string>
+    <string name="recycler_view">RecyclerView</string>
+    <string name="video_player">视频播放器</string>
 </resources>

@@ -9,17 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".widget.CustomWidgetActivity" />
         <activity android:name=".widget.CustomViewActivity" />
         <activity android:name=".widget.falling.FallingViewActivity" />
         <activity android:name=".widget.banner.BannerViewActivity"/>
+        <activity android:name=".recycler.RecyclerViewActivity" />
+        <activity android:name=".recycler.RecyclerPageActivity" />
+        <activity android:name=".player.PlayerMainActivity" />
     </application>
 
 </manifest>

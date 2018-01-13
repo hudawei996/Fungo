@@ -21,7 +21,7 @@ public class CustomViewActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        setActionBar(getString(R.string.widget_view_custom), true);
+        setActionBar(getString(R.string.widget_custom), true);
     }
 
 
