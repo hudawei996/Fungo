@@ -1,5 +1,6 @@
 package com.pinger.repertory.main;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.pinger.baselib.base.BaseActivity;
@@ -10,13 +11,12 @@ import com.pinger.repertory.widget.CustomViewActivity;
 
 public class MainActivity extends BaseActivity {
 
-
     @Override
     protected int getLayoutResID() {
         return R.layout.activity_main;
     }
 
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         switch (view.getId()) {
             case R.id.btn_widget:
                 startActivity(CustomViewActivity.class);
