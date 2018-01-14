@@ -10,7 +10,6 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/AndroidBaseLib" />
             <option value="$PROJECT_DIR$/AndroidSimple" />
-            <option value="$PROJECT_DIR$/AndroidUtils" />
             <option value="$PROJECT_DIR$/AndroidWidget" />
           </set>
         </option>

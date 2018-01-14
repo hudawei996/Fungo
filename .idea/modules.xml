@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" filepath="$PROJECT_DIR$/AndroidBaseLib/AndroidBaseLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/AndroidRepertory.iml" filepath="$PROJECT_DIR$/AndroidRepertory.iml" />
       <module fileurl="file://$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" filepath="$PROJECT_DIR$/AndroidSimple/AndroidSimple.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidUtils/AndroidUtils.iml" filepath="$PROJECT_DIR$/AndroidUtils/AndroidUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/AndroidWidget/AndroidWidget.iml" filepath="$PROJECT_DIR$/AndroidWidget/AndroidWidget.iml" />
     </modules>
   </component>

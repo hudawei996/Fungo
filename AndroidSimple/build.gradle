@@ -24,8 +24,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':AndroidBaseLib')
-    compile project(':AndroidUtils')
     compile project(':AndroidWidget')
 
     compile rootProject.ext.dependencies.appcompat_v7
