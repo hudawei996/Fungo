@@ -1,1 +1,1 @@
-include ':AndroidSimple', ':AndroidBaseLib', ':AndroidWidget'
+include ':sample', ':baselib', ':widget'
