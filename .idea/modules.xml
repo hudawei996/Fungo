@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/baselib/AndroidBaseLib.iml" filepath="$PROJECT_DIR$/baselib/AndroidBaseLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/AndroidRepertory.iml" filepath="$PROJECT_DIR$/.idea/AndroidRepertory.iml" />
       <module fileurl="file://$PROJECT_DIR$/AndroidRepertory.iml" filepath="$PROJECT_DIR$/AndroidRepertory.iml" />
-      <module fileurl="file://$PROJECT_DIR$/baselib/AndroidBaseLib.iml" filepath="$PROJECT_DIR$/baselib/AndroidBaseLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/AndroidSimple.iml" filepath="$PROJECT_DIR$/sample/AndroidSimple.iml" />
       <module fileurl="file://$PROJECT_DIR$/widget/AndroidWidget.iml" filepath="$PROJECT_DIR$/widget/AndroidWidget.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baselib/baselib.iml" filepath="$PROJECT_DIR$/baselib/baselib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/widget/widget.iml" filepath="$PROJECT_DIR$/widget/widget.iml" />
     </modules>
   </component>
 </project>
