@@ -57,7 +57,7 @@ class MZBannerView<T> : RelativeLayout {
     private var mIndicatorAlign = 1
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
     private var mBannerPageClickListener: BannerPageClickListener? = null
-    private var mIsMiddlePageCover = true  // 中间Page是否覆盖两边，默认覆盖
+    private var mIsMiddlePageCover = false  // 中间Page是否覆盖两边，默认不覆盖
 
 
     private val mLoopRunnable = object : Runnable {
@@ -67,10 +67,10 @@ class MZBannerView<T> : RelativeLayout {
                 mCurrentItem++
                 if (mCurrentItem == mAdapter.count - 1) {
                     mCurrentItem = 0
-                    mViewPager!!.setCurrentItem(mCurrentItem, false)
+                    mViewPager.setCurrentItem(mCurrentItem, false)
                     mHandler.postDelayed(this, mDelayedTime.toLong())
                 } else {
-                    mViewPager!!.currentItem = mCurrentItem
+                    mViewPager.currentItem = mCurrentItem
                     mHandler.postDelayed(this, mDelayedTime.toLong())
                 }
             } else {
@@ -98,9 +98,9 @@ class MZBannerView<T> : RelativeLayout {
      * @param duration 切换动画时间
      */
     var duration: Int
-        get() = mViewPagerScroller!!.scrollDuration
+        get() = mViewPagerScroller.scrollDuration
         set(duration) {
-            mViewPagerScroller!!.duration = duration
+            mViewPagerScroller.duration = duration
         }
 
     enum class IndicatorAlign {
