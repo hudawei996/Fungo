@@ -6,4 +6,5 @@
     <string name="recycler_page">功能列表页</string>
     <string name="recycler_view">RecyclerView</string>
     <string name="video_player">视频播放器</string>
+    <string name="image_loader">图片加载</string>
 </resources>

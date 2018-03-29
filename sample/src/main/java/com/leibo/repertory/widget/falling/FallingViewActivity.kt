@@ -1,5 +1,6 @@
 package com.leibo.repertory.widget.falling
 
+import android.support.v4.content.ContextCompat
 import com.leibo.baselib.base.BaseActivity
 import com.leibo.baseuilib.view.falling.FallingEntity
 import com.leibo.baseuilib.view.falling.FallingView
@@ -19,7 +20,7 @@ class FallingViewActivity : BaseActivity() {
 
         val fallingView = findViewById<FallingView>(R.id.falling_view)
 
-        val builder = FallingEntity().Builder(resources.getDrawable(R.mipmap.ic_snow))
+        val builder = FallingEntity().Builder(ContextCompat.getDrawable(this, R.mipmap.ic_snow)!!)
         val fallingEntity = builder
                 .setSpeed(7, true)
                 .setSize(50, 50, true)

@@ -3,8 +3,8 @@ package com.leibo.baselib.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
-import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import java.util.*
 
 /**
@@ -17,14 +17,15 @@ object BaseUtils {
 
     private lateinit var mApplication: Application
     private val mActivityList = LinkedList<Activity>()
+    private lateinit var mHandler: Handler
 
     /**
      * 初始化
      */
-    fun init(context: Context) {
-        mApplication = context.applicationContext as Application
-        mApplication.registerActivityLifecycleCallbacks(mCallbacks)
-
+    fun init(application: Application) {
+        mApplication = application
+        mHandler = Handler()
+        //registerCallback()
     }
 
     /**
@@ -56,38 +57,53 @@ object BaseUtils {
         return mActivityList
     }
 
+
     /**
      * Activity生命周期回调
      */
-    private val mCallbacks = object : Application.ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, bundle: Bundle) {
-            setTopActivity(activity)
-        }
+    private fun registerCallback() {
+        mApplication.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, bundle: Bundle) {
+                setTopActivity(activity)
+            }
 
-        override fun onActivityStarted(activity: Activity) {
-            setTopActivity(activity)
-        }
+            override fun onActivityStarted(activity: Activity) {
+                setTopActivity(activity)
+            }
 
-        override fun onActivityResumed(activity: Activity) {
-            setTopActivity(activity)
-        }
+            override fun onActivityResumed(activity: Activity) {
+                setTopActivity(activity)
+            }
 
-        override fun onActivityPaused(activity: Activity) {
+            override fun onActivityPaused(activity: Activity) {
 
-        }
+            }
 
-        override fun onActivityStopped(activity: Activity) {
+            override fun onActivityStopped(activity: Activity) {
 
-        }
+            }
 
-        override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
 
-        }
+            }
 
-        override fun onActivityDestroyed(activity: Activity) {
-            mActivityList.remove(activity)
-        }
+            override fun onActivityDestroyed(activity: Activity) {
+                mActivityList.remove(activity)
+            }
+        })
     }
 
+    fun post(runnable: Runnable) {
+        mHandler.removeCallbacks(null)
+        mHandler.post(runnable)
+    }
 
+    fun postDelayed(runnable: Runnable, delayMillis: Long) {
+        mHandler.removeCallbacks(null)
+        mHandler.postDelayed(runnable, delayMillis)
+    }
+
+    fun removeCallbacks() {
+        mHandler.removeCallbacks(null)
+    }
 }

@@ -1,5 +1,6 @@
 package org.fungo.baselib.image
 
+import android.graphics.Color
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
@@ -9,174 +10,117 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
  *
  * 图片加载库的相关配置
  */
-class ImageConfiguration(builder: ImageConfiguration.Builder) {
-
-    companion object {
-        const val CENTER_CROP = 0      // 圆形图片
-        const val CENTER_FITXY = 1     // 填充图片
-    }
-
-    private var isCrossFade = true            // 是否淡入淡出动画
-    private var crossDuration = 2000        // 淡入淡出动画持续的时间
-
-    private var placeHolderResId = 0        // 默认占位资源
-    private var errorResId = 0              // 错误时显示的资源
-
-    private var size: OverrideSize? = null   // 图片最终显示在ImageView上的宽高度像素
-    private var cropType = CENTER_CROP       // 裁剪类型,默认为中部裁剪
-
-    private var asGif: Boolean = false       // Gif模式加载
-    private var asBitmap: Boolean = true     // 常规图片加载
-    private var skipMemoryCache: Boolean = false                    // 内存缓存
-    private var diskCacheStrategy: DiskCache = DiskCache.AUTOMATIC  // 硬盘缓存
-    private var priority: LoadPriority = LoadPriority.HIGH
-    private var thumbnail: Float = 0.8f
-    private var thumbnailUrl: String? = null
-
-    private var isCircleTransform: Boolean = false   // 圆形展示
-    private var isRoundTransform: Boolean = false    // 圆角展示
-    private var isGrayScaleTransform: Boolean = false// 灰色展示
-    private var isBlurTransform: Boolean = false     // 高斯模糊
-
-
-    init {
-        this.placeHolderResId = builder.placeHolderResId
-        this.errorResId = builder.errorResId
-        this.isCrossFade = builder.isCrossFade
-        this.crossDuration = builder.crossDuration
-        this.size = builder.size
-        this.cropType = builder.cropType
-        this.asGif = builder.asGif
-        this.asBitmap = builder.asBitmap
-        this.skipMemoryCache = builder.skipMemoryCache
-        this.diskCacheStrategy = builder.diskCacheStrategy
-        this.thumbnail = builder.thumbnail
-        this.thumbnailUrl = builder.thumbnailUrl
-        this.priority = builder.priority
-        this.thumbnailUrl = builder.thumbnailUrl
-        this.isBlurTransform = builder.isBlurTransform
-        this.isGrayScaleTransform = builder.isGrayScaleTransform
-        this.isCircleTransform = builder.isCircleTransform
-        this.isRoundTransform = builder.isRoundTransform
-    }
-
-
-    /**
-     * 硬盘缓存策略
-     */
-    enum class DiskCache(strategy: DiskCacheStrategy) {
-        NONE(DiskCacheStrategy.NONE),  // 无缓存
-        AUTOMATIC(DiskCacheStrategy.AUTOMATIC),  // 自动选择
-        RESOURCE(DiskCacheStrategy.RESOURCE),
-        DATA(DiskCacheStrategy.DATA),
-        ALL(DiskCacheStrategy.ALL);
-    }
-
-    /**
-     * 加载优先级策略
-     */
-    enum class LoadPriority(strategy: Priority) {
-        LOW(Priority.LOW),
-        NORMAL(Priority.NORMAL),
-        HIGH(Priority.HIGH),
-        IMMEDIATE(Priority.IMMEDIATE);
-    }
-
+class ImageConfiguration(private val builder: ImageConfiguration.Builder) {
 
     fun parseBuilder(config: ImageConfiguration): Builder {
         val builder = Builder()
-        builder.placeHolderResId = config.placeHolderResId
-        builder.errorResId = config.errorResId
-        builder.isCrossFade = config.isCrossFade
-        builder.crossDuration = config.crossDuration
-        builder.size = config.size
-        builder.cropType = config.cropType
-        builder.asGif = config.asGif
-        builder.asBitmap = config.asBitmap
-        builder.skipMemoryCache = config.skipMemoryCache
-        builder.diskCacheStrategy = config.diskCacheStrategy
-        builder.thumbnail = config.thumbnail
-        builder.thumbnailUrl = config.thumbnailUrl
-        builder.isBlurTransform = config.isBlurTransform
-        builder.isGrayScaleTransform = config.isGrayScaleTransform
-        builder.isCircleTransform = config.isCircleTransform
-        builder.isRoundTransform = config.isRoundTransform
+        builder.placeHolderResId = config.getPlaceHolderResId()
+        builder.errorResId = config.getErrorResId()
+        builder.isCrossFade = config.isCrossFade()
+        builder.size = config.getSize()
+        builder.tag = config.getTag()
+        builder.scaletype = config.getScaleType()
+        builder.asGif = config.isAsGif()
+        builder.asBitmap = config.isAsBitmap()
+        builder.skipMemoryCache = config.isSkipMemoryCache()
+        builder.diskCacheStrategy = config.getDiskCacheStrategy()
+        builder.thumbnail = config.getThumbnail()
+        builder.thumbnailUrl = config.getThumbnailUrl()
+        builder.isCircleTransform = config.isCircleTransform()
+        builder.isBlurTransform = config.isBlurTransform()
+        builder.isGrayScaleTransform = config.isGrayScaleTransform()
+        builder.isRoundTransform = config.isRoundTransform()
+        builder.blurRadius = config.getBlurRadius()
+        builder.roundRadius = config.getRoundRadius()
+        builder.borderColor = config.getBorderColor()
+        builder.borderWidth = config.getBorderWidth()
         return builder
     }
 
     fun getPlaceHolderResId(): Int {
-        return placeHolderResId
+        return builder.placeHolderResId
     }
 
     fun getErrorResId(): Int {
-        return errorResId
+        return builder.errorResId
     }
 
     fun isCrossFade(): Boolean {
-        return isCrossFade
+        return builder.isCrossFade
     }
 
-    fun getCrossFadeDuration(): Int {
-        return crossDuration
-    }
 
     fun getSize(): OverrideSize? {
-        return size
+        return builder.size
     }
 
-    fun getCropType(): Int {
-        return cropType
+    fun getTag(): String? {
+        return builder.tag
+    }
+
+    fun getScaleType(): ScaleType {
+        return builder.scaletype
     }
 
     fun isAsGif(): Boolean {
-        return asGif
+        return builder.asGif
     }
 
     fun isAsBitmap(): Boolean {
-        return asBitmap
+        return builder.asBitmap
     }
 
     fun isSkipMemoryCache(): Boolean {
-        return skipMemoryCache
+        return builder.skipMemoryCache
     }
 
     fun getDiskCacheStrategy(): DiskCache {
-        return diskCacheStrategy
+        return builder.diskCacheStrategy
     }
 
     fun getPriority(): LoadPriority {
-        return priority
+        return builder.priority
     }
 
     fun getThumbnail(): Float {
-        return thumbnail
+        return builder.thumbnail
     }
 
     fun getThumbnailUrl(): String? {
-        return thumbnailUrl
-    }
-
-    fun isBlurTransform(): Boolean {
-        return isBlurTransform
-    }
-
-    fun isGrayScaleTransform(): Boolean {
-        return isGrayScaleTransform
+        return builder.thumbnailUrl
     }
 
     fun isCircleTransform(): Boolean {
-        return isCircleTransform
+        return builder.isCircleTransform
+    }
+
+    fun isBlurTransform(): Boolean {
+        return builder.isBlurTransform
+    }
+
+    fun isGrayScaleTransform(): Boolean {
+        return builder.isGrayScaleTransform
     }
 
     fun isRoundTransform(): Boolean {
-        return isRoundTransform
+        return builder.isRoundTransform
     }
 
+    fun getBlurRadius(): Float {
+        return builder.blurRadius
+    }
 
-    /**
-     * 图片最终显示在ImageView上的宽高像素
-     */
-    class OverrideSize(val width: Int, val height: Int)
+    fun getRoundRadius(): Float {
+        return builder.roundRadius
+    }
+
+    fun getBorderColor(): Int {
+        return builder.borderColor
+    }
+
+    fun getBorderWidth(): Float {
+        return builder.borderWidth
+    }
 
 
     /**
@@ -186,21 +130,27 @@ class ImageConfiguration(builder: ImageConfiguration.Builder) {
         var placeHolderResId = 0
         var errorResId = 0
         var isCrossFade = true
-        var crossDuration = 1200
         var size: OverrideSize? = null
-        var cropType = 0
+        var scaletype = ScaleType.CENTER_CROP
         var asGif: Boolean = false
-        var asBitmap: Boolean = true
+        var asBitmap: Boolean = false
         var skipMemoryCache: Boolean = false
         var diskCacheStrategy = DiskCache.AUTOMATIC
         var priority = LoadPriority.NORMAL
-        var thumbnail: Float = 0.8f
+        var thumbnail: Float = 0f
         var thumbnailUrl: String? = null
+        var tag: String? = null
 
-        var isCircleTransform: Boolean = false   // 圆形展示
+        var isCircleTransform: Boolean = false   // 圆形图片
         var isRoundTransform: Boolean = false    // 圆角展示
         var isGrayScaleTransform: Boolean = false// 灰色展示
         var isBlurTransform: Boolean = false     // 高斯模糊
+
+        var blurRadius: Float = 20f              // 高斯模糊程度
+        var roundRadius: Float = 12f
+        var borderWidth: Float = 0f
+        var borderColor: Int = Color.TRANSPARENT
+
 
         fun setPlaceHolderResId(placeHolderResId: Int): Builder {
             this.placeHolderResId = placeHolderResId
@@ -217,18 +167,13 @@ class ImageConfiguration(builder: ImageConfiguration.Builder) {
             return this
         }
 
-        fun setCrossFadeDuration(crossDuration: Int): Builder {
-            this.crossDuration = crossDuration
-            return this
-        }
-
         fun setSize(size: OverrideSize): Builder {
             this.size = size
             return this
         }
 
-        fun setCropType(cropType: Int): Builder {
-            this.cropType = cropType
+        fun setScaleType(scaleType: ScaleType): Builder {
+            this.scaletype = scaleType
             return this
         }
 
@@ -252,7 +197,12 @@ class ImageConfiguration(builder: ImageConfiguration.Builder) {
             return this
         }
 
-        fun setPrioriy(priority: LoadPriority): Builder {
+        fun setTag(tag: String?): Builder {
+            this.tag = tag
+            return this
+        }
+
+        fun setPriority(priority: LoadPriority): Builder {
             this.priority = priority
             return this
         }
@@ -264,12 +214,6 @@ class ImageConfiguration(builder: ImageConfiguration.Builder) {
 
         fun setThumbnailUrl(thumbnailUrl: String): Builder {
             this.thumbnailUrl = thumbnailUrl
-            return this
-        }
-
-
-        fun isCircleTransform(isCircleTransform: Boolean): Builder {
-            this.isCircleTransform = isCircleTransform
             return this
         }
 
@@ -288,11 +232,70 @@ class ImageConfiguration(builder: ImageConfiguration.Builder) {
             return this
         }
 
+        fun isCircleTransform(isCircleTransform: Boolean): Builder {
+            this.isCircleTransform = isCircleTransform
+            return this
+        }
+
+        fun setBlurRadius(blurRadius: Float): Builder {
+            this.blurRadius = blurRadius
+            return this
+        }
+
+        fun setRoundRadius(roundRadius: Float): Builder {
+            this.roundRadius = roundRadius
+            return this
+        }
+
+        fun setBorderColor(borderColor: Int): Builder {
+            this.borderColor = borderColor
+            return this
+        }
+
+        fun setBorderWidth(borderWidth: Float): Builder {
+            this.borderWidth = borderWidth
+            return this
+        }
 
         fun build(): ImageConfiguration {
             return ImageConfiguration(this)
         }
     }
 
+    /**
+     * 图片最终显示在ImageView上的宽高像素
+     */
+    class OverrideSize(val width: Int, val height: Int)
 
+
+    /**
+     * 硬盘缓存策略
+     */
+    enum class DiskCache(val strategy: DiskCacheStrategy) {
+        NONE(DiskCacheStrategy.NONE),  // 无缓存
+        AUTOMATIC(DiskCacheStrategy.AUTOMATIC),  // 自动选择
+        RESOURCE(DiskCacheStrategy.RESOURCE),
+        DATA(DiskCacheStrategy.DATA),
+        ALL(DiskCacheStrategy.ALL)
+    }
+
+    /**
+     * 加载优先级策略
+     */
+    enum class LoadPriority(val strategy: Priority) {
+        LOW(Priority.LOW),
+        NORMAL(Priority.NORMAL),
+        HIGH(Priority.HIGH),
+        IMMEDIATE(Priority.IMMEDIATE)
+    }
+
+    /**
+     * 图片裁剪类型
+     */
+    enum class ScaleType {
+        FIT_CENTER,    // 自适应控件, 不剪裁
+        CENTER_CROP,   // 以填满整个控件为目标,等比缩放,超过控件时将被裁剪
+        CENTER_INSIDE, // 以完整显示图片为目标, 不剪裁 ,当显示不下的时候将缩放
+        CIRCLE_CROP    // 圆形裁剪
+    }
 }

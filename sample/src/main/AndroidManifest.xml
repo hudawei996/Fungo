@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.leibo.repertory">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".app.SampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,12 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.leibo.repertory.widget.CustomViewActivity" />
-        <activity android:name="com.leibo.repertory.widget.falling.FallingViewActivity" />
-        <activity android:name="com.leibo.repertory.widget.banner.BannerViewActivity"/>
-        <activity android:name="com.leibo.repertory.recycler.RecyclerViewActivity" />
-        <activity android:name="com.leibo.repertory.recycler.RecyclerPageActivity" />
-        <activity android:name="com.leibo.repertory.player.PlayerMainActivity" />
+        <activity android:name=".widget.CustomViewActivity" />
+        <activity android:name=".widget.falling.FallingViewActivity" />
+        <activity android:name=".widget.banner.BannerViewActivity" />
+        <activity android:name=".recycler.RecyclerViewActivity" />
+        <activity android:name=".recycler.RecyclerPageActivity" />
+        <activity android:name=".player.PlayerMainActivity" />
+        <activity android:name=".image.ImageTestActivity" />
     </application>
 
 </manifest>
