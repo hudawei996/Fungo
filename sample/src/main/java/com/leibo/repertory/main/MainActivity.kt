@@ -21,4 +21,5 @@ class MainActivity : BaseActivity() {
             R.id.btn_image -> startActivity(ImageTestActivity::class.java)
         }
     }
+
 }
