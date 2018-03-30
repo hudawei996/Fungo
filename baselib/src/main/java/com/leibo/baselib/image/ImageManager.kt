@@ -2,7 +2,7 @@ package org.fungo.baselib.image
 
 import android.text.TextUtils
 import android.widget.ImageView
-import com.leibo.baselib.image.ImageModel
+import com.leibo.baselib.image.strategy.ImageModel
 import com.leibo.baseuilib.utils.ViewUtils
 
 /**

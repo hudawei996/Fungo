@@ -1,4 +1,4 @@
-package com.leibo.baselib.image
+package com.leibo.baselib.image.strategy
 
 /**
  * @author Pinger

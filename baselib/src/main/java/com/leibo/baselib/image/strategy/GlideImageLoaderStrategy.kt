@@ -8,8 +8,14 @@ import android.text.TextUtils
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions.withCrossFade
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.leibo.baselib.R
 import com.leibo.baselib.image.transfmer.BlurTransformation
@@ -184,79 +190,136 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         val glideConfig: ImageConfiguration = config ?: defaultConfiguration
 
         try {
-            val options = RequestOptions()
-            val request = Glide.with(context)
-            var builder: RequestBuilder<*>? = null
-
-            // 图片类型
             when {
-                glideConfig.isAsGif() -> builder = request.asGif().load(obj)       // gif加载
-                glideConfig.isAsBitmap() -> builder = request.asBitmap().load(obj) // bitmap加载
-                glideConfig.isCrossFade() -> builder = request.asBitmap().load(obj).transition(withCrossFade())
+                glideConfig.isAsGif() -> {
+                    // gif加载
+                    val gifBuilder = Glide.with(context).asGif().load(obj)
+                    buildGift(glideConfig, gifBuilder, listener)
+                    buildOptions(context, obj, imageView, glideConfig, gifBuilder)
+                }
+                glideConfig.isAsBitmap() -> {
+                    // bitmap加载
+                    val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
+                    buildBitmap(glideConfig, bitmapBuilder, listener)
+                    buildOptions(context, obj, imageView, glideConfig, bitmapBuilder)
+                }
             }
-
-
-            if (builder == null) {
-                listener?.onFail("GlideImageLoaderStrategy：builder is null...")
-                return
-            }
-
-            // 缩放类型
-            when (glideConfig.getScaleType()) {
-                ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
-                ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
-                ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
-                ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
-            }
-
-            // TODO 检查存储权限
-            // 是否跳过内存缓存
-            options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
-
-            // transform
-            when {
-                glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
-                glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
-                glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))
-                glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))
-            }
-
-            options
-                    .priority(glideConfig.getPriority().strategy)      // 优先级
-                    .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
-                    .placeholder(glideConfig.getPlaceHolderResId())    // 占位符
-                    .error(glideConfig.getErrorResId())                // 错误占位符
-                    .fallback(glideConfig.getErrorResId())             // 传入null时占位
-
-            // 图片大小
-            val size = glideConfig.getSize()
-            if (size != null) {
-                options.override(size.width, size.height)
-            }
-
-            // Tag
-            val tag = glideConfig.getTag()
-            if (tag != null) {
-                options.signature(ObjectKey(tag))
-            } else {
-                options.signature(ObjectKey(obj.toString()))
-            }
-
-            // 缩略图大小
-            if (glideConfig.getThumbnail() > 0f) {
-                builder.thumbnail(glideConfig.getThumbnail())
-            }
-
-            // 缩略图请求
-            if (!TextUtils.isEmpty(glideConfig.getThumbnailUrl())) {
-                val thumbnailRequest = Glide.with(context).load(glideConfig.getThumbnailUrl())
-                builder = Glide.with(context).load(obj)
-                builder.thumbnail(thumbnailRequest)
-            }
-            builder.apply(options).into(imageView)
         } catch (e: Exception) {
             listener?.onFail("GlideImageLoaderStrategy：load image exception: " + e.message)
             imageView.setImageResource(glideConfig.getErrorResId())
         }
+    }
+
+
+    /**
+     * 设置bitmap属性
+     */
+    private fun buildBitmap(glideConfig: ImageConfiguration, bitmapBuilder: RequestBuilder<Bitmap>, listener: ImageListener?) {
+        // 渐变展示
+        if (glideConfig.isCrossFade()) {
+            bitmapBuilder.transition(BitmapTransitionOptions.withCrossFade())
+        }
+
+        bitmapBuilder.listener(object : RequestListener<Bitmap> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+                listener?.onFail(e?.message ?: "GlideImageLoaderStrategy：image load fail")
+                return false
+            }
+
+            override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                listener?.onSuccess()
+                return false
+            }
+
+        })
+
+
+    }
+
+
+    /**
+     * 设置Gift属性
+     */
+    private fun buildGift(glideConfig: ImageConfiguration, gifBuilder: RequestBuilder<GifDrawable>, listener: ImageListener?) {
+        // 渐变展示
+        if (glideConfig.isCrossFade()) {
+            gifBuilder.transition(DrawableTransitionOptions.withCrossFade())
+        }
+
+        gifBuilder.listener(object : RequestListener<GifDrawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
+                listener?.onFail(e?.message ?: "GlideImageLoaderStrategy：Gif load fail")
+                return false
+            }
+
+            override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                listener?.onSuccess()
+                return false
+            }
+        })
+    }
+
+
+    /**
+     * 设置图片加载选项并且加载图片
+     */
+    private fun buildOptions(context: Context, obj: Any, imageView: ImageView, glideConfig: ImageConfiguration, requestBuilder: RequestBuilder<*>) {
+        val options = RequestOptions()
+        var builder = requestBuilder
+
+        // 缩放类型
+        when (glideConfig.getScaleType()) {
+            ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
+            ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
+            ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
+            ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
+        }
+
+        // TODO 检查存储权限
+        // 是否跳过内存缓存
+        options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
+
+        // transform
+        when {
+            glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
+            glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
+            glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))
+            glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))
+        }
+
+        options
+                .priority(glideConfig.getPriority().strategy)      // 优先级
+                .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
+                .placeholder(glideConfig.getPlaceHolderResId())    // 占位符
+                .error(glideConfig.getErrorResId())                // 错误占位符
+                .fallback(glideConfig.getErrorResId())             // 传入null时占位
+
+        // 图片大小
+        val size = glideConfig.getSize()
+        if (size != null) {
+            options.override(size.width, size.height)
+        }
+
+        // Tag
+        val tag = glideConfig.getTag()
+        if (tag != null) {
+            options.signature(ObjectKey(tag))
+        } else {
+            options.signature(ObjectKey(obj.toString()))
+        }
+
+
+        // 缩略图大小
+        if (glideConfig.getThumbnail() > 0f) {
+            builder.thumbnail(glideConfig.getThumbnail())
+        }
+
+        // 缩略图请求
+        if (!TextUtils.isEmpty(glideConfig.getThumbnailUrl())) {
+            val thumbnailBuilder = Glide.with(context).load(obj).thumbnail(Glide.with(context).load(glideConfig.getThumbnailUrl()))
+            builder = thumbnailBuilder
+        }
+
+        builder.apply(options).into(imageView)
     }
 }
