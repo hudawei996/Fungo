@@ -25,8 +25,8 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation rootProject.ext.dependencies.kotlin
     api rootProject.ext.dependencies.appcompat_v7
     api rootProject.ext.dependencies.design
-    api rootProject.ext.dependencies.kotlin
 }

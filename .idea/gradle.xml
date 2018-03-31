@@ -9,9 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/baselib" />
-            <option value="$PROJECT_DIR$/basenet" />
             <option value="$PROJECT_DIR$/baseuilib" />
-            <option value="$PROJECT_DIR$/businesslib" />
             <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>

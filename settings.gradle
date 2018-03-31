@@ -1,1 +1,1 @@
-include ':sample', ':baselib', ':baseuilib', ':basenet', ':businesslib'
+include ':sample', ':baselib', ':baseuilib'
