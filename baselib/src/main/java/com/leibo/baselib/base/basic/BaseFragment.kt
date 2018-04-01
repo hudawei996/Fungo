@@ -1,4 +1,4 @@
-package com.leibo.baselib.base
+package com.leibo.baselib.base.basic
 
 import android.app.Fragment
 

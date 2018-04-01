@@ -1,7 +1,7 @@
 package com.leibo.repertory.widget.falling
 
 import android.support.v4.content.ContextCompat
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.baseuilib.view.falling.FallingEntity
 import com.leibo.baseuilib.view.falling.FallingView
 import com.leibo.repertory.R

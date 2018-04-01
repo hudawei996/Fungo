@@ -1,6 +1,6 @@
 package com.leibo.repertory.player
 
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.baselib.player.VideoPlayer
 import com.leibo.repertory.R
 import com.leibo.repertory.player.controller.SimpleVideoPlayerController

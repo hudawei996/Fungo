@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.baseuilib.view.banner.MZBannerView
 import com.leibo.baseuilib.view.banner.holder.MZHolderCreator
 import com.leibo.baseuilib.view.banner.holder.MZViewHolder

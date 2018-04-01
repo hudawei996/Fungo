@@ -1,7 +1,7 @@
 package com.leibo.repertory.main
 
 import android.view.View
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
 import com.leibo.repertory.image.ImageTestActivity
 import com.leibo.repertory.player.PlayerMainActivity

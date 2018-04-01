@@ -1,4 +1,4 @@
-package com.leibo.baselib.base
+package com.leibo.baselib.base.recycler
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
