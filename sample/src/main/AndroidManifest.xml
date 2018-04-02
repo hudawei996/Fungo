@@ -25,7 +25,9 @@
         <activity android:name=".widget.banner.BannerViewActivity" />
         <activity android:name=".recycler.RecyclerViewActivity" />
         <activity android:name=".recycler.RecyclerPageActivity" />
-        <activity android:name=".player.PlayerMainActivity" />
+        <activity
+            android:name=".player.PlayerMainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".image.ImageTestActivity" />
     </application>
 

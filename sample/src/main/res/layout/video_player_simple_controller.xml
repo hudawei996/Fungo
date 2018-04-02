@@ -6,15 +6,14 @@
 
     <!--底图-->
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/ivPlaceImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:visibility="visible" />
+        android:scaleType="fitXY" />
 
     <!--加载动画-->
     <LinearLayout
-        android:id="@+id/loading"
+        android:id="@+id/layoutLoading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -27,7 +26,7 @@
             android:indeterminateDrawable="@drawable/player_loading" />
 
         <TextView
-            android:id="@+id/load_text"
+            android:id="@+id/tvLoadingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -35,9 +34,10 @@
             android:textColor="@android:color/white"
             android:textSize="13sp" />
     </LinearLayout>
-    <!--改变播放位置-->
+
+    <!--横屏拖动位置视图-->
     <LinearLayout
-        android:id="@+id/change_position"
+        android:id="@+id/layoutChangePosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -48,7 +48,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/change_position_current"
+            android:id="@+id/tvChangeCurrentPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
@@ -56,7 +56,7 @@
             android:textSize="28sp" />
 
         <ProgressBar
-            android:id="@+id/change_position_progress"
+            android:id="@+id/pbChangeProgressPosition"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="100dp"
             android:layout_height="2dp"
@@ -65,9 +65,11 @@
             android:max="100"
             android:progressDrawable="@drawable/player_pb_change" />
     </LinearLayout>
-    <!--改变亮度-->
+
+
+    <!--横屏改变亮度视图-->
     <LinearLayout
-        android:id="@+id/change_brightness"
+        android:id="@+id/layoutChangeBrightness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -80,10 +82,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_palyer_brightness" />
+            android:src="@mipmap/ic_player_brightness" />
 
         <ProgressBar
-            android:id="@+id/change_brightness_progress"
+            android:id="@+id/pbChangeProgressBrightness"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="100dp"
             android:layout_height="2dp"
@@ -93,9 +95,11 @@
             android:progressDrawable="@drawable/player_pb_change" />
 
     </LinearLayout>
-    <!--改变声音-->
+
+
+    <!--横屏改变声音视图-->
     <LinearLayout
-        android:id="@+id/change_volume"
+        android:id="@+id/layoutChangeVolume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -111,7 +115,7 @@
             android:src="@mipmap/ic_player_volume" />
 
         <ProgressBar
-            android:id="@+id/change_volume_progress"
+            android:id="@+id/pbChangeProgressVolume"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="100dp"
             android:layout_height="2dp"
@@ -121,9 +125,11 @@
             android:progressDrawable="@drawable/player_pb_change" />
 
     </LinearLayout>
-    <!--播放完成-->
+
+
+    <!--播放完成展示视图-->
     <LinearLayout
-        android:id="@+id/completed"
+        android:id="@+id/layoutPlayerCompleted"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#6c0b0b0b"
@@ -132,7 +138,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/replay"
+            android:id="@+id/tvReplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_player_replay"
@@ -143,20 +149,22 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/share"
+            android:id="@+id/ivShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="64dp"
-            android:drawableLeft="@mipmap/ic_palyer_share"
+            android:drawableLeft="@mipmap/ic_player_share"
             android:drawablePadding="4dp"
             android:padding="8dp"
             android:text="分享"
             android:textColor="@android:color/white"
             android:textSize="13sp" />
     </LinearLayout>
-    <!--播放错误-->
+
+
+    <!--播放错误视图-->
     <LinearLayout
-        android:id="@+id/error"
+        android:id="@+id/layoutError"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
@@ -165,6 +173,7 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/tvErrorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="播放错误，请重试。"
@@ -172,7 +181,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/retry"
+            android:id="@+id/tvErrorRetry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -185,9 +194,11 @@
             android:textColor="@android:color/white"
             android:textSize="13sp" />
     </LinearLayout>
+
+
     <!--顶部控制区-->
     <LinearLayout
-        android:id="@+id/top"
+        android:id="@+id/layoutTopController"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:background="@mipmap/ic_player_mask_top"
@@ -196,14 +207,14 @@
         android:paddingRight="8dp">
 
         <ImageView
-            android:id="@+id/back"
+            android:id="@+id/ivBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@mipmap/ic_player_back"
+            android:src="@mipmap/ic_back"
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -214,7 +225,7 @@
             tools:text="真实死亡游戏“蓝鲸”疑似进入国内，家长们要注意了" />
 
         <LinearLayout
-            android:id="@+id/battery_time"
+            android:id="@+id/layoutTopBatteryTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -222,13 +233,13 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/battery"
+                android:id="@+id/ivTopBattery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_player_battery" />
+                android:src="@mipmap/ic_player_battery_100" />
 
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/tvTopTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
@@ -236,89 +247,73 @@
                 android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
+
+
     <!--底部控制区-->
     <LinearLayout
-        android:id="@+id/bottom"
+        android:id="@+id/layoutBottomController"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_alignParentBottom="true"
         android:background="@mipmap/ic_player_mask_bottom"
-        android:gravity="center_vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:gravity="center_vertical">
 
         <ImageView
-            android:id="@+id/restart_or_pause"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@mipmap/ic_player_start" />
-
-        <TextView
-            android:id="@+id/position"
+            android:id="@+id/ivBottomStartOrPause"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="00:00"
-            android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:layout_height="20dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:src="@mipmap/ic_player_bottom_start" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="/"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/duration"
+            android:id="@+id/tvBottomPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="00:00"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
+
 
         <SeekBar
-            android:id="@+id/seek"
+            android:id="@+id/skBottomSeek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:background="@null"
+            android:focusable="true"
             android:max="100"
-            android:maxHeight="1.5dp"
-            android:minHeight="1.5dp"
+            android:maxHeight="8dp"
+            android:minHeight="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:progressDrawable="@drawable/player_seek_progress"
             android:thumb="@drawable/player_seek_thumb" />
 
+        <TextView
+            android:id="@+id/tvBottomDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
 
         <ImageView
-            android:id="@+id/full_screen"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@mipmap/ic_player_enlarge" />
+            android:id="@+id/ivFullOrShrinkScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:src="@mipmap/ic_player_full" />
     </LinearLayout>
 
-    <!--右下角初始显示的总时长-->
-    <TextView
-        android:id="@+id/length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginRight="8dp"
-        android:padding="4dp"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        tools:text="00:00" />
 
-    <!--中间开始播放按钮-->
+    <!--中间开始播放或者暂停按钮-->
     <ImageView
-        android:id="@+id/center_start"
+        android:id="@+id/ivCenterStartOrPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@mipmap/ic_player_center_start"
-        android:visibility="visible" />
+        android:src="@mipmap/ic_player_center_start" />
 
 </RelativeLayout>

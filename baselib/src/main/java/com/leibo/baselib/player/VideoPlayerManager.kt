@@ -67,7 +67,7 @@ class VideoPlayerManager private constructor() {
     /**
      * 重新播放
      */
-    fun resumeVideoPlayer() {
+    fun restartVideoPlayer() {
         if (mVideoPlayer != null && (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused())) {
             mVideoPlayer!!.restart()
         }
@@ -86,7 +86,7 @@ class VideoPlayerManager private constructor() {
     /**
      * 返回按钮，退出全屏或者退出小窗口模式
      */
-    fun onBackPressd(): Boolean {
+    fun onBackPressed(): Boolean {
         if (mVideoPlayer != null) {
             if (mVideoPlayer!!.isFullScreen()) {
                 return mVideoPlayer!!.exitFullScreen()

@@ -10,12 +10,15 @@ import android.support.annotation.DrawableRes
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.Toast
 import com.leibo.baselib.player.IVideoPlayer
 import com.leibo.baselib.player.VideoHandleUtils
 import com.leibo.baselib.player.VideoPlayer
 import com.leibo.baselib.player.controller.BaseVideoPlayerController
 import com.leibo.repertory.R
+import kotlinx.android.synthetic.main.video_player_simple_controller.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,46 +29,7 @@ import java.util.*
 
 class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(context), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-    private var mImage: ImageView? = null
-    private var mCenterStart: ImageView? = null
     private var mUrl: String? = null
-
-    private var mTop: LinearLayout? = null
-    private var mBack: ImageView? = null
-    private var mTitle: TextView? = null
-    private var mBatteryTime: LinearLayout? = null
-    private var mBattery: ImageView? = null
-    private var mTime: TextView? = null
-
-    private var mBottom: LinearLayout? = null
-    private var mRestartPause: ImageView? = null
-    private var mPosition: TextView? = null
-    private var mDuration: TextView? = null
-    private var mSeek: SeekBar? = null
-    private var mFullScreen: ImageView? = null
-
-    private var mLength: TextView? = null
-
-    private var mLoading: LinearLayout? = null
-    private var mLoadText: TextView? = null
-
-    private var mChangePosition: LinearLayout? = null
-    private var mChangePositionCurrent: TextView? = null
-    private var mChangePositionProgress: ProgressBar? = null
-
-    private var mChangeBrightness: LinearLayout? = null
-    private var mChangeBrightnessProgress: ProgressBar? = null
-
-    private var mChangeVolume: LinearLayout? = null
-    private var mChangeVolumeProgress: ProgressBar? = null
-
-    private var mError: LinearLayout? = null
-    private var mRetry: TextView? = null
-
-    private var mCompleted: LinearLayout? = null
-    private var mReplay: TextView? = null
-    private var mShare: TextView? = null
-
     private var topBottomVisible: Boolean = false
     private var mDismissTopBottomCountDownTimer: CountDownTimer? = null
 
@@ -78,22 +42,22 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         override fun onReceive(context: Context, intent: Intent) {
             val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
                     BatteryManager.BATTERY_STATUS_UNKNOWN)
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-                // 充电中
-                mBattery!!.setImageResource(R.mipmap.ic_player_battery)
-            } else if (status == BatteryManager.BATTERY_STATUS_FULL) {
-                // 充电完成
-                mBattery!!.setImageResource(R.mipmap.ic_player_battery)
-            } else {
-                val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
-                val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0)
-                val percentage = (level.toFloat() / scale * 100).toInt()
-                when {
-//                    percentage <= 10 -> mBattery!!.setImageResource(R.drawable.battery_10)
-//                    percentage <= 20 -> mBattery!!.setImageResource(R.drawable.battery_20)
-//                    percentage <= 50 -> mBattery!!.setImageResource(R.drawable.battery_50)
-//                    percentage <= 80 -> mBattery!!.setImageResource(R.drawable.battery_80)
-                    percentage <= 100 -> mBattery!!.setImageResource(R.mipmap.ic_player_battery)
+            when (status) {
+                BatteryManager.BATTERY_STATUS_CHARGING -> // 充电中
+                    ivTopBattery.setImageResource(R.mipmap.ic_player_brighting)
+                BatteryManager.BATTERY_STATUS_FULL -> // 充电完成
+                    ivTopBattery.setImageResource(R.mipmap.ic_player_battery_100)
+                else -> {
+                    val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
+                    val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0)
+                    val percentage = (level.toFloat() / scale * 100).toInt()
+                    when {
+                        percentage <= 20 -> ivTopBattery?.setImageResource(R.mipmap.ic_player_battery_20)
+                        percentage <= 40 -> ivTopBattery?.setImageResource(R.mipmap.ic_player_battery_40)
+                        percentage <= 60 -> ivTopBattery?.setImageResource(R.mipmap.ic_player_battery_60)
+                        percentage <= 80 -> ivTopBattery?.setImageResource(R.mipmap.ic_player_battery_80)
+                        percentage <= 100 -> ivTopBattery.setImageResource(R.mipmap.ic_player_battery_100)
+                    }
                 }
             }
         }
@@ -101,58 +65,19 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
 
     override fun initView() {
         LayoutInflater.from(mContext).inflate(R.layout.video_player_simple_controller, this, true)
-
-        mCenterStart = findViewById(R.id.center_start)
-        mImage = findViewById(R.id.image)
-
-        mTop = findViewById<View>(R.id.top) as LinearLayout
-        mBack = findViewById<View>(R.id.back) as ImageView
-        mTitle = findViewById<View>(R.id.title) as TextView
-        mBatteryTime = findViewById<View>(R.id.battery_time) as LinearLayout
-        mBattery = findViewById<View>(R.id.battery) as ImageView
-        mTime = findViewById<View>(R.id.time) as TextView
-
-        mBottom = findViewById<View>(R.id.bottom) as LinearLayout
-        mRestartPause = findViewById<View>(R.id.restart_or_pause) as ImageView
-        mPosition = findViewById<View>(R.id.position) as TextView
-        mDuration = findViewById<View>(R.id.duration) as TextView
-        mSeek = findViewById<View>(R.id.seek) as SeekBar
-        mFullScreen = findViewById<View>(R.id.full_screen) as ImageView
-        mLength = findViewById<View>(R.id.length) as TextView
-
-        mLoading = findViewById<View>(R.id.loading) as LinearLayout
-        mLoadText = findViewById<View>(R.id.load_text) as TextView
-
-        mChangePosition = findViewById<View>(R.id.change_position) as LinearLayout
-        mChangePositionCurrent = findViewById<View>(R.id.change_position_current) as TextView
-        mChangePositionProgress = findViewById<View>(R.id.change_position_progress) as ProgressBar
-
-        mChangeBrightness = findViewById<View>(R.id.change_brightness) as LinearLayout
-        mChangeBrightnessProgress = findViewById<View>(R.id.change_brightness_progress) as ProgressBar
-
-        mChangeVolume = findViewById<View>(R.id.change_volume) as LinearLayout
-        mChangeVolumeProgress = findViewById<View>(R.id.change_volume_progress) as ProgressBar
-
-        mError = findViewById<View>(R.id.error) as LinearLayout
-        mRetry = findViewById<View>(R.id.retry) as TextView
-
-        mCompleted = findViewById<View>(R.id.completed) as LinearLayout
-        mReplay = findViewById<View>(R.id.replay) as TextView
-        mShare = findViewById<View>(R.id.share) as TextView
-
-        mCenterStart!!.setOnClickListener(this)
-        mBack!!.setOnClickListener(this)
-        mRestartPause!!.setOnClickListener(this)
-        mFullScreen!!.setOnClickListener(this)
-        mRetry!!.setOnClickListener(this)
-        mReplay!!.setOnClickListener(this)
-        mShare!!.setOnClickListener(this)
-        mSeek!!.setOnSeekBarChangeListener(this)
+        ivCenterStartOrPause.setOnClickListener(this)
+        ivBack.setOnClickListener(this)
+        ivBottomStartOrPause.setOnClickListener(this)
+        ivFullOrShrinkScreen.setOnClickListener(this)
+        tvErrorRetry.setOnClickListener(this)
+        tvReplay.setOnClickListener(this)
+        ivShare.setOnClickListener(this)
+        skBottomSeek.setOnSeekBarChangeListener(this)
         this.setOnClickListener(this)
     }
 
     override fun setTitle(title: String) {
-        mTitle!!.text = title
+        tvTitle?.text = title
     }
 
     override fun setUrl(url: String) {
@@ -160,20 +85,17 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     }
 
     override fun imageView(): ImageView {
-        return mImage!!
+        return ivPlaceImage
     }
 
     override fun setImage(@DrawableRes resId: Int) {
-        mImage!!.setImageResource(resId)
+        ivPlaceImage?.setImageResource(resId)
     }
 
     override fun setImage(imageURl: String) {
         // TODO 加载网络图片
     }
 
-    override fun setLength(length: Long) {
-        mLength!!.text = VideoHandleUtils.formatTime(length)
-    }
 
     override fun setVideoPlayer(videoPlayer: IVideoPlayer) {
         super.setVideoPlayer(videoPlayer)
@@ -188,50 +110,49 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
             VideoPlayer.STATE_IDLE -> {
             }
             VideoPlayer.STATE_PREPARING -> {
-                mImage!!.visibility = View.GONE
-                mLoading!!.visibility = View.VISIBLE
-                mLoadText!!.text = "正在准备..."
-                mError!!.visibility = View.GONE
-                mCompleted!!.visibility = View.GONE
-                mTop!!.visibility = View.GONE
-                mBottom!!.visibility = View.GONE
-                mCenterStart!!.visibility = View.GONE
-                mLength!!.visibility = View.GONE
+                ivPlaceImage?.visibility = View.GONE
+                layoutLoading?.visibility = View.VISIBLE
+                tvLoadingText?.text = "正在准备..."
+                layoutError?.visibility = View.GONE
+                layoutPlayerCompleted?.visibility = View.GONE
+                layoutTopController?.visibility = View.GONE
+                layoutBottomController!!.visibility = View.GONE
+                ivCenterStartOrPause!!.visibility = View.GONE
             }
             VideoPlayer.STATE_PREPARED -> startUpdateProgressTimer()
             VideoPlayer.STATE_PLAYING -> {
-                mLoading!!.visibility = View.GONE
-                mRestartPause!!.setImageResource(R.mipmap.ic_player_pause)
+                layoutLoading?.visibility = View.GONE
+                ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_pause)
                 startDismissTopBottomTimer()
             }
             VideoPlayer.STATE_PAUSED -> {
-                mLoading!!.visibility = View.GONE
-                mRestartPause!!.setImageResource(R.mipmap.ic_player_start)
+                layoutLoading?.visibility = View.GONE
+                ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_start)
                 cancelDismissTopBottomTimer()
             }
             VideoPlayer.STATE_BUFFERING_PLAYING -> {
-                mLoading!!.visibility = View.VISIBLE
-                mRestartPause!!.setImageResource(R.mipmap.ic_player_pause)
-                mLoadText!!.text = "正在缓冲..."
+                layoutLoading?.visibility = View.VISIBLE
+                ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_pause)
+                tvLoadingText?.text = "正在缓冲..."
                 startDismissTopBottomTimer()
             }
             VideoPlayer.STATE_BUFFERING_PAUSED -> {
-                mLoading!!.visibility = View.VISIBLE
-                mRestartPause!!.setImageResource(R.mipmap.ic_player_start)
-                mLoadText!!.text = "正在缓冲..."
+                layoutLoading?.visibility = View.VISIBLE
+                ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_start)
+                tvLoadingText?.text = "正在缓冲..."
                 cancelDismissTopBottomTimer()
             }
             VideoPlayer.STATE_ERROR -> {
                 cancelUpdateProgressTimer()
                 setTopBottomVisible(false)
-                mTop!!.visibility = View.VISIBLE
-                mError!!.visibility = View.VISIBLE
+                layoutTopController!!.visibility = View.VISIBLE
+                layoutError!!.visibility = View.VISIBLE
             }
             VideoPlayer.STATE_COMPLETED -> {
                 cancelUpdateProgressTimer()
                 setTopBottomVisible(false)
-                mImage!!.visibility = View.VISIBLE
-                mCompleted!!.visibility = View.VISIBLE
+                ivPlaceImage?.visibility = View.VISIBLE
+                layoutPlayerCompleted?.visibility = View.VISIBLE
             }
         }
     }
@@ -239,27 +160,27 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     override fun onPlayModeChanged(playMode: Int) {
         when (playMode) {
             VideoPlayer.MODE_NORMAL -> {
-                mBack!!.visibility = View.GONE
-                mFullScreen!!.setImageResource(R.mipmap.ic_player_enlarge)
-                mFullScreen!!.visibility = View.VISIBLE
-                mBatteryTime!!.visibility = View.GONE
+                ivBack?.visibility = View.GONE
+                ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_full)
+                ivFullOrShrinkScreen?.visibility = View.VISIBLE
+                layoutTopBatteryTime?.visibility = View.GONE
                 if (hasRegisterBatteryReceiver) {
                     mContext.unregisterReceiver(mBatterReceiver)
                     hasRegisterBatteryReceiver = false
                 }
             }
             VideoPlayer.MODE_FULL_SCREEN -> {
-                mBack!!.visibility = View.VISIBLE
-                mFullScreen!!.visibility = View.GONE
-                mFullScreen!!.setImageResource(R.mipmap.ic_player_shrink)
-                mBatteryTime!!.visibility = View.VISIBLE
+                ivBack?.visibility = View.VISIBLE
+                ivFullOrShrinkScreen?.visibility = View.GONE
+                ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_shrink)
+                layoutTopBatteryTime?.visibility = View.VISIBLE
                 if (!hasRegisterBatteryReceiver) {
                     mContext.registerReceiver(mBatterReceiver,
                             IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                     hasRegisterBatteryReceiver = true
                 }
             }
-            VideoPlayer.MODE_TINY_WINDOW -> mBack!!.visibility = View.VISIBLE
+            VideoPlayer.MODE_TINY_WINDOW -> ivBack?.visibility = View.VISIBLE
         }
     }
 
@@ -267,23 +188,21 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         topBottomVisible = false
         cancelUpdateProgressTimer()
         cancelDismissTopBottomTimer()
-        mSeek!!.progress = 0
-        mSeek!!.secondaryProgress = 0
+        skBottomSeek?.progress = 0
+        skBottomSeek?.secondaryProgress = 0
 
-        mCenterStart!!.visibility = View.VISIBLE
-        mImage!!.visibility = View.VISIBLE
+        ivCenterStartOrPause?.visibility = View.VISIBLE
+        ivPlaceImage?.visibility = View.VISIBLE
 
-        mBottom!!.visibility = View.GONE
-        mFullScreen!!.setImageResource(R.mipmap.ic_player_enlarge)
+        layoutBottomController?.visibility = View.GONE
+        ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_full)
 
-        mLength!!.visibility = View.VISIBLE
+        layoutTopController?.visibility = View.VISIBLE
+        ivBack?.visibility = View.GONE
 
-        mTop!!.visibility = View.VISIBLE
-        mBack!!.visibility = View.GONE
-
-        mLoading!!.visibility = View.GONE
-        mError!!.visibility = View.GONE
-        mCompleted!!.visibility = View.GONE
+        layoutLoading?.visibility = View.GONE
+        layoutError?.visibility = View.GONE
+        layoutPlayerCompleted?.visibility = View.GONE
     }
 
     /**
@@ -291,35 +210,35 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
      * UI相关的逻辑都尽量到[.onPlayStateChanged]和[.onPlayModeChanged]中处理.
      */
     override fun onClick(v: View) {
-        if (v === mCenterStart) {
+        if (v === ivCenterStartOrPause) {
             if (mVideoPlayer!!.isIdle()) {
                 mVideoPlayer!!.start()
             }
-        } else if (v === mBack) {
+        } else if (v === ivBack) {
             if (mVideoPlayer!!.isFullScreen()) {
                 mVideoPlayer!!.exitFullScreen()
             } else if (mVideoPlayer!!.isTinyWindow()) {
                 mVideoPlayer!!.exitTinyWindow()
             }
-        } else if (v === mRestartPause) {
+        } else if (v === ivBottomStartOrPause) {
             if (mVideoPlayer!!.isPlaying() || mVideoPlayer!!.isBufferingPlaying()) {
                 mVideoPlayer!!.pause()
             } else if (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused()) {
                 mVideoPlayer!!.restart()
             }
-        } else if (v === mFullScreen) {
+        } else if (v === ivFullOrShrinkScreen) {
             if (mVideoPlayer!!.isNormal() || mVideoPlayer!!.isTinyWindow()) {
                 mVideoPlayer!!.enterFullScreen()
             } else if (mVideoPlayer!!.isFullScreen()) {
                 mVideoPlayer!!.exitFullScreen()
             }
-        } else if (v === mRetry) {
+        } else if (v == tvErrorRetry) {
             mVideoPlayer!!.restart()
-        } else if (v === mReplay) {
-            mRetry!!.performClick()
-        } else if (v === mShare) {
+        } else if (v == tvReplay) {
+            tvErrorRetry!!.performClick()
+        } else if (v == ivShare) {
             Toast.makeText(mContext, "分享", Toast.LENGTH_SHORT).show()
-        } else if (v === this) {
+        } else if (v == this) {
             if (mVideoPlayer!!.isPlaying()
                     || mVideoPlayer!!.isPaused()
                     || mVideoPlayer!!.isBufferingPlaying()
@@ -335,8 +254,8 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
      * @param visible true显示，false隐藏.
      */
     private fun setTopBottomVisible(visible: Boolean) {
-        mTop!!.visibility = if (visible) View.VISIBLE else View.GONE
-        mBottom!!.visibility = if (visible) View.VISIBLE else View.GONE
+        layoutTopController?.visibility = if (visible) View.VISIBLE else View.GONE
+        layoutBottomController?.visibility = if (visible) View.VISIBLE else View.GONE
         topBottomVisible = visible
         if (visible) {
             if (!mVideoPlayer!!.isPaused() && !mVideoPlayer!!.isBufferingPaused()) {
@@ -355,7 +274,6 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         if (mDismissTopBottomCountDownTimer == null) {
             mDismissTopBottomCountDownTimer = object : CountDownTimer(8000, 8000) {
                 override fun onTick(millisUntilFinished: Long) {
-
                 }
 
                 override fun onFinish() {
@@ -396,43 +314,43 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         val position = mVideoPlayer!!.getCurrentPosition()
         val duration = mVideoPlayer!!.getDuration()
         val bufferPercentage = mVideoPlayer!!.getBufferPercentage()
-        mSeek!!.secondaryProgress = bufferPercentage
+        skBottomSeek?.secondaryProgress = bufferPercentage
         val progress = (100f * position / duration).toInt()
-        mSeek!!.progress = progress
-        mPosition!!.text = VideoHandleUtils.formatTime(position)
-        mDuration!!.text = VideoHandleUtils.formatTime(duration)
+        skBottomSeek?.progress = progress
+        tvBottomPosition?.text = VideoHandleUtils.formatTime(position)
+        tvBottomDuration?.text = VideoHandleUtils.formatTime(duration)
         // 更新时间
-        mTime!!.text = SimpleDateFormat("HH:mm", Locale.CHINA).format(Date())
+        tvTopTime?.text = SimpleDateFormat("HH:mm", Locale.CHINA).format(Date())
     }
 
     override fun showChangePosition(duration: Long, newPositionProgress: Int) {
-        mChangePosition!!.visibility = View.VISIBLE
+        layoutChangePosition?.visibility = View.VISIBLE
         val newPosition = (duration * newPositionProgress / 100f).toLong()
-        mChangePositionCurrent!!.text = VideoHandleUtils.formatTime(newPosition)
-        mChangePositionProgress!!.progress = newPositionProgress
-        mSeek!!.progress = newPositionProgress
-        mPosition!!.text = VideoHandleUtils.formatTime(newPosition)
+        tvChangeCurrentPosition?.text = VideoHandleUtils.formatTime(newPosition)
+        pbChangeProgressPosition?.progress = newPositionProgress
+        skBottomSeek?.progress = newPositionProgress
+        tvBottomPosition?.text = VideoHandleUtils.formatTime(newPosition)
     }
 
     override fun hideChangePosition() {
-        mChangePosition!!.visibility = View.GONE
+        layoutChangePosition?.visibility = View.GONE
     }
 
     override fun showChangeVolume(newVolumeProgress: Int) {
-        mChangeVolume!!.visibility = View.VISIBLE
-        mChangeVolumeProgress!!.progress = newVolumeProgress
+        layoutChangeVolume?.visibility = View.VISIBLE
+        pbChangeProgressVolume?.progress = newVolumeProgress
     }
 
     override fun hideChangeVolume() {
-        mChangeVolume!!.visibility = View.GONE
+        layoutChangeVolume?.visibility = View.GONE
     }
 
     override fun showChangeBrightness(newBrightnessProgress: Int) {
-        mChangeBrightness!!.visibility = View.VISIBLE
-        mChangeBrightnessProgress!!.progress = newBrightnessProgress
+        layoutChangeBrightness?.visibility = View.VISIBLE
+        pbChangeProgressBrightness?.progress = newBrightnessProgress
     }
 
     override fun hideChangeBrightness() {
-        mChangeBrightness!!.visibility = View.GONE
+        layoutChangeBrightness?.visibility = View.GONE
     }
 }

@@ -226,11 +226,6 @@ abstract class BaseVideoPlayerController(var mContext: Context) : FrameLayout(mC
     abstract fun imageView(): ImageView
 
     /**
-     * 设置总时长.
-     */
-    abstract fun setLength(length: Long)
-
-    /**
      * 更新进度，包括进度条进度，展示的当前播放位置时长，总时长等。
      */
     protected abstract fun updateProgress()

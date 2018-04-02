@@ -2,6 +2,7 @@ package com.leibo.repertory.player
 
 import com.leibo.baselib.base.BaseActivity
 import com.leibo.baselib.player.VideoPlayer
+import com.leibo.baselib.player.VideoPlayerManager
 import com.leibo.repertory.R
 import com.leibo.repertory.player.controller.SimpleVideoPlayerController
 
@@ -30,4 +31,25 @@ class PlayerMainActivity : BaseActivity() {
         videoPlayer.setUp(url)
         videoPlayer.start()
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        VideoPlayerManager.instance.restartVideoPlayer()
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        VideoPlayerManager.instance.pauseVideoPlayer()
+    }
+
+    override fun onBackPressed() {
+        if (VideoPlayerManager.instance.onBackPressed()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
+
 }
