@@ -1,4 +1,4 @@
-package com.leibo.baselib.base
+package com.leibo.baselib.base.basic
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.leibo.baselib.base.page.IBaseView
 
 /**
  * @author Pinger

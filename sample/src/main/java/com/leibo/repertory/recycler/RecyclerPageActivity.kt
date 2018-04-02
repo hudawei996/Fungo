@@ -2,7 +2,7 @@ package com.leibo.repertory.recycler
 
 import android.view.View
 
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
 
 /**

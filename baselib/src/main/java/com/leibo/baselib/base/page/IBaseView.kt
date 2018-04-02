@@ -1,4 +1,4 @@
-package com.leibo.baselib.base
+package com.leibo.baselib.base.page
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable

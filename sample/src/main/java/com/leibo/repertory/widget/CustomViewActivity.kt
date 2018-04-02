@@ -2,7 +2,7 @@ package com.leibo.repertory.widget
 
 import android.view.View
 
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
 import com.leibo.repertory.widget.banner.BannerViewActivity
 import com.leibo.repertory.widget.falling.FallingViewActivity

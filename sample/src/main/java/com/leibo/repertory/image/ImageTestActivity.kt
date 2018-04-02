@@ -1,7 +1,7 @@
 package com.leibo.repertory.image
 
 import android.widget.ImageView
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
 import org.fungo.baselib.image.ImageManager
 

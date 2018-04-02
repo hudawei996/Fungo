@@ -1,6 +1,9 @@
 package com.leibo.baselib.app
 
 import android.app.Application
+import com.leibo.baselib.net.dependency.DaggerNetComponent
+import com.leibo.baselib.net.dependency.NetHolder
+import com.leibo.baselib.net.dependency.NetModule
 import com.leibo.baselib.player.VideoPlayerManager
 import com.leibo.baselib.player.ijkplayer.IjkVideoPlayerFactory
 import com.leibo.baselib.utils.BaseUtils
@@ -15,8 +18,12 @@ open class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         init()
+        val netComponent = DaggerNetComponent.builder()
+                .appModule(AppModule(this))
+                .netModule(NetModule(this, ""))
+                .build()
+        NetHolder.setNetComponent(netComponent)
     }
-
 
     private fun init() {
         initUtils()

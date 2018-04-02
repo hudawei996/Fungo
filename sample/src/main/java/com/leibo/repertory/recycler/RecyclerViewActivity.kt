@@ -1,6 +1,6 @@
 package com.leibo.repertory.recycler
 
-import com.leibo.baselib.base.BaseActivity
+import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
 
 /**
@@ -15,5 +15,9 @@ class RecyclerViewActivity : BaseActivity() {
 
     override fun initView() {
         setActionBar(getString(R.string.recycler_view), true)
+    }
+
+    override fun initData() {
+        //NetHolder.getNetComponent().getFungoRequest().getRequest()
     }
 }
