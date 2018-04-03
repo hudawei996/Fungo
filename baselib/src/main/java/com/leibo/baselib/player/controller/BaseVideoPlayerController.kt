@@ -70,7 +70,7 @@ abstract class BaseVideoPlayerController(var mContext: Context) : FrameLayout(mC
                 || mVideoPlayer!!.isPreparing()
                 || mVideoPlayer!!.isPrepared()
                 || mVideoPlayer!!.isCompleted()) {
-            hideChangePosition()
+            hideChangePosition(mNewPosition)
             hideChangeBrightness()
             hideChangeVolume()
             return false
@@ -141,7 +141,7 @@ abstract class BaseVideoPlayerController(var mContext: Context) : FrameLayout(mC
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 if (mNeedChangePosition) {
                     mVideoPlayer!!.seekTo(mNewPosition)
-                    hideChangePosition()
+                    hideChangePosition(mNewPosition)
                     startUpdateProgressTimer()
                     return true
                 }
@@ -278,7 +278,7 @@ abstract class BaseVideoPlayerController(var mContext: Context) : FrameLayout(mC
      * 手势左右滑动改变播放位置后，手势up或者cancel时，隐藏控制器中间的播放位置变化视图，
      * 在手势ACTION_UP或ACTION_CANCEL时调用。
      */
-    protected abstract fun hideChangePosition()
+    protected abstract fun hideChangePosition(newPosition: Long)
 
     /**
      * 手势在右侧上下滑动改变音量时，显示控制器中间的音量变化视图，

@@ -56,7 +56,7 @@ class LiveVideoPlayerController(context: Context) : BaseVideoPlayerController(co
 
     }
 
-    override fun hideChangePosition() {
+    override fun hideChangePosition(newPosition:Long) {
 
     }
 

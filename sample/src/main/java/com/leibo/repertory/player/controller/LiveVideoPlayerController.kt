@@ -46,7 +46,7 @@ class LiveVideoPlayerController (context:Context):BaseVideoPlayerController(cont
     override fun showChangePosition(duration: Long, newPositionProgress: Int) {
     }
 
-    override fun hideChangePosition() {
+    override fun hideChangePosition(newPosition:Long) {
     }
 
     override fun showChangeVolume(newVolumeProgress: Int) {

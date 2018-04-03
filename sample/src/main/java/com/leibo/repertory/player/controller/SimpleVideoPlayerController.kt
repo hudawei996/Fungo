@@ -17,8 +17,10 @@ import com.leibo.baselib.player.IVideoPlayer
 import com.leibo.baselib.player.VideoHandleUtils
 import com.leibo.baselib.player.VideoPlayer
 import com.leibo.baselib.player.controller.BaseVideoPlayerController
+import com.leibo.baseuilib.utils.ViewUtils
 import com.leibo.repertory.R
 import kotlinx.android.synthetic.main.video_player_simple_controller.view.*
+import org.fungo.baselib.image.ImageManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,10 +32,13 @@ import java.util.*
 class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(context), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     private var mUrl: String? = null
+    private var mTitle: String? = null
     private var topBottomVisible: Boolean = false
     private var mDismissTopBottomCountDownTimer: CountDownTimer? = null
 
     private var hasRegisterBatteryReceiver: Boolean = false // 是否已经注册了电池广播
+    private var mLastPosition: Long = 0  // 上一次的播放位置
+
 
     /**
      * 电池状态即电量变化广播接收器
@@ -69,15 +74,14 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         ivBack.setOnClickListener(this)
         ivBottomStartOrPause.setOnClickListener(this)
         ivFullOrShrinkScreen.setOnClickListener(this)
-        tvErrorRetry.setOnClickListener(this)
-        tvReplay.setOnClickListener(this)
-        ivShare.setOnClickListener(this)
+        layoutError.setOnClickListener(this)
+        ivTopShare.setOnClickListener(this)
         skBottomSeek.setOnSeekBarChangeListener(this)
         this.setOnClickListener(this)
     }
 
     override fun setTitle(title: String) {
-        tvTitle?.text = title
+        mTitle = title
     }
 
     override fun setUrl(url: String) {
@@ -93,7 +97,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     }
 
     override fun setImage(imageURl: String) {
-        // TODO 加载网络图片
+        ImageManager.instance.loadImage(imageURl, ivPlaceImage)
     }
 
 
@@ -110,49 +114,51 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
             VideoPlayer.STATE_IDLE -> {
             }
             VideoPlayer.STATE_PREPARING -> {
-                ivPlaceImage?.visibility = View.GONE
-                layoutLoading?.visibility = View.VISIBLE
+                ViewUtils.setVisible(layoutLoading)
+                ViewUtils.setGone(ivPlaceImage)
                 tvLoadingText?.text = "正在准备..."
-                layoutError?.visibility = View.GONE
-                layoutPlayerCompleted?.visibility = View.GONE
-                layoutTopController?.visibility = View.GONE
-                layoutBottomController!!.visibility = View.GONE
-                ivCenterStartOrPause!!.visibility = View.GONE
+                ViewUtils.setGone(layoutError)
+                ViewUtils.setGone(layoutTopController)
+                ViewUtils.setGone(layoutBottomController)
+                ViewUtils.setGone(ivCenterStartOrPause)
             }
             VideoPlayer.STATE_PREPARED -> startUpdateProgressTimer()
             VideoPlayer.STATE_PLAYING -> {
-                layoutLoading?.visibility = View.GONE
+                ViewUtils.setGone(layoutLoading)
                 ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_pause)
+                ivCenterStartOrPause?.setImageResource(R.mipmap.ic_player_center_pause)
                 startDismissTopBottomTimer()
             }
             VideoPlayer.STATE_PAUSED -> {
-                layoutLoading?.visibility = View.GONE
+                ViewUtils.setGone(layoutLoading)
                 ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_start)
+                ivCenterStartOrPause?.setImageResource(R.mipmap.ic_player_center_start)
                 cancelDismissTopBottomTimer()
             }
             VideoPlayer.STATE_BUFFERING_PLAYING -> {
-                layoutLoading?.visibility = View.VISIBLE
+                ViewUtils.setVisible(layoutLoading)
                 ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_pause)
-                tvLoadingText?.text = "正在缓冲..."
+                tvLoadingText?.text = "正在缓冲${mVideoPlayer!!.getBufferPercentage()}%..."
                 startDismissTopBottomTimer()
             }
             VideoPlayer.STATE_BUFFERING_PAUSED -> {
-                layoutLoading?.visibility = View.VISIBLE
+                ViewUtils.setVisible(layoutLoading)
                 ivBottomStartOrPause?.setImageResource(R.mipmap.ic_player_bottom_start)
-                tvLoadingText?.text = "正在缓冲..."
+                tvLoadingText?.text = "正在缓冲${mVideoPlayer!!.getBufferPercentage()}%..."
                 cancelDismissTopBottomTimer()
             }
             VideoPlayer.STATE_ERROR -> {
                 cancelUpdateProgressTimer()
                 setTopBottomVisible(false)
-                layoutTopController!!.visibility = View.VISIBLE
-                layoutError!!.visibility = View.VISIBLE
+                ViewUtils.setGone(layoutLoading)
+                ViewUtils.setVisible(layoutError)
             }
             VideoPlayer.STATE_COMPLETED -> {
                 cancelUpdateProgressTimer()
                 setTopBottomVisible(false)
-                ivPlaceImage?.visibility = View.VISIBLE
-                layoutPlayerCompleted?.visibility = View.VISIBLE
+                ViewUtils.setVisible(ivPlaceImage)
+                ViewUtils.setVisible(ivCenterStartOrPause)
+                ivCenterStartOrPause?.setImageResource(R.mipmap.ic_player_replay)
             }
         }
     }
@@ -160,9 +166,8 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     override fun onPlayModeChanged(playMode: Int) {
         when (playMode) {
             VideoPlayer.MODE_NORMAL -> {
-                ivBack?.visibility = View.GONE
+                tvTitle?.text = ""
                 ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_full)
-                ivFullOrShrinkScreen?.visibility = View.VISIBLE
                 layoutTopBatteryTime?.visibility = View.GONE
                 if (hasRegisterBatteryReceiver) {
                     mContext.unregisterReceiver(mBatterReceiver)
@@ -170,8 +175,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
                 }
             }
             VideoPlayer.MODE_FULL_SCREEN -> {
-                ivBack?.visibility = View.VISIBLE
-                ivFullOrShrinkScreen?.visibility = View.GONE
+                tvTitle?.text = mTitle
                 ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_shrink)
                 layoutTopBatteryTime?.visibility = View.VISIBLE
                 if (!hasRegisterBatteryReceiver) {
@@ -192,17 +196,16 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         skBottomSeek?.secondaryProgress = 0
 
         ivCenterStartOrPause?.visibility = View.VISIBLE
+        ivCenterStartOrPause?.setImageResource(R.mipmap.ic_player_center_start)
         ivPlaceImage?.visibility = View.VISIBLE
 
         layoutBottomController?.visibility = View.GONE
         ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_full)
 
         layoutTopController?.visibility = View.VISIBLE
-        ivBack?.visibility = View.GONE
 
         layoutLoading?.visibility = View.GONE
         layoutError?.visibility = View.GONE
-        layoutPlayerCompleted?.visibility = View.GONE
     }
 
     /**
@@ -210,34 +213,31 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
      * UI相关的逻辑都尽量到[.onPlayStateChanged]和[.onPlayModeChanged]中处理.
      */
     override fun onClick(v: View) {
-        if (v === ivCenterStartOrPause) {
-            if (mVideoPlayer!!.isIdle()) {
-                mVideoPlayer!!.start()
+        if (v == ivBack) {
+            when {
+                mVideoPlayer!!.isFullScreen() -> mVideoPlayer!!.exitFullScreen()
+                mVideoPlayer!!.isTinyWindow() -> mVideoPlayer!!.exitTinyWindow()
+                else -> // TODO
+                    Toast.makeText(mContext, "关闭当前页面", Toast.LENGTH_SHORT).show()
             }
-        } else if (v === ivBack) {
-            if (mVideoPlayer!!.isFullScreen()) {
-                mVideoPlayer!!.exitFullScreen()
-            } else if (mVideoPlayer!!.isTinyWindow()) {
-                mVideoPlayer!!.exitTinyWindow()
-            }
-        } else if (v === ivBottomStartOrPause) {
+        } else if (v == ivBottomStartOrPause || v == ivCenterStartOrPause) {
             if (mVideoPlayer!!.isPlaying() || mVideoPlayer!!.isBufferingPlaying()) {
                 mVideoPlayer!!.pause()
+                startLoadAD()
             } else if (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused()) {
                 mVideoPlayer!!.restart()
             }
-        } else if (v === ivFullOrShrinkScreen) {
+        } else if (v == ivFullOrShrinkScreen) {
             if (mVideoPlayer!!.isNormal() || mVideoPlayer!!.isTinyWindow()) {
                 mVideoPlayer!!.enterFullScreen()
             } else if (mVideoPlayer!!.isFullScreen()) {
                 mVideoPlayer!!.exitFullScreen()
             }
-        } else if (v == tvErrorRetry) {
+        } else if (v == layoutError) {
+            ViewUtils.setGone(layoutError)
             mVideoPlayer!!.restart()
-        } else if (v == tvReplay) {
-            tvErrorRetry!!.performClick()
-        } else if (v == ivShare) {
-            Toast.makeText(mContext, "分享", Toast.LENGTH_SHORT).show()
+        } else if (v == ivTopShare) {
+            startShareVideo()
         } else if (v == this) {
             if (mVideoPlayer!!.isPlaying()
                     || mVideoPlayer!!.isPaused()
@@ -248,6 +248,23 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         }
     }
 
+
+    /**
+     * 暂停视频请求广告数据，弹窗展示
+     */
+    private fun startLoadAD() {
+        // TODO 广告
+        Toast.makeText(mContext, "广告", Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * 分享视频
+     */
+    private fun startShareVideo() {
+        // TODO 分享
+        Toast.makeText(mContext, "分享", Toast.LENGTH_SHORT).show()
+    }
+
     /**
      * 设置top、bottom的显示和隐藏
      *
@@ -256,6 +273,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     private fun setTopBottomVisible(visible: Boolean) {
         layoutTopController?.visibility = if (visible) View.VISIBLE else View.GONE
         layoutBottomController?.visibility = if (visible) View.VISIBLE else View.GONE
+        ivCenterStartOrPause.visibility = if (visible) View.VISIBLE else View.GONE
         topBottomVisible = visible
         if (visible) {
             if (!mVideoPlayer!!.isPaused() && !mVideoPlayer!!.isBufferingPaused()) {
@@ -272,7 +290,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     private fun startDismissTopBottomTimer() {
         cancelDismissTopBottomTimer()
         if (mDismissTopBottomCountDownTimer == null) {
-            mDismissTopBottomCountDownTimer = object : CountDownTimer(8000, 8000) {
+            mDismissTopBottomCountDownTimer = object : CountDownTimer(5000, 5000) {
                 override fun onTick(millisUntilFinished: Long) {
                 }
 
@@ -298,7 +316,6 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar) {
-
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -324,33 +341,49 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     }
 
     override fun showChangePosition(duration: Long, newPositionProgress: Int) {
-        layoutChangePosition?.visibility = View.VISIBLE
+        ViewUtils.setGone(ivCenterStartOrPause)
+        ViewUtils.setVisible(layoutChangePosition)
         val newPosition = (duration * newPositionProgress / 100f).toLong()
-        tvChangeCurrentPosition?.text = VideoHandleUtils.formatTime(newPosition)
-        pbChangeProgressPosition?.progress = newPositionProgress
+
+        // 中间滑动的展示
+        val dTime = (newPosition - mLastPosition) / 1000
+
+        tvChangeDTime.text = if (dTime <= 0) {
+            dTime.toString()
+        } else {
+            "+$dTime"
+        }
+        tvChangeCurrentTime?.text = VideoHandleUtils.formatTime(newPosition)
+        tvChangeTotalTime?.text = VideoHandleUtils.formatTime(duration)
+        pbChangePosition?.progress = newPositionProgress
+
+        // 底下进度更新的位置
         skBottomSeek?.progress = newPositionProgress
         tvBottomPosition?.text = VideoHandleUtils.formatTime(newPosition)
     }
 
-    override fun hideChangePosition() {
-        layoutChangePosition?.visibility = View.GONE
+    override fun hideChangePosition(newPosition: Long) {
+        ViewUtils.setGone(layoutChangePosition)
+        mLastPosition = newPosition
     }
 
     override fun showChangeVolume(newVolumeProgress: Int) {
-        layoutChangeVolume?.visibility = View.VISIBLE
-        pbChangeProgressVolume?.progress = newVolumeProgress
+        ViewUtils.setGone(ivCenterStartOrPause)
+        ViewUtils.setVisible(layoutChangeVolume)
+        tvChangeProgressVolume?.text = "$newVolumeProgress%"
     }
 
     override fun hideChangeVolume() {
-        layoutChangeVolume?.visibility = View.GONE
+        ViewUtils.setGone(layoutChangeVolume)
     }
 
     override fun showChangeBrightness(newBrightnessProgress: Int) {
-        layoutChangeBrightness?.visibility = View.VISIBLE
-        pbChangeProgressBrightness?.progress = newBrightnessProgress
+        ViewUtils.setGone(ivCenterStartOrPause)
+        ViewUtils.setVisible(layoutChangeBrightness)
+        tvChangeProgressBrightness?.text = "$newBrightnessProgress%"
     }
 
     override fun hideChangeBrightness() {
-        layoutChangeBrightness?.visibility = View.GONE
+        ViewUtils.setGone(layoutChangeBrightness)
     }
 }

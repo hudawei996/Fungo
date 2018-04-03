@@ -596,12 +596,12 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
                 // 视频旋转了extra度，需要恢复
                 if (mTextureView != null) {
                     mTextureView!!.rotation = extra.toFloat()
-                    Log.d(TAG, "视频旋转角度：" + extra)
+                    Log.d(TAG, "视频旋转角度：$extra")
                 }
             } else if (what == PlayerConstant.MEDIA_INFO_NOT_SEEK) {
                 Log.d(TAG, "视频不能seekTo，为直播视频")
             } else {
-                Log.d(TAG, "onInfo ——> what：" + what)
+                Log.d(TAG, "onInfo ——> what：$what")
             }
             return true
         }
