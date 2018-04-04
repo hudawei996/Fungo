@@ -224,7 +224,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
             if (mVideoPlayer!!.isPlaying() || mVideoPlayer!!.isBufferingPlaying()) {
                 mVideoPlayer!!.pause()
                 startLoadAD()
-            } else if (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused()) {
+            } else if (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused() || mVideoPlayer!!.isCompleted()) {
                 mVideoPlayer!!.restart()
             }
         } else if (v == ivFullOrShrinkScreen) {
