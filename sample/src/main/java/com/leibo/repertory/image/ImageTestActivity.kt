@@ -40,7 +40,7 @@ class ImageTestActivity : BaseActivity() {
             btnNormalBlur -> ImageManager.instance.loadBlurImage(mUrl, mImageView, 8f)
             btnNormalCircle -> ImageManager.instance.loadCircleImage(mUrl, mImageView)
             btnNormalRound -> ImageManager.instance.loadRoundImage(mUrl, mImageView, 8)
-            btnGif -> ImageManager.instance.loadImage(mUrl, mImageView)
+            btnGif -> ImageManager.instance.loadImage(mGifUrl, mImageView)
         }
     }
 

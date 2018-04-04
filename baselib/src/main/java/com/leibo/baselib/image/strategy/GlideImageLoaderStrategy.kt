@@ -190,12 +190,13 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 glideConfig.isAsGif() -> {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
+                    // 使用clone方法复用builder
                     builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {
                     val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
                     val builder = buildBitmap(context, obj, glideConfig, bitmapBuilder, listener)
-                    builder.apply(buildOptions(context, obj, glideConfig)).into(imageView)
+                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
             }
         } catch (e: Exception) {
