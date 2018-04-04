@@ -10,8 +10,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -186,22 +184,18 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
             listener?.onFail("GlideImageLoaderStrategy：context is null...")
             return
         }
-
         val glideConfig: ImageConfiguration = config ?: defaultConfiguration
-
-        val options: RequestOptions = buildOptions(context, obj, glideConfig)
-
         try {
             when {
                 glideConfig.isAsGif() -> {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
-                    builder.apply(options).into(imageView)
+                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {
                     val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
                     val builder = buildBitmap(context, obj, glideConfig, bitmapBuilder, listener)
-                    builder.apply(options).into(imageView)
+                    builder.apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
             }
         } catch (e: Exception) {
@@ -245,7 +239,6 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
             val thumbnailBuilder = Glide.with(context).asBitmap().load(obj).thumbnail(Glide.with(context).asBitmap().load(glideConfig.getThumbnailUrl()))
             builder = thumbnailBuilder
         }
-
         return builder
     }
 
@@ -293,9 +286,16 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     private fun buildOptions(context: Context, obj: Any, glideConfig: ImageConfiguration): RequestOptions {
         val options = RequestOptions()
 
-        options.dontAnimate()
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
+
+        // 缩放类型
+        when (glideConfig.getScaleType()) {
+            ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
+            ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
+            ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
+            ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
+        }
 
         // transform
         when {
@@ -311,14 +311,6 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 .fallback(glideConfig.getErrorResId())             // 传入null时占位
                 .priority(glideConfig.getPriority().strategy)      // 优先级
                 .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
-
-        // 缩放类型
-        when (glideConfig.getScaleType()) {
-            ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
-            ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
-            ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
-            ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
-        }
 
         // 图片大小
         val size = glideConfig.getSize()
