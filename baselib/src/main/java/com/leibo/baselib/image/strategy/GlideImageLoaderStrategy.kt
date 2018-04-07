@@ -20,6 +20,8 @@ import com.leibo.baselib.image.transfmer.BlurTransformation
 import com.leibo.baselib.image.transfmer.CircleTransformation
 import com.leibo.baselib.image.transfmer.GrayScaleTransformation
 import com.leibo.baselib.image.transfmer.RoundTransformation
+import com.leibo.baselib.manager.TheadManager
+import com.leibo.baselib.utils.FileUtils
 import java.io.File
 
 /**
@@ -30,10 +32,7 @@ import java.io.File
  */
 class GlideImageLoaderStrategy : BaseImageStrategy {
 
-
-    /**
-     * 默认的配置,可以手动配置
-     */
+    /** 默认的配置,可以手动配置 */
     private val defaultConfiguration = ImageConfiguration.Builder()
             .setScaleType(ImageConfiguration.ScaleType.CENTER_CROP)
             .setAsBitmap(true)
@@ -95,6 +94,9 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     }
 
     override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+        val bitmap = loadBitmapImage(context, url)
+
+//        FileUtils.get
     }
 
     override fun saveImage(context: Context?, url: String?, savePath: String, saveFileName: String,
@@ -126,11 +128,16 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 .isCircleTransform(true).setBorderWidth(borderWidth).setBorderColor(borderColor).build(), null)
     }
 
+    override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
+        if (context != null && !TextUtils.isEmpty(url)) {
+            return Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
+        }
+        return null
+    }
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            // TODO 子线程
-            Glide.get(context).clearDiskCache()
+            TheadManager.runOnSubThead(Runnable { Glide.get(context).clearDiskCache() })
         }
     }
 
@@ -279,7 +286,6 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         }
         return builder
     }
-
 
     /**
      * 设置图片加载选项并且加载图片
