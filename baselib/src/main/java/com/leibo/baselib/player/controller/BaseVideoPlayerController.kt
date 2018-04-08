@@ -17,7 +17,7 @@ import java.util.*
  * @since 2017/10/30 0030 上午 10:12
  * 播放器控制类
  */
-abstract class BaseVideoPlayerController(var mContext: Context) : FrameLayout(mContext), View.OnTouchListener {
+abstract class BaseVideoPlayerController(private var mContext: Context) : FrameLayout(mContext), View.OnTouchListener {
 
     protected var mVideoPlayer: IVideoPlayer? = null
     private var mUpdateProgressTimer: Timer? = null

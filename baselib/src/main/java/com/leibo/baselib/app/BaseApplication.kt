@@ -45,6 +45,4 @@ open class BaseApplication : Application() {
     private fun initPlayer() {
         VideoPlayerManager.instance.setVideoPlayer(IjkVideoPlayerFactory())
     }
-
-
 }

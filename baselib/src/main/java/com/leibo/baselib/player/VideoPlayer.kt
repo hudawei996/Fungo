@@ -27,7 +27,7 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
     private var mCurrentMode = MODE_NORMAL
     private var mAudioManager: AudioManager? = null
     private var mVideoExecutor: IVideoExecutor? = null
-    private var mContainer: FrameLayout? = null
+    private var mContainer = FrameLayout(mContext)
     private var mTextureView: AspectTextureView? = null
     private var mController: BaseVideoPlayerController? = null
     private var mSurfaceTexture: SurfaceTexture? = null
@@ -95,12 +95,7 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
     }
 
     init {
-        init()
-    }
-
-    private fun init() {
-        mContainer = FrameLayout(mContext)
-        mContainer!!.setBackgroundColor(Color.BLACK)
+        mContainer.setBackgroundColor(Color.BLACK)
         val params = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT)
@@ -120,14 +115,14 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
      * 设置控制器
      */
     fun setController(controller: BaseVideoPlayerController) {
-        mContainer!!.removeView(mController)
+        mContainer.removeView(mController)
         mController = controller
         mController!!.reset()
         mController!!.setVideoPlayer(this)
         val params = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT)
-        mContainer!!.addView(mController, params)
+        mContainer.addView(mController, params)
     }
 
     /**
@@ -314,12 +309,12 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
     }
 
     private fun addTextureView() {
-        mContainer!!.removeView(mTextureView)
+        mContainer.removeView(mTextureView)
         val params = FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER)
-        mContainer!!.addView(mTextureView, 0, params)
+        mContainer.addView(mTextureView, 0, params)
     }
 
     override fun onSurfaceTextureAvailable(surfaceTexture: SurfaceTexture, width: Int, height: Int) {
@@ -333,7 +328,7 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
 
     private fun openMediaPlayer() {
         // 屏幕常亮
-        mContainer!!.keepScreenOn = true
+        mContainer.keepScreenOn = true
         // 设置监听
         mVideoExecutor!!.setOnPreparedListener(mOnPreparedListener)
         mVideoExecutor!!.setOnVideoSizeChangedListener(mOnVideoSizeChangedListener)
@@ -473,7 +468,7 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
             mVideoExecutor = null
 
         }
-        mContainer!!.removeView(mTextureView)
+        mContainer.removeView(mTextureView)
         if (mSurface != null) {
             mSurface!!.release()
             mSurface = null
@@ -545,7 +540,7 @@ class VideoPlayer @JvmOverloads constructor(private val mContext: Context, attrs
             mController!!.onPlayStateChanged(mCurrentState)
             Log.d(TAG, "onCompletion ——> STATE_COMPLETED")
             // 清除屏幕常亮
-            mContainer!!.keepScreenOn = false
+            mContainer.keepScreenOn = false
         }
     }
 

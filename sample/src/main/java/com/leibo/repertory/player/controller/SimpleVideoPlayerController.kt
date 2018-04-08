@@ -69,7 +69,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
     }
 
     override fun initView() {
-        LayoutInflater.from(mContext).inflate(R.layout.video_player_simple_controller, this, true)
+        LayoutInflater.from(context).inflate(R.layout.video_player_simple_controller, this, true)
         ivCenterStartOrPause.setOnClickListener(this)
         ivBack.setOnClickListener(this)
         ivBottomStartOrPause.setOnClickListener(this)
@@ -170,7 +170,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
                 ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_full)
                 layoutTopBatteryTime?.visibility = View.GONE
                 if (hasRegisterBatteryReceiver) {
-                    mContext.unregisterReceiver(mBatterReceiver)
+                    context.unregisterReceiver(mBatterReceiver)
                     hasRegisterBatteryReceiver = false
                 }
             }
@@ -179,7 +179,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
                 ivFullOrShrinkScreen?.setImageResource(R.mipmap.ic_player_shrink)
                 layoutTopBatteryTime?.visibility = View.VISIBLE
                 if (!hasRegisterBatteryReceiver) {
-                    mContext.registerReceiver(mBatterReceiver,
+                    context.registerReceiver(mBatterReceiver,
                             IntentFilter(Intent.ACTION_BATTERY_CHANGED))
                     hasRegisterBatteryReceiver = true
                 }
@@ -218,7 +218,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
                 mVideoPlayer!!.isFullScreen() -> mVideoPlayer!!.exitFullScreen()
                 mVideoPlayer!!.isTinyWindow() -> mVideoPlayer!!.exitTinyWindow()
                 else -> // TODO
-                    Toast.makeText(mContext, "关闭当前页面", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "关闭当前页面", Toast.LENGTH_SHORT).show()
             }
         } else if (v == ivBottomStartOrPause || v == ivCenterStartOrPause) {
             if (mVideoPlayer!!.isPlaying() || mVideoPlayer!!.isBufferingPlaying()) {
@@ -254,7 +254,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
      */
     private fun startLoadAD() {
         // TODO 广告
-        Toast.makeText(mContext, "广告", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "广告", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -262,7 +262,7 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
      */
     private fun startShareVideo() {
         // TODO 分享
-        Toast.makeText(mContext, "分享", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "分享", Toast.LENGTH_SHORT).show()
     }
 
     /**
