@@ -1,5 +1,6 @@
 package org.fungo.baselib.image
 
+import android.content.Context
 import android.text.TextUtils
 import android.widget.ImageView
 import com.leibo.baselib.image.strategy.ImageModel
@@ -79,6 +80,12 @@ class ImageManager {
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Int, borderColor: Int) {
         mImageStrategy!!.loadCircleImage(url, imageView, ViewUtils.dp2px(imageView?.context, borderWidth), borderColor)
     }
+
+    /** 保存图片到本地 */
+    fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+        mImageStrategy!!.saveImage(context, url, listener)
+    }
+
 
     /** 设置图片加载模式 */
     fun setLoadModel(model: Int) {

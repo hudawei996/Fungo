@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
  * @author Pinger
  * @since 2018/4/7 8:23
  */
-object TheadManager {
+object ThreadManager {
 
     private const val DEFAULT_SINGLE_POOL_NAME = "DEFAULT_SINGLE_POOL_NAME"
 

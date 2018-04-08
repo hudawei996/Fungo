@@ -1,6 +1,8 @@
 package com.leibo.baselib.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Environment
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -15,7 +17,39 @@ import java.util.*
  */
 object FileUtils {
 
-    private val LINE_SEP = System.getProperty("line.separator")
+    private const val PATH_DATA = "Pinger"
+    private const val PATH_IMAGE = "images"
+    private const val PATH_VIDEO = "videos"
+
+    /** 获取项目数据目录的路径字符串 */
+    fun getAppDataPath(context: Context): String {
+        val dataPath: String = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            (Environment.getExternalStorageDirectory()
+                    .absolutePath
+                    + File.separator
+                    + PATH_DATA)
+        } else {
+            (context.filesDir.absolutePath
+                    + File.separator
+                    + PATH_DATA)
+        }
+        createOrExistsFile(dataPath)
+        return dataPath
+    }
+
+    /** 获取图片存储的路径 */
+    fun getImagePatch(context: Context): String {
+        val path = getAppDataPath(context) + File.separator + PATH_IMAGE
+        createOrExistsFile(path)
+        return path
+    }
+
+    /** 获取视频存储的路径 */
+    fun getVideoPatch(context: Context): String {
+        val path = getAppDataPath(context) + File.separator + PATH_VIDEO
+        createOrExistsFile(path)
+        return path
+    }
 
     /**
      * Return the file by path.

@@ -1,6 +1,7 @@
 package org.fungo.baselib.image
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -20,7 +21,7 @@ import com.leibo.baselib.image.transfmer.BlurTransformation
 import com.leibo.baselib.image.transfmer.CircleTransformation
 import com.leibo.baselib.image.transfmer.GrayScaleTransformation
 import com.leibo.baselib.image.transfmer.RoundTransformation
-import com.leibo.baselib.manager.TheadManager
+import com.leibo.baselib.manager.ThreadManager
 import com.leibo.baselib.utils.FileUtils
 import java.io.File
 
@@ -94,13 +95,29 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     }
 
     override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
-        val bitmap = loadBitmapImage(context, url)
-
-//        FileUtils.get
-    }
-
-    override fun saveImage(context: Context?, url: String?, savePath: String, saveFileName: String,
-                           listener: ImageListener?) {
+        ThreadManager.runOnSubThead(Runnable {
+            try {
+                if (context != null && !TextUtils.isEmpty(url)) {
+                    val imageFile = download(context, url!!)
+                    val filePath = FileUtils.getImagePatch(context)
+                    FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
+                        override fun onReplace(): Boolean {
+                            return true
+                        }
+                    })
+                    // 最后通知图库更新
+                    context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                            Uri.fromFile(File(filePath))))
+                    ThreadManager.runOnUIThread(Runnable {
+                        listener?.onSuccess()
+                    })
+                }
+            } catch (e: Exception) {
+                ThreadManager.runOnUIThread(Runnable {
+                    listener?.onFail("保存失败")
+                })
+            }
+        })
     }
 
     override fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
@@ -137,7 +154,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            TheadManager.runOnSubThead(Runnable { Glide.get(context).clearDiskCache() })
+            ThreadManager.runOnSubThead(Runnable { Glide.get(context).clearDiskCache() })
         }
     }
 
@@ -334,5 +351,10 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         }
 
         return options
+    }
+
+    /** 下载图片 */
+    override fun download(context: Context, url: String): File {
+        return Glide.with(context).download(url).submit().get()
     }
 }

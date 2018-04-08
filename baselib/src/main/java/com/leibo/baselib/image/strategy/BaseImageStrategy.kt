@@ -36,9 +36,6 @@ interface BaseImageStrategy {
     /** 保存图片 */
     fun saveImage(context: Context?, url: String?, listener: ImageListener?)
 
-    /** 保存图片，自定义路径 */
-    fun saveImage(context: Context?, url: String?, savePath: String, saveFileName: String, listener: ImageListener?)
-
     /** 加载圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float)
 
@@ -52,7 +49,7 @@ interface BaseImageStrategy {
     fun loadCircleImage(url: String?, imageView: ImageView?)
 
     /** 加载图片，生成Bitmap */
-    fun loadBitmapImage(context: Context?,url: String?): Bitmap?
+    fun loadBitmapImage(context: Context?, url: String?): Bitmap?
 
     /** 加载圆形图片带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int)
@@ -84,5 +81,8 @@ interface BaseImageStrategy {
 
     /** 暂停所有加载任务 */
     fun pauseRequests(context: Context?)
+
+    /** 下载图片 */
+    fun download(context: Context, url: String): File
 
 }
