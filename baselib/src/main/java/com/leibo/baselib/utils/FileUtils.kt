@@ -33,21 +33,21 @@ object FileUtils {
                     + File.separator
                     + PATH_DATA)
         }
-        createOrExistsFile(dataPath)
+        createOrExistsDir(dataPath)
         return dataPath
     }
 
     /** 获取图片存储的路径 */
     fun getImagePatch(context: Context): String {
         val path = getAppDataPath(context) + File.separator + PATH_IMAGE
-        createOrExistsFile(path)
+        createOrExistsDir(path)
         return path
     }
 
     /** 获取视频存储的路径 */
     fun getVideoPatch(context: Context): String {
         val path = getAppDataPath(context) + File.separator + PATH_VIDEO
-        createOrExistsFile(path)
+        createOrExistsDir(path)
         return path
     }
 
@@ -396,9 +396,7 @@ object FileUtils {
         }
         if (!createOrExistsDir(destFile.parentFile)) return false
         return try {
-            // TODO
-            true
-            //FileIOUtils.writeFileFromIS(destFile, FileInputStream(srcFile), false) && !(isMove && !deleteFile(srcFile))
+            FileIOUtils.writeFileFromIS(destFile, FileInputStream(srcFile), false) && !(isMove && !deleteFile(srcFile))
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
             false
@@ -429,7 +427,7 @@ object FileUtils {
         // dir isn't a directory then return false
         if (!dir.isDirectory) return false
         val files = dir.listFiles()
-        if (files != null && files.size != 0) {
+        if (files != null && files.isNotEmpty()) {
             for (file in files) {
                 if (file.isFile) {
                     if (!file.delete()) return false
@@ -527,7 +525,7 @@ object FileUtils {
         // dir isn't a directory then return false
         if (!dir.isDirectory) return false
         val files = dir.listFiles()
-        if (files != null && files.size != 0) {
+        if (files != null && files.isNotEmpty()) {
             for (file in files) {
                 if (filter.accept(file)) {
                     if (file.isFile) {
@@ -643,7 +641,7 @@ object FileUtils {
         if (!isDir(dir)) return null
         val list = ArrayList<File>()
         val files = dir!!.listFiles()
-        if (files != null && files.size != 0) {
+        if (files != null && files.isNotEmpty()) {
             for (file in files) {
                 if (filter.accept(file)) {
                     list.add(file)
@@ -696,20 +694,20 @@ object FileUtils {
      */
     fun getFileCharsetSimple(file: File?): String {
         var p = 0
-        var `is`: InputStream? = null
+        var stream: InputStream? = null
         try {
-            `is` = BufferedInputStream(FileInputStream(file!!))
-            p = (`is`.read() shl 8) + `is`.read()
+            stream = BufferedInputStream(FileInputStream(file!!))
+            p = (stream.read() shl 8) + stream.read()
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            CloseUtils.closeIO(`is`)
+            CloseUtils.closeIO(stream)
         }
-        when (p) {
-            0xefbb -> return "UTF-8"
-            0xfffe -> return "Unicode"
-            0xfeff -> return "UTF-16BE"
-            else -> return "GBK"
+        return when (p) {
+            0xefbb -> "UTF-8"
+            0xfffe -> "Unicode"
+            0xfeff -> "UTF-16BE"
+            else -> "GBK"
         }
     }
 
@@ -731,20 +729,20 @@ object FileUtils {
      */
     fun getFileLines(file: File?): Int {
         var count = 1
-        var `is`: InputStream? = null
+        var stream: InputStream? = null
         try {
-            `is` = BufferedInputStream(FileInputStream(file!!))
+            stream = BufferedInputStream(FileInputStream(file!!))
             val buffer = ByteArray(1024)
             var readChars: Int
             // TODO
 //            if (LINE_SEP.endsWith("\n")) {
-//                while ((readChars = `is`.read(buffer, 0, 1024)) != -1) {
+//                while ((readChars = stream.read(buffer, 0, 1024)) != -1) {
 //                    for (i in 0 until readChars) {
 //                        if (buffer[i] == '\n'.toByte()) ++count
 //                    }
 //                }
 //            } else {
-//                while ((readChars = `is`.read(buffer, 0, 1024)) != -1) {
+//                while ((readChars = stream.read(buffer, 0, 1024)) != -1) {
 //                    for (i in 0 until readChars) {
 //                        if (buffer[i] == '\r'.toByte()) ++count
 //                    }
@@ -753,7 +751,7 @@ object FileUtils {
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            CloseUtils.closeIO(`is`)
+            CloseUtils.closeIO(stream)
         }
         return count
     }
