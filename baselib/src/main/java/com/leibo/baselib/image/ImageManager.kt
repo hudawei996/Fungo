@@ -1,10 +1,15 @@
-package org.fungo.baselib.image
+package com.leibo.baselib.image
 
 import android.content.Context
 import android.text.TextUtils
 import android.widget.ImageView
+import com.leibo.baselib.image.listener.ImageListener
+import com.leibo.baselib.image.progress.ProgressEngine
+import com.leibo.baselib.image.progress.ProgressListener
 import com.leibo.baselib.image.strategy.ImageModel
 import com.leibo.baseuilib.utils.ViewUtils
+import org.fungo.baselib.image.BaseImageStrategy
+import org.fungo.baselib.image.GlideImageLoaderStrategy
 
 /**
  * @author Pinger
@@ -51,6 +56,13 @@ class ImageManager {
         }
     }
 
+    /** 加载图片，带进度条 */
+    fun loadImageWithProgress(url: String?, imageView: ImageView?, listener: ProgressListener) {
+        ProgressEngine.addProgressListener(listener)
+        loadImage(url, imageView, null)
+    }
+
+
     /** GIF图片 */
     fun loadGifImage(url: String?, imageView: ImageView?) {
         mImageStrategy!!.loadGifImage(url, imageView)
@@ -58,7 +70,7 @@ class ImageManager {
 
     /** 圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Int) {
-        mImageStrategy!!.loadRoundImage(url, imageView, ViewUtils.dp2px(imageView?.context, roundRadius))
+        mImageStrategy!!.loadRoundImage(url, imageView, ViewUtils.dp2px(imageView?.context, roundRadius).toFloat())
     }
 
     /** 灰色图片 */
@@ -78,7 +90,7 @@ class ImageManager {
 
     /** 圆形图片，带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Int, borderColor: Int) {
-        mImageStrategy!!.loadCircleImage(url, imageView, ViewUtils.dp2px(imageView?.context, borderWidth), borderColor)
+        mImageStrategy!!.loadCircleImage(url, imageView, ViewUtils.dp2px(imageView?.context, borderWidth).toFloat(), borderColor)
     }
 
     /** 保存图片到本地 */

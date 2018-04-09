@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.leibo.baselib.R
+import com.leibo.baselib.image.listener.ImageListener
 import com.leibo.baselib.image.transfmer.BlurTransformation
 import com.leibo.baselib.image.transfmer.CircleTransformation
 import com.leibo.baselib.image.transfmer.GrayScaleTransformation

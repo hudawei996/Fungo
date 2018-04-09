@@ -9,6 +9,6 @@ interface ProgressListener {
     /**
      * 下载进度
      */
-    fun progress(bytesRead: Long, contentLength: Long, isDone: Boolean)
+    fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean)
 
 }

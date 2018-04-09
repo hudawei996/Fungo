@@ -9,7 +9,7 @@ import com.leibo.baselib.player.controller.BaseVideoPlayerController
 import com.leibo.baseuilib.utils.ViewUtils
 import com.leibo.repertory.R
 import kotlinx.android.synthetic.main.video_player_live_controller.view.*
-import org.fungo.baselib.image.ImageManager
+import com.leibo.baselib.image.ImageManager
 
 /**
  * @author Pinger

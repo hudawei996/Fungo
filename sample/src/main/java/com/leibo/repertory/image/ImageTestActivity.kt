@@ -4,10 +4,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.leibo.baselib.base.basic.BaseActivity
+import com.leibo.baselib.image.ImageManager
+import com.leibo.baselib.image.listener.ImageListener
+import com.leibo.baselib.image.progress.ProgressListener
+import com.leibo.baseuilib.utils.ViewUtils
 import com.leibo.repertory.R
 import kotlinx.android.synthetic.main.activity_image.*
-import org.fungo.baselib.image.ImageListener
-import org.fungo.baselib.image.ImageManager
 
 /**
  * @author Pinger
@@ -61,6 +63,18 @@ class ImageTestActivity : BaseActivity() {
                     Toast.makeText(this@ImageTestActivity, msg, Toast.LENGTH_SHORT).show()
                 }
             })
+
+            btnNormalProgress -> {
+                ImageManager.instance.loadImageWithProgress(mUrl, mImageView, object : ProgressListener {
+                    override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
+                        ViewUtils.setVisible(progressView)
+                        progressView.progress = ((bytesRead / contentLength) * 100f).toInt()
+                        if (isDone) {
+                            ViewUtils.setGone(progressView)
+                        }
+                    }
+                })
+            }
         }
     }
 

@@ -196,45 +196,45 @@ object ViewUtils {
     /**
      * dp to px
      */
-    fun dp2px(context: Context?, dipValue: Int): Float {
+    fun dp2px(context: Context?, dipValue: Int): Int {
         if (context == null) {
-            return dipValue.toFloat()
+            return dipValue
         }
         val scale = context.resources.displayMetrics.density
-        return dipValue * scale + 0.5f
+        return (dipValue * scale + 0.5f).toInt()
     }
 
     /**
      * px to dip
      */
-    fun px2dp(context: Context?, pxValue: Int): Float {
+    fun px2dp(context: Context?, pxValue: Int): Int {
         if (context == null) {
-            return pxValue.toFloat()
+            return pxValue
         }
         val scale = context.resources.displayMetrics.density
-        return pxValue / scale + 0.5f
+        return (pxValue / scale + 0.5f).toInt()
     }
 
     /**
      * px to sp
      */
-    fun px2sp(context: Context?, pxValue: Int): Float {
+    fun px2sp(context: Context?, pxValue: Int): Int {
         if (context == null) {
-            return pxValue.toFloat()
+            return pxValue
         }
         val fontScale = context.resources.displayMetrics.scaledDensity
-        return pxValue / fontScale + 0.5f
+        return (pxValue / fontScale + 0.5f).toInt()
     }
 
     /**
      * sp to px
      */
-    fun sp2px(context: Context?, spValue: Int): Float {
+    fun sp2px(context: Context?, spValue: Int): Int {
         if (context == null) {
-            return spValue.toFloat()
+            return spValue
         }
         val fontScale = context.resources.displayMetrics.scaledDensity
-        return spValue * fontScale + 0.5f
+        return (spValue * fontScale + 0.5f).toInt()
     }
 
     /**
