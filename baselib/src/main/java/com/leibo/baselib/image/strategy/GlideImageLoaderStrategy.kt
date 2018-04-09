@@ -1,6 +1,7 @@
 package org.fungo.baselib.image
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -10,8 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -22,6 +21,8 @@ import com.leibo.baselib.image.transfmer.BlurTransformation
 import com.leibo.baselib.image.transfmer.CircleTransformation
 import com.leibo.baselib.image.transfmer.GrayScaleTransformation
 import com.leibo.baselib.image.transfmer.RoundTransformation
+import com.leibo.baselib.manager.ThreadManager
+import com.leibo.baselib.utils.FileUtils
 import java.io.File
 
 /**
@@ -32,10 +33,7 @@ import java.io.File
  */
 class GlideImageLoaderStrategy : BaseImageStrategy {
 
-
-    /**
-     * 默认的配置,可以手动配置
-     */
+    /** 默认的配置,可以手动配置 */
     private val defaultConfiguration = ImageConfiguration.Builder()
             .setScaleType(ImageConfiguration.ScaleType.CENTER_CROP)
             .setAsBitmap(true)
@@ -97,10 +95,29 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     }
 
     override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
-    }
-
-    override fun saveImage(context: Context?, url: String?, savePath: String, saveFileName: String,
-                           listener: ImageListener?) {
+        ThreadManager.runOnSubThead(Runnable {
+            try {
+                if (context != null && !TextUtils.isEmpty(url)) {
+                    val imageFile = download(context, url!!)
+                    val filePath = FileUtils.getImagePatch(context)
+                    FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
+                        override fun onReplace(): Boolean {
+                            return true
+                        }
+                    })
+                    // 最后通知图库更新
+                    context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                            Uri.fromFile(File(filePath))))
+                    ThreadManager.runOnUIThread(Runnable {
+                        listener?.onSuccess()
+                    })
+                }
+            } catch (e: Exception) {
+                ThreadManager.runOnUIThread(Runnable {
+                    listener?.onFail("保存失败")
+                })
+            }
+        })
     }
 
     override fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
@@ -128,11 +145,16 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 .isCircleTransform(true).setBorderWidth(borderWidth).setBorderColor(borderColor).build(), null)
     }
 
+    override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
+        if (context != null && !TextUtils.isEmpty(url)) {
+            return Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
+        }
+        return null
+    }
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            // TODO 子线程
-            Glide.get(context).clearDiskCache()
+            ThreadManager.runOnSubThead(Runnable { Glide.get(context).clearDiskCache() })
         }
     }
 
@@ -186,22 +208,19 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
             listener?.onFail("GlideImageLoaderStrategy：context is null...")
             return
         }
-
         val glideConfig: ImageConfiguration = config ?: defaultConfiguration
-
-        val options: RequestOptions = buildOptions(context, obj, glideConfig)
-
         try {
             when {
                 glideConfig.isAsGif() -> {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
-                    builder.apply(options).into(imageView)
+                    // 使用clone方法复用builder
+                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {
                     val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
                     val builder = buildBitmap(context, obj, glideConfig, bitmapBuilder, listener)
-                    builder.apply(options).into(imageView)
+                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
             }
         } catch (e: Exception) {
@@ -245,7 +264,6 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
             val thumbnailBuilder = Glide.with(context).asBitmap().load(obj).thumbnail(Glide.with(context).asBitmap().load(glideConfig.getThumbnailUrl()))
             builder = thumbnailBuilder
         }
-
         return builder
     }
 
@@ -286,16 +304,22 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         return builder
     }
 
-
     /**
      * 设置图片加载选项并且加载图片
      */
     private fun buildOptions(context: Context, obj: Any, glideConfig: ImageConfiguration): RequestOptions {
         val options = RequestOptions()
 
-        options.dontAnimate()
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
+
+        // 缩放类型
+        when (glideConfig.getScaleType()) {
+            ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
+            ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
+            ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
+            ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
+        }
 
         // transform
         when {
@@ -312,14 +336,6 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 .priority(glideConfig.getPriority().strategy)      // 优先级
                 .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
 
-        // 缩放类型
-        when (glideConfig.getScaleType()) {
-            ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
-            ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
-            ImageConfiguration.ScaleType.CENTER_INSIDE -> options.centerInside()
-            ImageConfiguration.ScaleType.CIRCLE_CROP -> options.circleCrop()
-        }
-
         // 图片大小
         val size = glideConfig.getSize()
         if (size != null) {
@@ -335,5 +351,10 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         }
 
         return options
+    }
+
+    /** 下载图片 */
+    override fun download(context: Context, url: String): File {
+        return Glide.with(context).download(url).submit().get()
     }
 }

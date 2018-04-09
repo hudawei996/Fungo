@@ -1,10 +1,8 @@
 package org.fungo.baselib.image
 
+import android.content.Context
 import android.text.TextUtils
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.leibo.baselib.R
 import com.leibo.baselib.image.strategy.ImageModel
 import com.leibo.baseuilib.utils.ViewUtils
 
@@ -37,11 +35,12 @@ class ImageManager {
         }
     }
 
-
+    /** 普通图片 */
     fun loadImage(url: String?, imageView: ImageView?) {
         loadImage(url, imageView, null)
     }
 
+    /** 加载图片，默认根据图片后缀加载GIF图片 */
     fun loadImage(url: String?, imageView: ImageView?, listener: ImageListener?) {
         if (!TextUtils.isEmpty(url)) {
             if (url!!.endsWith(".gif") || url.endsWith(".GIF")) {
@@ -52,30 +51,43 @@ class ImageManager {
         }
     }
 
+    /** GIF图片 */
+    fun loadGifImage(url: String?, imageView: ImageView?) {
+        mImageStrategy!!.loadGifImage(url, imageView)
+    }
 
+    /** 圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Int) {
         mImageStrategy!!.loadRoundImage(url, imageView, ViewUtils.dp2px(imageView?.context, roundRadius))
     }
 
+    /** 灰色图片 */
     fun loadGrayImage(url: String?, imageView: ImageView?) {
         mImageStrategy!!.loadGrayImage(url, imageView)
     }
 
+    /** 模糊图片 */
     fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float) {
         mImageStrategy!!.loadBlurImage(url, imageView, blurRadius)
     }
 
+    /** 圆形图片 */
     fun loadCircleImage(url: String?, imageView: ImageView?) {
         loadCircleImage(url, imageView, 0, 0)
     }
 
+    /** 圆形图片，带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Int, borderColor: Int) {
         mImageStrategy!!.loadCircleImage(url, imageView, ViewUtils.dp2px(imageView?.context, borderWidth), borderColor)
     }
 
-    /**
-     * 设置图片加载模式
-     */
+    /** 保存图片到本地 */
+    fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+        mImageStrategy!!.saveImage(context, url, listener)
+    }
+
+
+    /** 设置图片加载模式 */
     fun setLoadModel(model: Int) {
         this.mLoadModel = model
     }
