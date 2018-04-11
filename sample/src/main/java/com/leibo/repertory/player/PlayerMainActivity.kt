@@ -64,7 +64,7 @@ class PlayerMainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        VideoPlayerManager.instance.restartVideoPlayer()
+        VideoPlayerManager.instance.resumeVideoPlayer()
     }
 
 

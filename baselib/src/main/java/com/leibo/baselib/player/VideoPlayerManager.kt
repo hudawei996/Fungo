@@ -20,8 +20,8 @@ class VideoPlayerManager private constructor() {
     /**
      * 获取当前播放器
      */
-    fun getCurrentVideoPlayer(): VideoPlayer {
-        return mVideoPlayer!!
+    fun getCurrentVideoPlayer(): VideoPlayer? {
+        return mVideoPlayer
     }
 
     /**
@@ -31,8 +31,6 @@ class VideoPlayerManager private constructor() {
         if (mVideoPlayer !== videoPlayer) {
             releaseVideoPlayer()
             mVideoPlayer = videoPlayer
-            val executor = mPlayerFactory!!.create(videoPlayer.context)
-            executor.setConstant()
         }
     }
 
@@ -47,11 +45,13 @@ class VideoPlayerManager private constructor() {
     /**
      * 获取工厂播放器
      */
-    fun getVideoPlayer(context: Context): IVideoExecutor {
+    fun getVideoPlayer(context:Context): IVideoExecutor {
         return if (mPlayerFactory == null) {
             throw NullPointerException("please first initView video player factory...")
         } else {
-            mPlayerFactory!!.create(context)
+            val executor = mPlayerFactory!!.create(context)
+            executor.setConstant()
+            executor
         }
     }
 
@@ -67,7 +67,7 @@ class VideoPlayerManager private constructor() {
     /**
      * 重新播放
      */
-    fun restartVideoPlayer() {
+    fun resumeVideoPlayer() {
         if (mVideoPlayer != null && (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused())) {
             mVideoPlayer!!.restart()
         }
@@ -101,9 +101,7 @@ class VideoPlayerManager private constructor() {
      * 伴生对象获取单利
      */
     companion object {
-
         private var sInstance: VideoPlayerManager? = null
-
         val instance: VideoPlayerManager
             @Synchronized get() {
                 if (sInstance == null) {
