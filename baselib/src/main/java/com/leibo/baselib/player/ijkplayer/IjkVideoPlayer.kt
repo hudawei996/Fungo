@@ -25,7 +25,31 @@ class IjkVideoPlayer : IVideoExecutor {
         mMediaPlayer.setOption(1, "probesize", 10240L)
         mMediaPlayer.setOption(1, "flush_packets", 1L)
         mMediaPlayer.setOption(4, "packet-buffering", 0L)
-        mMediaPlayer.setOption(4, "framedrop", 8)
+
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0)
+
+        // seek只支持关键帧
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
+
+        // RV32是通用配置，也可以选择YV12来提高性能（免去了YUV-RGB的转换，但是部分手机不支持）
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "overlay-format", IjkMediaPlayer.SDL_FCC_RV32.toLong())
+        //ijkMediaPlayer.setOverlayFormat(AvFourCC.SDL_FCC_RV16);
+        // ijkplayer-0.2.0 开始，不在ffmpeg层强制concat的safe选项为0，而是动态配置（用于cntv分段的回看源）
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "safe", "0")
+
+        // 清除本地dns缓存，避免播放完http后播不了https
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1)
+
+        // FIXME 官方ijkplayer-n0.2.0之后，可以在java层手动配置丢帧策略
+        // 参照ffmpeg里面的定义（影响画面质量，尤其是马赛克，但是值越小，可能导致CPU繁忙或者低端手机音画不同步，图像处理跟不上音频时钟）
+
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 8)
+        // 渲染时候可以丢弃的帧
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 8)
+        // FIXME 官方ijkplayer-n0.2.0之后，可以配置是否使用MediaCodec的硬解码
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 0)
+        // 可以配置是否使用OpenSLES替代AudioTrack来最为音频输出
+        mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 0)
     }
 
     override fun start() {
