@@ -2,6 +2,7 @@ package com.leibo.repertory.recycler
 
 import com.leibo.baselib.base.basic.BaseActivity
 import com.leibo.repertory.R
+import java.util.function.Consumer
 
 /**
  * @author Pinger
@@ -18,6 +19,7 @@ class RecyclerViewActivity : BaseActivity() {
     }
 
     override fun initData() {
-        //NetHolder.getNetComponent().getFungoRequest().getRequest()
+        val url = ""
+
     }
 }

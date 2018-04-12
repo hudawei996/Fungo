@@ -1,7 +1,8 @@
 package com.leibo.baselib.net.utils
 
-import com.leibo.baselib.net.base.BaseRequestInfo
+import com.leibo.baselib.net.entity.BaseRequestInfo
 import android.net.Uri
+import com.leibo.baselib.utils.GsonUtils
 
 /**
  * Author  ZYH
@@ -12,7 +13,7 @@ object ParamsUtils {
 
     fun getPostBody(sourceUrl: String, params: Map<String, Any?>?): BaseRequestInfo {
         val baseRequestInfo = BaseRequestInfo(params)
-        Logger.i("Fungo Request Post--->  sourceUrl ：" + sourceUrl + "\n request body : ---> " + GsonUtils.toJson(baseRequestInfo))
+        NetLogger.i("Fungo Request Post--->  sourceUrl ：" + sourceUrl + "\n request body : ---> " + GsonUtils.toJson(baseRequestInfo))
         return baseRequestInfo
     }
 
@@ -28,7 +29,7 @@ object ParamsUtils {
             }
             url = builder.build().toString()
         }
-        Logger.i("Fungo Request Get--->  url ：" + url)
+        NetLogger.i("Fungo Request Get--->  url ：$url")
         return url
     }
 }

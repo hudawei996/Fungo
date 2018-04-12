@@ -1,8 +1,7 @@
-package com.leibo.baselib.net.base
+package com.leibo.baselib.net.entity
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-
+import com.leibo.baselib.utils.GsonUtils
 import java.io.Serializable
 
 /**
@@ -28,25 +27,8 @@ class BaseRequestInfo(params: Map<String, Any?>?) : Serializable {
 
     init {
         data = if (params != null) {
-            val g = Gson()
-            g.toJsonTree(params).asJsonObject
-        } else {
-            null
-        }
-        /* uid = AccountManager.getInstance().getAccount().uid;
-        token = AccountManager.getInstance().getAccount().token;
-        Logger.i("request token 参数token：" + token);
-        version = BaseAppInfoManager.getInstance().version;//app版本
-
-        ts = System.currentTimeMillis();//时间
-        udid = BaseAppInfoManager.getInstance().udid;//手机设备相关
-        model = Build.MODEL;//手机型号
-        channel = BaseAppInfoManager.getInstance().channel;//渠道
-        app = BaseAppInfoManager.getInstance().app;//包名
-        //0代表wifi ,1 4g（无网络也是4G）
-        nettype = NetworkUtil.getNetworkType(BaseApplication.getApplication()) == NetworkUtil.NETTYPE_WIFI ?
-                NetworkUtil.NETTYPE_WIFI : NetworkUtil.NETTYPE_MOBILE;
-        sign = StringUtils.sha256Hex(new StringBuilder().append(CommonData.secrectKey).append(uid).append(ts).toString());*/
+            GsonUtils.getGson().toJsonTree(params).asJsonObject
+        } else null
 
         //示例，抓包修改即可
         uid = java.lang.Long.parseLong("55885588")

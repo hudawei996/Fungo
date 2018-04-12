@@ -1,4 +1,4 @@
-package com.leibo.baselib.net.utils
+package com.leibo.baselib.utils
 
 
 import android.annotation.SuppressLint
@@ -18,8 +18,7 @@ import java.util.*
  */
 object GsonUtils {
     private val TAG = GsonUtils::class.java.name
-    val gson = createGson(true)
-    private val GSON_NO_NULLS = createGson(false)
+    private val GSON_NO_NULLS = createGson(false) // 序列化，字段内容为空时，是否还需要这个Key
 
     private fun createGson(serializeNulls: Boolean = true): Gson {
         val builder = GsonBuilder()
@@ -36,37 +35,37 @@ object GsonUtils {
         return builder.create()
     }
 
-    fun getGson(serializeNulls: Boolean): Gson {
-        return if (serializeNulls) gson else GSON_NO_NULLS
+    fun getGson(): Gson {
+        return createGson(true)
     }
 
     @JvmOverloads
-    fun toJson(`object`: Any, includeNulls: Boolean = true): String {
-        return if (includeNulls) gson.toJson(`object`) else GSON_NO_NULLS.toJson(`object`)
+    fun toJson(obj: Any, includeNulls: Boolean = true): String {
+        return if (includeNulls) getGson().toJson(obj) else GSON_NO_NULLS.toJson(obj)
     }
 
     fun <V> fromJson(json: String, type: Class<V>): V {
-        return gson.fromJson(json, type)
+        return getGson().fromJson(json, type)
     }
 
     fun <V> fromJson(json: String, type: Type): V {
-        return gson.fromJson(json, type)
+        return getGson().fromJson(json, type)
     }
 
     fun <V> fromJson(params: Map<String, Any>, type: Class<V>): V {
-        return gson.fromJson(gson.toJson(params), type)
+        return getGson().fromJson(getGson().toJson(params), type)
     }
 
     fun <V> fromJson(params: Map<String, Any>, type: Type): V? {
-        return gson.fromJson<V>(gson.toJson(params), type)
+        return getGson().fromJson<V>(getGson().toJson(params), type)
     }
 
     fun <V> fromJson(reader: Reader, type: Class<V>): V {
-        return gson.fromJson(reader, type)
+        return getGson().fromJson(reader, type)
     }
 
     fun <V> fromJson(reader: Reader, type: Type): V {
-        return gson.fromJson(reader, type)
+        return getGson().fromJson(reader, type)
     }
 
     class DateFormatter @SuppressLint("SimpleDateFormat")

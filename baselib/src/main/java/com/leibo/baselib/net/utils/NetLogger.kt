@@ -8,9 +8,9 @@ import org.json.JSONObject
 /**
  * Author  ZYH
  * Date    2018/1/24
- * Des     Logger
+ * Des     NetLogger
  */
-object Logger {
+object NetLogger {
     var DEBUG = true/*BuildConfig.DEBUG*///这个待定写出根据debug模式来
     val TAG = "fungo_net_test"
     private val MIN_STACK_OFFSET = 3
@@ -164,7 +164,7 @@ object Logger {
             val element = trace[i]
             val name = element.className
 
-            if (name != Logger::class.java.name) {
+            if (name != NetLogger::class.java.name) {
                 start = i
                 break
             }

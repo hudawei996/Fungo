@@ -1,4 +1,4 @@
-package com.leibo.baselib.net.base
+package com.leibo.baselib.net.entity
 
 /**
  * Author  ZYH

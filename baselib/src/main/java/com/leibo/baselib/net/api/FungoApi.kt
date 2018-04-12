@@ -1,7 +1,7 @@
 package com.leibo.baselib.net.api
 
-import com.leibo.baselib.net.base.BaseEntity
-import com.leibo.baselib.net.base.BaseRequestInfo
+import com.leibo.baselib.net.entity.BaseEntity
+import com.leibo.baselib.net.entity.BaseRequestInfo
 import io.reactivex.Observable
 import retrofit2.http.*
 

@@ -20,10 +20,11 @@ object FileUtils {
     private const val PATH_DATA = "Pinger"
     private const val PATH_IMAGE = "images"
     private const val PATH_VIDEO = "videos"
+    private const val PATH_CACHE = "cache"
 
     /** 获取项目数据目录的路径字符串 */
-    fun getAppDataPath(context: Context): String {
-        val dataPath: String = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+    fun getAppDataPath(context: Context?): String {
+        val dataPath: String = if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED || context == null) {
             (Environment.getExternalStorageDirectory()
                     .absolutePath
                     + File.separator
@@ -38,14 +39,21 @@ object FileUtils {
     }
 
     /** 获取图片存储的路径 */
-    fun getImagePatch(context: Context): String {
+    fun getImagePatch(context: Context?): String {
         val path = getAppDataPath(context) + File.separator + PATH_IMAGE
         createOrExistsDir(path)
         return path
     }
 
+    /** 获取缓存的路径 */
+    fun getCachePath(context: Context?): String {
+        val path = getAppDataPath(context) + File.separator + PATH_CACHE
+        createOrExistsDir(path)
+        return path
+    }
+
     /** 获取视频存储的路径 */
-    fun getVideoPatch(context: Context): String {
+    fun getVideoPatch(context: Context?): String {
         val path = getAppDataPath(context) + File.separator + PATH_VIDEO
         createOrExistsDir(path)
         return path
