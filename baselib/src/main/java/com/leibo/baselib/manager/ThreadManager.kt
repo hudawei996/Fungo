@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Pinger
  * @since 2018/4/7 8:23
+ * TODO 使用RxJava替换线程切换
  */
 object ThreadManager {
 
@@ -142,7 +143,7 @@ object ThreadManager {
     }
 
     /** 运行在子线程 */
-    fun runOnSubThead(run: Runnable) {
+    fun runOnSubThread(run: Runnable) {
         singlePool.execute(run)
     }
 

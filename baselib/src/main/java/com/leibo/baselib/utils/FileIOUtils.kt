@@ -53,6 +53,7 @@ object FileIOUtils {
             val len: Int = stream.read(data, 0, sBufferSize)
             while (len != -1) {
                 os.write(data, 0, len)
+                println("----> data write len = $len")
             }
             true
         } catch (e: IOException) {

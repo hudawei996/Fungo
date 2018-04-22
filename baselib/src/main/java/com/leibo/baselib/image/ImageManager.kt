@@ -9,7 +9,7 @@ import com.leibo.baselib.image.progress.ProgressListener
 import com.leibo.baselib.image.strategy.ImageModel
 import com.leibo.baseuilib.utils.ViewUtils
 import org.fungo.baselib.image.BaseImageStrategy
-import org.fungo.baselib.image.GlideImageLoaderStrategy
+import com.leibo.baselib.image.strategy.GlideImageLoaderStrategy
 
 /**
  * @author Pinger

@@ -1,4 +1,4 @@
-package org.fungo.baselib.image
+package com.leibo.baselib.image.strategy
 
 import android.content.Context
 import android.content.Intent
@@ -24,6 +24,8 @@ import com.leibo.baselib.image.transfmer.GrayScaleTransformation
 import com.leibo.baselib.image.transfmer.RoundTransformation
 import com.leibo.baselib.manager.ThreadManager
 import com.leibo.baselib.utils.FileUtils
+import org.fungo.baselib.image.BaseImageStrategy
+import org.fungo.baselib.image.ImageConfiguration
 import java.io.File
 
 /**
@@ -96,7 +98,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     }
 
     override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
-        ThreadManager.runOnSubThead(Runnable {
+        ThreadManager.runOnSubThread(Runnable {
             try {
                 if (context != null && !TextUtils.isEmpty(url)) {
                     val imageFile = download(context, url!!)
@@ -155,7 +157,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            ThreadManager.runOnSubThead(Runnable { Glide.get(context).clearDiskCache() })
+            ThreadManager.runOnSubThread(Runnable { Glide.get(context).clearDiskCache() })
         }
     }
 
