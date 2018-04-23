@@ -17,7 +17,7 @@ import java.util.*
  */
 object FileUtils {
 
-    private const val PATH_DATA = "Pinger"
+    private const val PATH_DATA = "Fungo"
     private const val PATH_IMAGE = "images"
     private const val PATH_VIDEO = "videos"
     private const val PATH_CACHE = "cache"
@@ -40,21 +40,21 @@ object FileUtils {
 
     /** 获取图片存储的路径 */
     fun getImagePatch(context: Context?): String {
-        val path = getAppDataPath(context) + File.separator + PATH_IMAGE
+        val path = getAppDataPath(context) + File.separator + PATH_IMAGE + File.separator
         createOrExistsDir(path)
         return path
     }
 
     /** 获取缓存的路径 */
     fun getCachePath(context: Context?): String {
-        val path = getAppDataPath(context) + File.separator + PATH_CACHE
+        val path = getAppDataPath(context) + File.separator + PATH_CACHE + File.separator
         createOrExistsDir(path)
         return path
     }
 
     /** 获取视频存储的路径 */
     fun getVideoPatch(context: Context?): String {
-        val path = getAppDataPath(context) + File.separator + PATH_VIDEO
+        val path = getAppDataPath(context) + File.separator + PATH_VIDEO + File.separator
         createOrExistsDir(path)
         return path
     }
@@ -201,11 +201,11 @@ object FileUtils {
         if (file == null) return false
         if (file.exists()) return file.isFile
         if (!createOrExistsDir(file.parentFile)) return false
-        try {
-            return file.createNewFile()
+        return try {
+            file.createNewFile()
         } catch (e: IOException) {
             e.printStackTrace()
-            return false
+            false
         }
 
     }

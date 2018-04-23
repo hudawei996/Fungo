@@ -18,6 +18,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.leibo.baselib.R
 import com.leibo.baselib.image.listener.ImageListener
+import com.leibo.baselib.image.listener.ImageSaveListener
 import com.leibo.baselib.image.transfmer.BlurTransformation
 import com.leibo.baselib.image.transfmer.CircleTransformation
 import com.leibo.baselib.image.transfmer.GrayScaleTransformation
@@ -97,27 +98,37 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         loadImage(obj, imageView, null, null)
     }
 
-    override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+    override fun saveImage(context: Context?, url: String?, listener: ImageSaveListener?) {
         ThreadManager.runOnSubThread(Runnable {
             try {
                 if (context != null && !TextUtils.isEmpty(url)) {
+                    val suffix = if (ImageModel.isGif(url)) {
+                        "${System.currentTimeMillis()}.gif"
+                    } else {
+                        "${System.currentTimeMillis()}.jpg"
+                    }
+                    val filePath = FileUtils.getImagePatch(context) + suffix
                     val imageFile = download(context, url!!)
-                    val filePath = FileUtils.getImagePatch(context)
-                    FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
+                    val isCopySuccess = FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
                         override fun onReplace(): Boolean {
                             return true
                         }
                     })
+
                     // 最后通知图库更新
                     context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                             Uri.fromFile(File(filePath))))
                     ThreadManager.runOnUIThread(Runnable {
-                        listener?.onSuccess()
+                        if (isCopySuccess) {
+                            listener?.onSaveSuccess("图片已保存至 " + FileUtils.getImagePatch(context))
+                        } else {
+                            listener?.onSaveFail("保存失败")
+                        }
                     })
                 }
             } catch (e: Exception) {
                 ThreadManager.runOnUIThread(Runnable {
-                    listener?.onFail("保存失败")
+                    listener?.onSaveFail("保存失败")
                 })
             }
         })
