@@ -327,7 +327,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
 
-        // 缩放类型
+        // 缩放类型,TODO Glide缩放类型对于占位图无效，所以一般使用ImageView的ScaleType属性
         when (glideConfig.getScaleType()) {
             ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
             ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
@@ -367,7 +367,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         return options
     }
 
-    /** 下载图片 */
+    /** 获取图片的缓存文件 */
     override fun download(context: Context, url: String): File {
         return Glide.with(context).download(url).submit().get()
     }
