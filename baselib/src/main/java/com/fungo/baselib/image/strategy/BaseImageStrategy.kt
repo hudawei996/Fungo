@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import com.fungo.baselib.image.listener.ImageListener
+import com.leibo.baselib.image.listener.ImageSaveListener
 import java.io.File
 
 /**

@@ -2,13 +2,13 @@ package com.fungo.repertory.image
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.image.ImageManager
-import com.fungo.baselib.image.listener.ImageListener
 import com.fungo.baselib.image.progress.ProgressListener
+import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.repertory.R
+import com.leibo.baselib.image.listener.ImageSaveListener
 import kotlinx.android.synthetic.main.activity_image.*
 
 /**

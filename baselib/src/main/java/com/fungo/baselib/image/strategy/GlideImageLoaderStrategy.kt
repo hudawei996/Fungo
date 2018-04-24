@@ -24,6 +24,7 @@ import com.fungo.baselib.image.transfmer.GrayScaleTransformation
 import com.fungo.baselib.image.transfmer.RoundTransformation
 import com.fungo.baselib.manager.ThreadManager
 import com.fungo.baselib.utils.FileUtils
+import com.leibo.baselib.image.listener.ImageSaveListener
 import org.fungo.baselib.image.BaseImageStrategy
 import org.fungo.baselib.image.ImageConfiguration
 import java.io.File

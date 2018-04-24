@@ -6,10 +6,11 @@ import android.widget.ImageView
 import com.fungo.baselib.image.listener.ImageListener
 import com.fungo.baselib.image.progress.ProgressEngine
 import com.fungo.baselib.image.progress.ProgressListener
+import com.fungo.baselib.image.strategy.GlideImageLoaderStrategy
 import com.fungo.baselib.image.strategy.ImageModel
 import com.fungo.baseuilib.utils.ViewUtils
+import com.leibo.baselib.image.listener.ImageSaveListener
 import org.fungo.baselib.image.BaseImageStrategy
-import com.fungo.baselib.image.strategy.GlideImageLoaderStrategy
 
 /**
  * @author Pinger
