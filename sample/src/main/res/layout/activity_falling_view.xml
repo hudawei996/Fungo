@@ -4,7 +4,7 @@
     android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
-    <com.leibo.baseuilib.view.falling.FallingView
+    <com.fungo.baseuilib.view.falling.FallingView
         android:id="@+id/falling_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

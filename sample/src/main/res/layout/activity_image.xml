@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <com.leibo.baseuilib.view.progress.CircleProgressView
+    <com.fungo.baseuilib.view.progress.CircleProgressView
         android:id="@+id/progressView"
         android:layout_width="50dp"
         android:layout_height="50dp"
