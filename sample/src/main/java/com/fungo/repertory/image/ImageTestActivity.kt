@@ -45,23 +45,25 @@ class ImageTestActivity : BaseActivity() {
             btnNormalCircle -> ImageManager.instance.loadCircleImage(mUrl, mImageView)
             btnNormalRound -> ImageManager.instance.loadRoundImage(mUrl, mImageView, 8)
             btnGif -> ImageManager.instance.loadImage(mGifUrl, mImageView)
-            btnGifSave -> ImageManager.instance.saveImage(this, mGifUrl, object : ImageListener {
-                override fun onSuccess() {
-                    Toast.makeText(this@ImageTestActivity, "保存成功", Toast.LENGTH_SHORT).show()
+            btnGifSave -> ImageManager.instance.saveImage(this, mGifUrl, object : ImageSaveListener {
+                override fun onSaveSuccess(msg: String) {
+                    ToastUtils.showToast(msg)
                 }
 
-                override fun onFail(msg: String) {
-                    Toast.makeText(this@ImageTestActivity, msg, Toast.LENGTH_SHORT).show()
+                override fun onSaveFail(msg: String) {
+                    ToastUtils.showToast(msg)
                 }
+
             })
-            btnNormalSave -> ImageManager.instance.saveImage(this, mUrl, object : ImageListener {
-                override fun onSuccess() {
-                    Toast.makeText(this@ImageTestActivity, "保存成功", Toast.LENGTH_SHORT).show()
+            btnNormalSave -> ImageManager.instance.saveImage(this, mUrl, object : ImageSaveListener {
+                override fun onSaveSuccess(msg: String) {
+                    ToastUtils.showToast(msg)
                 }
 
-                override fun onFail(msg: String) {
-                    Toast.makeText(this@ImageTestActivity, msg, Toast.LENGTH_SHORT).show()
+                override fun onSaveFail(msg: String) {
+                    ToastUtils.showToast(msg)
                 }
+
             })
 
             btnNormalProgress -> {

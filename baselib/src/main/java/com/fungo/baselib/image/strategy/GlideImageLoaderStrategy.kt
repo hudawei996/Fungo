@@ -97,27 +97,37 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         loadImage(obj, imageView, null, null)
     }
 
-    override fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+    override fun saveImage(context: Context?, url: String?, listener: ImageSaveListener?) {
         ThreadManager.runOnSubThread(Runnable {
             try {
                 if (context != null && !TextUtils.isEmpty(url)) {
+                    val suffix = if (ImageModel.isGif(url)) {
+                        "${System.currentTimeMillis()}.gif"
+                    } else {
+                        "${System.currentTimeMillis()}.jpg"
+                    }
+                    val filePath = FileUtils.getImagePatch(context) + suffix
                     val imageFile = download(context, url!!)
-                    val filePath = FileUtils.getImagePatch(context)
-                    FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
+                    val isCopySuccess = FileUtils.copyFile(imageFile.path, filePath, object : FileUtils.OnReplaceListener {
                         override fun onReplace(): Boolean {
                             return true
                         }
                     })
+
                     // 最后通知图库更新
                     context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                             Uri.fromFile(File(filePath))))
                     ThreadManager.runOnUIThread(Runnable {
-                        listener?.onSuccess()
+                        if (isCopySuccess) {
+                            listener?.onSaveSuccess("图片已保存至 " + FileUtils.getImagePatch(context))
+                        } else {
+                            listener?.onSaveFail("保存失败")
+                        }
                     })
                 }
             } catch (e: Exception) {
                 ThreadManager.runOnUIThread(Runnable {
-                    listener?.onFail("保存失败")
+                    listener?.onSaveFail("保存失败")
                 })
             }
         })
@@ -316,7 +326,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
 
-        // 缩放类型
+        // 缩放类型,TODO Glide缩放类型对于占位图无效，所以一般使用ImageView的ScaleType属性
         when (glideConfig.getScaleType()) {
             ImageConfiguration.ScaleType.FIT_CENTER -> options.fitCenter()
             ImageConfiguration.ScaleType.CENTER_CROP -> options.centerCrop()
@@ -356,7 +366,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
         return options
     }
 
-    /** 下载图片 */
+    /** 获取图片的缓存文件 */
     override fun download(context: Context, url: String): File {
         return Glide.with(context).download(url).submit().get()
     }

@@ -11,6 +11,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,6 +22,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:progress="0"
+        android:visibility="gone"
         app:cpv_innerPadding="2dp"
         app:cpv_outerColor="#E5ffffff"
         app:cpv_outerSize="1dp"

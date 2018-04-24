@@ -29,4 +29,5 @@ dependencies {
     implementation rootProject.ext.dependencies.kotlin
 
     kapt 'com.google.dagger:dagger-compiler:2.9'
+    kapt 'com.github.bumptech.glide:compiler:4.6.1'
 }

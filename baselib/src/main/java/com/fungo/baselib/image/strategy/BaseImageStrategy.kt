@@ -35,7 +35,7 @@ interface BaseImageStrategy {
     fun loadGifImage(url: String?, imageView: ImageView?, listener: ImageListener?)
 
     /** 保存图片 */
-    fun saveImage(context: Context?, url: String?, listener: ImageListener?)
+    fun saveImage(context: Context?, url: String?, listener: ImageSaveListener?)
 
     /** 加载圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float)

@@ -94,7 +94,7 @@ class ImageManager {
     }
 
     /** 保存图片到本地 */
-    fun saveImage(context: Context?, url: String?, listener: ImageListener?) {
+    fun saveImage(context: Context?, url: String?, listener: ImageSaveListener?) {
         mImageStrategy!!.saveImage(context, url, listener)
     }
 
