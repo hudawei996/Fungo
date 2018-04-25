@@ -9,7 +9,7 @@ import com.fungo.baselib.image.progress.ProgressListener
 import com.fungo.baselib.image.strategy.GlideImageLoaderStrategy
 import com.fungo.baselib.image.strategy.ImageModel
 import com.fungo.baseuilib.utils.ViewUtils
-import com.leibo.baselib.image.listener.ImageSaveListener
+import com.fungo.baselib.image.listener.ImageSaveListener
 import org.fungo.baselib.image.BaseImageStrategy
 
 /**

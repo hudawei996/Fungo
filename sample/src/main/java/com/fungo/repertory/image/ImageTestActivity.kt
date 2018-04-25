@@ -8,7 +8,7 @@ import com.fungo.baselib.image.progress.ProgressListener
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.repertory.R
-import com.leibo.baselib.image.listener.ImageSaveListener
+import com.fungo.baselib.image.listener.ImageSaveListener
 import kotlinx.android.synthetic.main.activity_image.*
 
 /**
