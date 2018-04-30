@@ -1,23 +1,23 @@
-package com.fungo.baselib.social.share;
+package com.fungo.baselib.social.share.media;
 
 import android.graphics.Bitmap;
 
 /**
- * 视频分享 实体类
+ * 音乐分享 实体类
  * Created by tsy on 16/8/11.
  */
-public class ShareVideoMedia implements IShareMedia {
-    private String mVideoUrl;       //视频url
+public class ShareMusicMedia implements IShareMedia {
+    private String mMusicUrl;       //音乐url
     private String mTitle;          //标题
     private String mDescription;    //描述
     private Bitmap mThumb;          //缩略图
 
-    public String getVideoUrl() {
-        return mVideoUrl;
+    public String getMusicUrl() {
+        return mMusicUrl;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        mVideoUrl = videoUrl;
+    public void setMusicUrl(String musicUrl) {
+        mMusicUrl = musicUrl;
     }
 
     public String getTitle() {

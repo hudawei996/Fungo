@@ -1,4 +1,4 @@
-package com.fungo.baselib.social;
+package com.fungo.baselib.social.share.config;
 
 import java.util.HashMap;
 import java.util.Map;

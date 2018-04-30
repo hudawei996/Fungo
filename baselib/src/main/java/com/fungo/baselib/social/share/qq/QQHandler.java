@@ -1,4 +1,4 @@
-package com.fungo.baselib.social.qq;
+package com.fungo.baselib.social.share.qq;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 
-import com.fungo.baselib.social.PlatformConfig;
-import com.fungo.baselib.social.PlatformType;
-import com.fungo.baselib.social.SSOHandler;
-import com.fungo.baselib.social.listener.AuthListener;
-import com.fungo.baselib.social.listener.ShareListener;
-import com.fungo.baselib.social.share.IShareMedia;
-import com.fungo.baselib.social.share.ShareImageMedia;
-import com.fungo.baselib.social.share.ShareMusicMedia;
-import com.fungo.baselib.social.share.ShareWebMedia;
+import com.fungo.baselib.social.share.config.PlatformConfig;
+import com.fungo.baselib.social.share.config.PlatformType;
+import com.fungo.baselib.social.share.config.SSOHandler;
+import com.fungo.baselib.social.share.listener.OnAuthListener;
+import com.fungo.baselib.social.share.listener.OnShareListener;
+import com.fungo.baselib.social.share.media.IShareMedia;
+import com.fungo.baselib.social.share.media.ShareImageMedia;
+import com.fungo.baselib.social.share.media.ShareMusicMedia;
+import com.fungo.baselib.social.share.media.ShareWebMedia;
 import com.fungo.baselib.utils.BitmapUtils;
 import com.fungo.baselib.utils.GsonUtils;
 import com.fungo.baselib.utils.LogUtils;
@@ -43,8 +43,8 @@ public class QQHandler extends SSOHandler {
     private Tencent mTencent;
 
     private PlatformConfig.QQ mConfig;
-    private AuthListener mAuthListener;
-    private ShareListener mShareListener;
+    private OnAuthListener mAuthListener;
+    private OnShareListener mShareListener;
 
     public QQHandler() {
 
@@ -59,7 +59,7 @@ public class QQHandler extends SSOHandler {
     }
 
     @Override
-    public void authorize(Activity activity, AuthListener authListener) {
+    public void authorize(Activity activity, OnAuthListener authListener) {
         this.mActivity = activity;
         this.mAuthListener = authListener;
 
@@ -96,7 +96,7 @@ public class QQHandler extends SSOHandler {
     }
 
     @Override
-    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
+    public void share(Activity activity, IShareMedia shareMedia, OnShareListener shareListener) {
         this.mActivity = activity;
         this.mShareListener = shareListener;
 

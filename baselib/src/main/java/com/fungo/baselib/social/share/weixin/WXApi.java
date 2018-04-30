@@ -1,4 +1,4 @@
-package com.fungo.baselib.social.weixin;
+package com.fungo.baselib.social.share.weixin;
 
 
 import org.json.JSONObject;

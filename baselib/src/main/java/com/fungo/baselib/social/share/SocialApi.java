@@ -1,15 +1,18 @@
-package com.fungo.baselib.social;
+package com.fungo.baselib.social.share;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.fungo.baselib.social.listener.AuthListener;
-import com.fungo.baselib.social.listener.ShareListener;
-import com.fungo.baselib.social.qq.QQHandler;
-import com.fungo.baselib.social.share.IShareMedia;
-import com.fungo.baselib.social.sina.SinaWBHandler;
-import com.fungo.baselib.social.weixin.WXHandler;
+import com.fungo.baselib.social.share.listener.OnAuthListener;
+import com.fungo.baselib.social.share.listener.OnShareListener;
+import com.fungo.baselib.social.share.config.PlatformConfig;
+import com.fungo.baselib.social.share.config.PlatformType;
+import com.fungo.baselib.social.share.config.SSOHandler;
+import com.fungo.baselib.social.share.qq.QQHandler;
+import com.fungo.baselib.social.share.media.IShareMedia;
+import com.fungo.baselib.social.share.weibo.SinaWBHandler;
+import com.fungo.baselib.social.share.weixin.WXHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +81,7 @@ public class SocialApi {
      * @param platformType 第三方平台
      * @param authListener 授权回调
      */
-    public void doOauthVerify(Activity activity, PlatformType platformType, AuthListener authListener) {
+    public void doOauthVerify(Activity activity, PlatformType platformType, OnAuthListener authListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
         ssoHandler.onCreate(activity, PlatformConfig.getPlatformConfig(platformType));
         ssoHandler.authorize(activity, authListener);
@@ -90,7 +93,7 @@ public class SocialApi {
      * @param shareMedia
      * @param shareListener
      */
-    public void doShare(Activity activity, PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
+    public void doShare(Activity activity, PlatformType platformType, IShareMedia shareMedia, OnShareListener shareListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
         ssoHandler.onCreate(activity, PlatformConfig.getPlatformConfig(platformType));
         ssoHandler.share(activity, shareMedia, shareListener);

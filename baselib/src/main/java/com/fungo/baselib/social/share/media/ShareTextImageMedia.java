@@ -1,4 +1,4 @@
-package com.fungo.baselib.social.share;
+package com.fungo.baselib.social.share.media;
 
 import android.graphics.Bitmap;
 

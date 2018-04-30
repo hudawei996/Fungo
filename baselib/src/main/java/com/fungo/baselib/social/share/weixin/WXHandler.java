@@ -1,21 +1,21 @@
-package com.fungo.baselib.social.weixin;
+package com.fungo.baselib.social.share.weixin;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
-import com.fungo.baselib.social.PlatformConfig;
-import com.fungo.baselib.social.PlatformType;
-import com.fungo.baselib.social.SSOHandler;
-import com.fungo.baselib.social.listener.AuthListener;
-import com.fungo.baselib.social.listener.ShareListener;
-import com.fungo.baselib.social.share.IShareMedia;
-import com.fungo.baselib.social.share.ShareImageMedia;
-import com.fungo.baselib.social.share.ShareMusicMedia;
-import com.fungo.baselib.social.share.ShareTextMedia;
-import com.fungo.baselib.social.share.ShareVideoMedia;
-import com.fungo.baselib.social.share.ShareWebMedia;
+import com.fungo.baselib.social.share.config.PlatformConfig;
+import com.fungo.baselib.social.share.config.PlatformType;
+import com.fungo.baselib.social.share.config.SSOHandler;
+import com.fungo.baselib.social.share.listener.OnAuthListener;
+import com.fungo.baselib.social.share.listener.OnShareListener;
+import com.fungo.baselib.social.share.media.IShareMedia;
+import com.fungo.baselib.social.share.media.ShareImageMedia;
+import com.fungo.baselib.social.share.media.ShareMusicMedia;
+import com.fungo.baselib.social.share.media.ShareTextMedia;
+import com.fungo.baselib.social.share.media.ShareVideoMedia;
+import com.fungo.baselib.social.share.media.ShareWebMedia;
 import com.fungo.baselib.utils.BitmapUtils;
 import com.fungo.baselib.utils.LogUtils;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -55,8 +55,8 @@ public class WXHandler extends SSOHandler {
     private String mLastTransaction = "";
 
     private PlatformConfig.Weixin mConfig;
-    private AuthListener mAuthListener;
-    private ShareListener mShareListener;
+    private OnAuthListener mAuthListener;
+    private OnShareListener mShareListener;
 
     public WXHandler() {
         this.mEventHandler = new IWXAPIEventHandler() {
@@ -108,7 +108,7 @@ public class WXHandler extends SSOHandler {
     }
 
     @Override
-    public void authorize(Activity activity, AuthListener authListener) {
+    public void authorize(Activity activity, OnAuthListener authListener) {
         if(!isInstall()) {
             authListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.INSTANCE.e("wx not install");
@@ -155,7 +155,7 @@ public class WXHandler extends SSOHandler {
     }
 
     @Override
-    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
+    public void share(Activity activity, IShareMedia shareMedia, OnShareListener shareListener) {
         if(!isInstall()) {
             shareListener.onError(this.mConfig.getName(), "wx not install");
             LogUtils.INSTANCE.e("wx not install");

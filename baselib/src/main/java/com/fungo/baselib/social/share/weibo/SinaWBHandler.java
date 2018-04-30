@@ -1,15 +1,15 @@
-package com.fungo.baselib.social.sina;
+package com.fungo.baselib.social.share.weibo;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.fungo.baselib.social.PlatformConfig;
-import com.fungo.baselib.social.SSOHandler;
-import com.fungo.baselib.social.listener.AuthListener;
-import com.fungo.baselib.social.listener.ShareListener;
-import com.fungo.baselib.social.share.IShareMedia;
-import com.fungo.baselib.social.share.ShareTextImageMedia;
+import com.fungo.baselib.social.share.config.PlatformConfig;
+import com.fungo.baselib.social.share.config.SSOHandler;
+import com.fungo.baselib.social.share.listener.OnAuthListener;
+import com.fungo.baselib.social.share.listener.OnShareListener;
+import com.fungo.baselib.social.share.media.IShareMedia;
+import com.fungo.baselib.social.share.media.ShareTextImageMedia;
 import com.fungo.baselib.utils.LogUtils;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.TextObject;
@@ -37,8 +37,8 @@ public class SinaWBHandler extends SSOHandler {
     private SsoHandler mSsoHandler;
 
     private PlatformConfig.SinaWB mConfig;
-    private AuthListener mAuthListener;
-    private ShareListener mShareListener;
+    private OnAuthListener mAuthListener;
+    private OnShareListener mShareListener;
     private WbShareHandler mWbShareHandler;
 
     private static String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";// 应用的回调页 要和微博开放平台的回调地址一致
@@ -63,7 +63,7 @@ public class SinaWBHandler extends SSOHandler {
     }
 
     @Override
-    public void authorize(Activity activity, AuthListener authListener) {
+    public void authorize(Activity activity, OnAuthListener authListener) {
         this.mActivity = activity;
         this.mAuthListener = authListener;
 
@@ -104,7 +104,7 @@ public class SinaWBHandler extends SSOHandler {
     }
 
     @Override
-    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
+    public void share(Activity activity, IShareMedia shareMedia, OnShareListener shareListener) {
         this.mActivity = activity;
         this.mShareListener = shareListener;
 

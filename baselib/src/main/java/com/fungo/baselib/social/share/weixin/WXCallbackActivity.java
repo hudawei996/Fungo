@@ -1,12 +1,12 @@
-package com.fungo.baselib.social.weixin;
+package com.fungo.baselib.social.share.weixin;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fungo.baselib.social.PlatformConfig;
-import com.fungo.baselib.social.PlatformType;
-import com.fungo.baselib.social.SocialApi;
+import com.fungo.baselib.social.share.config.PlatformConfig;
+import com.fungo.baselib.social.share.config.PlatformType;
+import com.fungo.baselib.social.share.SocialApi;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;

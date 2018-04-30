@@ -1,12 +1,12 @@
-package com.fungo.baselib.social;
+package com.fungo.baselib.social.share.config;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.fungo.baselib.social.listener.AuthListener;
-import com.fungo.baselib.social.listener.ShareListener;
-import com.fungo.baselib.social.share.IShareMedia;
+import com.fungo.baselib.social.share.listener.OnAuthListener;
+import com.fungo.baselib.social.share.listener.OnShareListener;
+import com.fungo.baselib.social.share.media.IShareMedia;
 
 /**
  * Created by tsy on 16/8/4.
@@ -26,7 +26,7 @@ public abstract class SSOHandler {
      * @param activity
      * @param authListener 授权回调
      */
-    public void authorize(Activity activity, AuthListener authListener) {
+    public void authorize(Activity activity, OnAuthListener authListener) {
 
     }
 
@@ -35,7 +35,7 @@ public abstract class SSOHandler {
      * @param shareMedia 分享内容
      * @param shareListener 分享回调
      */
-    public void share(Activity activity, IShareMedia shareMedia, ShareListener shareListener) {
+    public void share(Activity activity, IShareMedia shareMedia, OnShareListener shareListener) {
 
     }
 
