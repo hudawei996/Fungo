@@ -4,12 +4,14 @@ package com.fungo.baselib.utils
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import com.google.gson.*
+import org.json.JSONObject
 import java.io.Reader
 import java.lang.reflect.Type
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Author  ZYH
@@ -66,6 +68,16 @@ object GsonUtils {
 
     fun <V> fromJson(reader: Reader, type: Type): V {
         return getGson().fromJson(reader, type)
+    }
+
+    fun jsonToMap(obj: JSONObject): Map<String, String> {
+        val map = HashMap<String, String>()
+        val iterator = obj.keys()
+        while (iterator.hasNext()) {
+            val key = iterator.next()
+            map[key] = obj.opt(key).toString()
+        }
+        return map
     }
 
     class DateFormatter @SuppressLint("SimpleDateFormat")

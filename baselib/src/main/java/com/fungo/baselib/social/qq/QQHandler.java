@@ -11,9 +11,12 @@ import com.fungo.baselib.social.PlatformType;
 import com.fungo.baselib.social.SSOHandler;
 import com.fungo.baselib.social.listener.AuthListener;
 import com.fungo.baselib.social.listener.ShareListener;
+import com.fungo.baselib.social.share.IShareMedia;
 import com.fungo.baselib.social.share.ShareImageMedia;
 import com.fungo.baselib.social.share.ShareMusicMedia;
 import com.fungo.baselib.social.share.ShareWebMedia;
+import com.fungo.baselib.utils.BitmapUtils;
+import com.fungo.baselib.utils.GsonUtils;
 import com.fungo.baselib.utils.LogUtils;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
@@ -63,8 +66,8 @@ public class QQHandler extends SSOHandler {
         this.mTencent.login(this.mActivity, "all", new IUiListener() {
             @Override
             public void onComplete(Object o) {
-                if (null == o || ((JSONObject)o) == null) {
-                    LogUtils.e("onComplete response=null");
+                if (null == o || ((JSONObject) o) == null) {
+                    LogUtils.INSTANCE.e("onComplete response=null");
                     mAuthListener.onError(mConfig.getName(), "onComplete response=null");
                     return;
                 }
@@ -73,7 +76,7 @@ public class QQHandler extends SSOHandler {
 
                 initOpenidAndToken(response);
 
-                mAuthListener.onComplete(mConfig.getName(), Utils.jsonToMap(response));
+                mAuthListener.onComplete(mConfig.getName(), GsonUtils.INSTANCE.jsonToMap(response));
 
                 mTencent.logout(mActivity);
             }
@@ -81,7 +84,7 @@ public class QQHandler extends SSOHandler {
             @Override
             public void onError(UiError uiError) {
                 String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                LogUtils.e(errmsg);
+                LogUtils.INSTANCE.e(errmsg);
                 mAuthListener.onError(mConfig.getName(), errmsg);
             }
 
@@ -98,24 +101,24 @@ public class QQHandler extends SSOHandler {
         this.mShareListener = shareListener;
 
         //获取当前时间
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMddHHmmss");
-        Date curDate =  new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date curDate = new Date(System.currentTimeMillis());
         String strDate = formatter.format(curDate);
 
         final String path = Environment.getExternalStorageDirectory().toString() + "/socail_qq_img_tmp" + strDate + ".png";
         final File file = new File(path);
-        if(file.exists()) {
+        if (file.exists()) {
             file.delete();
         }
 
         Bundle params = new Bundle();
 
-        if(this.mConfig.getName() == PlatformType.QZONE) {      //qq空间
-            if(shareMedia instanceof ShareWebMedia) {       //网页分享
+        if (this.mConfig.getName() == PlatformType.QZONE) {      //qq空间
+            if (shareMedia instanceof ShareWebMedia) {          // 网页分享
                 ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
 
-                //图片保存本地
-                BitmapUtils.saveBitmapFile(shareWebMedia.getThumb(), path);
+                // 图片保存本地
+                BitmapUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
 
                 params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
                 params.putString(QzoneShare.SHARE_TO_QQ_TITLE, shareWebMedia.getTitle());
@@ -126,10 +129,10 @@ public class QQHandler extends SSOHandler {
                 path_arr.add(path);
                 params.putStringArrayList(QzoneShare.SHARE_TO_QQ_IMAGE_URL, path_arr);  //!这里是大坑 不能用SHARE_TO_QQ_IMAGE_LOCAL_URL
             } else {
-                if(this.mShareListener != null) {
+                if (this.mShareListener != null) {
                     this.mShareListener.onError(this.mConfig.getName(), "QZone is not support this shareMedia");
                 }
-                return ;
+                return;
             }
 
             //qq zone分享
@@ -138,7 +141,7 @@ public class QQHandler extends SSOHandler {
                 public void onComplete(Object o) {
                     mShareListener.onComplete(mConfig.getName());
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
@@ -146,10 +149,10 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onError(UiError uiError) {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                    LogUtils.e(errmsg);
+                    LogUtils.INSTANCE.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
@@ -158,48 +161,48 @@ public class QQHandler extends SSOHandler {
                 public void onCancel() {
                     mShareListener.onCancel(mConfig.getName());
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
             });
         } else {        //分享到qq
-            if(shareMedia instanceof ShareWebMedia) {       //网页分享
+            if (shareMedia instanceof ShareWebMedia) {       //网页分享
                 ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.saveBitmapFile(shareWebMedia.getThumb(), path);
+                BitmapUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
                 params.putString(QQShare.SHARE_TO_QQ_TITLE, shareWebMedia.getTitle());
                 params.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareWebMedia.getDescription());
                 params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareWebMedia.getWebPageUrl());
                 params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);
-            } else if(shareMedia instanceof ShareImageMedia) {  //图片分享
+            } else if (shareMedia instanceof ShareImageMedia) {  //图片分享
                 ShareImageMedia shareImageMedia = (ShareImageMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.saveBitmapFile(shareImageMedia.getImage(), path);
+                BitmapUtils.INSTANCE.saveBitmapFile(shareImageMedia.getImage(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
-                params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL,path);
+                params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);
             } else if (shareMedia instanceof ShareMusicMedia) {  //音乐分享
                 ShareMusicMedia shareMusicMedia = (ShareMusicMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.saveBitmapFile(shareMusicMedia.getThumb(), path);
+                BitmapUtils.INSTANCE.saveBitmapFile(shareMusicMedia.getThumb(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_AUDIO);
                 params.putString(QQShare.SHARE_TO_QQ_TITLE, shareMusicMedia.getTitle());
-                params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  shareMusicMedia.getDescription());
-                params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  shareMusicMedia.getMusicUrl());
+                params.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareMusicMedia.getDescription());
+                params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareMusicMedia.getMusicUrl());
                 params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);
                 params.putString(QQShare.SHARE_TO_QQ_AUDIO_URL, shareMusicMedia.getMusicUrl());
             } else {
-                if(this.mShareListener != null) {
+                if (this.mShareListener != null) {
                     this.mShareListener.onError(this.mConfig.getName(), "QQ is not support this shareMedia");
                 }
-                return ;
+                return;
             }
 
             //qq分享
@@ -208,7 +211,7 @@ public class QQHandler extends SSOHandler {
                 public void onComplete(Object o) {
                     mShareListener.onComplete(mConfig.getName());
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
@@ -216,10 +219,10 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onError(UiError uiError) {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                    LogUtils.e(errmsg);
+                    LogUtils.INSTANCE.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
@@ -228,7 +231,7 @@ public class QQHandler extends SSOHandler {
                 public void onCancel() {
                     mShareListener.onCancel(mConfig.getName());
 
-                    if(file.exists()) {
+                    if (file.exists()) {
                         file.delete();
                     }
                 }
@@ -250,7 +253,7 @@ public class QQHandler extends SSOHandler {
 
             mTencent.setAccessToken(token, expires);
             mTencent.setOpenId(openId);
-        } catch(Exception e) {
+        } catch (Exception e) {
         }
     }
 }

@@ -34,33 +34,33 @@ public class WXApi {
                 + wxAppSecret + "&code=" + code + "&grant_type=authorization_code";
 
         //获取access token
-        NetUtils.doGet(access_token_url, new NetUtils.HttpResponseCallBack() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                if (response == null || response.length() == 0) {
-                    callback.onError("null respone");
-                    return;
-                }
-
-                if(response.optString("access_token") == null || response.optString("access_token").length() == 0) {
-                    callback.onError("errcode=" + response.optString("errcode") + " errmsg=" + response.optString("errmsg"));
-                    return;
-                }
-
-                Map<String, String> data = new HashMap<String, String>();
-                String[] keys = {"access_token", "expires_in", "refresh_token", "openid", "scope"};
-                for(int i=0; i<keys.length; i++) {
-                    data.put(keys[i], response.optString(keys[i]));
-                }
-
-                callback.onComplete(data);
-            }
-
-            @Override
-            public void onFailure() {
-                callback.onError("error net");
-            }
-        });
+//        NetUtils.doGet(access_token_url, new NetUtils.HttpResponseCallBack() {
+//            @Override
+//            public void onSuccess(JSONObject response) {
+//                if (response == null || response.length() == 0) {
+//                    callback.onError("null respone");
+//                    return;
+//                }
+//
+//                if(response.optString("access_token") == null || response.optString("access_token").length() == 0) {
+//                    callback.onError("errcode=" + response.optString("errcode") + " errmsg=" + response.optString("errmsg"));
+//                    return;
+//                }
+//
+//                Map<String, String> data = new HashMap<String, String>();
+//                String[] keys = {"access_token", "expires_in", "refresh_token", "openid", "scope"};
+//                for(int i=0; i<keys.length; i++) {
+//                    data.put(keys[i], response.optString(keys[i]));
+//                }
+//
+//                callback.onComplete(data);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//                callback.onError("error net");
+//            }
+//        });
     }
 
     /**
@@ -71,38 +71,37 @@ public class WXApi {
      */
     public static void getUserInfo(String openid, String access_token,
                                    final Callback callback) {
-
         String get_user_info_url = WX_GET_USER_INFO_URL + "?access_token=" + access_token
                 + "&openid=" + openid;
 
         //获取userinfo
-        NetUtils.doGet(get_user_info_url, new NetUtils.HttpResponseCallBack() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                if (response == null || response.length() == 0) {
-                    callback.onError("null respone");
-                    return;
-                }
-
-                if(response.optString("openid") == null || response.optString("openid").length() == 0) {
-                    callback.onError("errcode=" + response.optString("errcode") + " errmsg=" + response.optString("errmsg"));
-                    return;
-                }
-
-
-                Map<String, String> data = new HashMap<String, String>();
-                String[] keys = {"openid", "nickname", "sex", "province", "city", "country", "headimgurl", "unionid"};
-                for(int i=0; i<keys.length; i++) {
-                    data.put(keys[i], response.optString(keys[i]));
-                }
-
-                callback.onComplete(data);
-            }
-
-            @Override
-            public void onFailure() {
-                callback.onError("error net");
-            }
-        });
+//        NetUtils.doGet(get_user_info_url, new NetUtils.HttpResponseCallBack() {
+//            @Override
+//            public void onSuccess(JSONObject response) {
+//                if (response == null || response.length() == 0) {
+//                    callback.onError("null respone");
+//                    return;
+//                }
+//
+//                if(response.optString("openid") == null || response.optString("openid").length() == 0) {
+//                    callback.onError("errcode=" + response.optString("errcode") + " errmsg=" + response.optString("errmsg"));
+//                    return;
+//                }
+//
+//
+//                Map<String, String> data = new HashMap<String, String>();
+//                String[] keys = {"openid", "nickname", "sex", "province", "city", "country", "headimgurl", "unionid"};
+//                for(int i=0; i<keys.length; i++) {
+//                    data.put(keys[i], response.optString(keys[i]));
+//                }
+//
+//                callback.onComplete(data);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//                callback.onError("error net");
+//            }
+//        });
     }
 }

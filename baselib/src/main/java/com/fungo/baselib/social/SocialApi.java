@@ -80,7 +80,7 @@ public class SocialApi {
      */
     public void doOauthVerify(Activity activity, PlatformType platformType, AuthListener authListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
-        ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
+        ssoHandler.onCreate(activity, PlatformConfig.getPlatformConfig(platformType));
         ssoHandler.authorize(activity, authListener);
     }
 
@@ -92,7 +92,7 @@ public class SocialApi {
      */
     public void doShare(Activity activity, PlatformType platformType, IShareMedia shareMedia, ShareListener shareListener) {
         SSOHandler ssoHandler = getSSOHandler(platformType);
-        ssoHandler.onCreate(mContext, PlatformConfig.getPlatformConfig(platformType));
+        ssoHandler.onCreate(activity, PlatformConfig.getPlatformConfig(platformType));
         ssoHandler.share(activity, shareMedia, shareListener);
     }
 

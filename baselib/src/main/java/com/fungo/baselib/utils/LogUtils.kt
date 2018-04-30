@@ -9,4 +9,8 @@ object LogUtils {
     fun e(msg: String) {
         println(msg)
     }
+
+    fun e(tag: String, msg: String) {
+        println("$tag：$msg")
+    }
 }
