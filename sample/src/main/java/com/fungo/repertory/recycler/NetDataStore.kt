@@ -7,13 +7,12 @@ import com.fungo.baselib.net.api.FungoRequest
  * @author Pinger
  * @since 2018/4/30 22:36
  */
-class NetDataStore(fungoApi: FungoApi) : FungoRequest(fungoApi){
+class NetDataStore(fungoApi: FungoApi) : FungoRequest(fungoApi) {
 
 
-    fun loadNewsList(){
+    fun loadNewsList() {
 
     }
-
 
 
 }
