@@ -13,8 +13,8 @@
 
 
 ### 支付组件
-* [微信支付](https://github.com/PingerOne/Fungo/blob/master/baselib/src/main/java/com/fungo/baselib/social/pay/PayApi.java)
-* [支付宝支付](https://github.com/PingerOne/Fungo/blob/master/baselib/src/main/java/com/fungo/baselib/social/pay/PayApi.java)
+* [微信支付](\baselib\src\main\java\com\fungo\baselib\social\pay\PayApi.java)
+* [支付宝支付](/baselib/src/main/java/com/fungo/baselib/social/pay/PayApi.java)
 
 
 
