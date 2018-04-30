@@ -29,6 +29,7 @@
             android:name=".player.PlayerMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".image.ImageTestActivity" />
+        <activity android:name=".social.SocialActivity" />
     </application>
 
 </manifest>
