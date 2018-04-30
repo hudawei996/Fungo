@@ -1,11 +1,11 @@
 package com.fungo.baselib.net.retrofit
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.fungo.baselib.net.api.FungoApi
 import com.fungo.baselib.net.utils.FungoUrls
 import com.fungo.baselib.utils.BaseUtils
 import com.fungo.baselib.utils.FileUtils
 import com.fungo.baselib.utils.GsonUtils
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitManager private constructor() {
 
-    private val netService: FungoApi
+    private val mFungoApi: FungoApi
 
     companion object {
         private var mInstance: RetrofitManager? = null
@@ -50,12 +50,12 @@ class RetrofitManager private constructor() {
                 .client(okHttpClient)
                 .build()
 
-        netService = netRetrofit.create(FungoApi::class.java)
+        mFungoApi = netRetrofit.create(FungoApi::class.java)
 
-        println("---RetrofitManager---> netService：$netService")
+        println("---RetrofitManager---> netService：$mFungoApi")
     }
 
-    fun getNetService(): FungoApi {
-        return netService
+    fun getFungoApi(): FungoApi {
+        return mFungoApi
     }
 }

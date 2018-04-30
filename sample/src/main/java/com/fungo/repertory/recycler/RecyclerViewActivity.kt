@@ -1,6 +1,7 @@
 package com.fungo.repertory.recycler
 
 import com.fungo.baselib.base.basic.BaseActivity
+import com.fungo.baselib.net.repository.Repository
 import com.fungo.repertory.R
 import java.util.function.Consumer
 
@@ -20,6 +21,9 @@ class RecyclerViewActivity : BaseActivity() {
 
     override fun initData() {
         val url = ""
+
+
+
 
     }
 }

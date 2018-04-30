@@ -1,6 +1,7 @@
 package com.fungo.baselib.net.repository
 
-import com.fungo.baselib.net.api.FungoApi
+import com.fungo.baselib.net.api.FungoRequest
+import com.fungo.baselib.net.retrofit.RetrofitManager
 
 /**
  * @author Pinger
@@ -9,9 +10,7 @@ import com.fungo.baselib.net.api.FungoApi
 class Repository {
 
     @Volatile
-    private var repository: Repository? = null
-    @Volatile
-    private var netService: FungoApi? = null
+    private var mRepository: Repository? = null
 
     companion object {
         private var mInstance: Repository? = null
@@ -24,14 +23,12 @@ class Repository {
             }
     }
 
-
-    private var netWorkDataStore: NetWorkDataStore? = null
-
-    private fun getNetDataStore(): NetWorkDataStore? {
-        if (netWorkDataStore == null) {
-            netWorkDataStore = NetWorkDataStore(netService!!)
+    private var mFungoRequest: FungoRequest? = null
+    fun getFungoRequest(): FungoRequest {
+        if (mFungoRequest == null) {
+            mFungoRequest = FungoRequest(RetrofitManager.instance.getFungoApi())
         }
-        return netWorkDataStore
+        return mFungoRequest!!
     }
 
 }

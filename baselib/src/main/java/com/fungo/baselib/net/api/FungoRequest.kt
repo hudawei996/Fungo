@@ -1,8 +1,8 @@
 package com.fungo.baselib.net.api
 
-import com.jakewharton.retrofit2.adapter.rxjava2.HttpException
 import com.fungo.baselib.net.constant.ErrorCode
 import com.fungo.baselib.net.constant.ErrorDesc
+import com.fungo.baselib.net.constant.RequestType
 import com.fungo.baselib.net.entity.BaseEntity
 import com.fungo.baselib.net.entity.RequestError
 import com.fungo.baselib.net.utils.NetLogger
@@ -10,9 +10,12 @@ import com.fungo.baselib.net.utils.ParamsUtils
 import com.fungo.baselib.utils.BaseUtils
 import com.fungo.baselib.utils.GsonUtils
 import com.fungo.baselib.utils.NetWorkUtils
+import com.jakewharton.retrofit2.adapter.rxjava2.HttpException
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeoutException
@@ -24,12 +27,7 @@ import java.util.regex.Pattern
  * Date    2018/1/24
  * Des     网络请求
  */
-class FungoRequest(private val fungoApi: FungoApi) {
-
-    private companion object {
-        const val TYPE_POST = 0
-        const val TYPE_GET = 1
-    }
+open class FungoRequest(private val fungoApi: FungoApi) {
 
     /**
      * POST请求  不具体处理返回值，只是转化成BaseEntity实例
@@ -38,7 +36,7 @@ class FungoRequest(private val fungoApi: FungoApi) {
      * @param params    请求中data对应的参数，一个json格式数据
      *
      */
-    fun postRequest(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
+    fun postRequestNoResult(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
         val encryptionParams = ParamsUtils.getPostBody(sourceUrl, params)
         return if (sourceUrl.contains("http:") || sourceUrl.contains("https:")) {
             fungoApi.postRequestWithFullUrl(sourceUrl, encryptionParams)
@@ -55,8 +53,8 @@ class FungoRequest(private val fungoApi: FungoApi) {
      * @param <T>           请求成功对象data里面的实体对象，对过clazz确定
      * @return              返回成功后的数据
     </T> */
-    fun <T> postRequest(sourceUrl: String, params: Map<String, Any?>?, clazz: Class<T>): Observable<T> {
-        return request(TYPE_POST, sourceUrl, params, clazz)
+    fun <T> postRequest(sourceUrl: String, params: Map<String, Any?>?): Observable<T> {
+        return request(RequestType.TYPE_POST, sourceUrl, params)
     }
 
     /**
@@ -65,7 +63,7 @@ class FungoRequest(private val fungoApi: FungoApi) {
      * @param sourceUrl 接口号+参数
      *
      */
-    fun getRequest(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
+    fun getRequestNoResult(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
         val url = ParamsUtils.appendUrlParams(sourceUrl, params)
         return if (url.contains("http:") || url.contains("https:")) {
             fungoApi.getRequestWithFullUrl(url)
@@ -81,11 +79,11 @@ class FungoRequest(private val fungoApi: FungoApi) {
      * @param <T>           请求成功对象data里面的实体对象，对过clazz确定
      * @return              返回成功后的数据
     </T> */
-    fun <T> getRequest(sourceUrl: String, clazz: Class<T>): Observable<T> {
-        return request(TYPE_GET, sourceUrl, null, clazz)
+    fun <T> getRequest(sourceUrl: String): Observable<T> {
+        return request(RequestType.TYPE_GET, sourceUrl, null)
     }
 
-    private fun <T> request(requestType: Int, sourceUrl: String, params: Map<String, Any?>?, clazz: Class<T>): Observable<T> {
+    private fun <T> request(requestType: Int, sourceUrl: String, params: Map<String, Any?>?): Observable<T> {
         // 没网络主动抛出，程序决定是否处理
         return if (isNetworkDisconnected()) {
             Observable.create { e ->
@@ -95,13 +93,13 @@ class FungoRequest(private val fungoApi: FungoApi) {
                 }
             }
         } else Observable.just(sourceUrl)
-                .flatMap { url ->
-                    if (TYPE_POST == requestType) {
-                        postRequest(url, params)
+                .flatMap({ url ->
+                    if (RequestType.TYPE_POST == requestType) {
+                        postRequestNoResult(url, params)
                     } else {
-                        getRequest(url, params)
+                        getRequestNoResult(url, params)
                     }
-                }
+                })
                 .flatMap(Function<BaseEntity, ObservableSource<T>> { baseEntity ->
                     if (baseEntity.isSuccess()) {
                         Observable.create { subscriber ->
@@ -112,12 +110,29 @@ class FungoRequest(private val fungoApi: FungoApi) {
                                 try {
                                     val data = baseEntity.data
                                     NetLogger.i("Fungo Request OK---> sourceUrl ：" + sourceUrl + "\n success response : ---> " + data!!.toString())
-                                    /*if (cacheTime != CacheTime.NOT_CACHE) {
-                                                ACache.get(BaseApplication.getApplication()).put(new CacheHelper().getCacheKey(sourceUrl, params), data.toString(), cacheTime);
-                                            }*/
-                                    val bean = GsonUtils.fromJson(data.toString(), clazz)
-                                    if (!subscriber.isDisposed) {
-                                        subscriber.onNext(bean)
+
+                                    var tType: Type? = null
+                                    // 通过反射获取到方法
+                                    val declaredMethod = FungoRequest::class.java.getDeclaredMethod("request", Int::class.java, String::class.java, Map::class.java)
+                                    //获取返回值的类型，此处不是数组，请注意智商，返回值只能是一个
+                                    val genericReturnType = declaredMethod.genericReturnType
+                                    println("---------request：$genericReturnType")
+                                    //获取返回值的泛型参数
+                                    if (genericReturnType is ParameterizedType) {
+                                        val actualTypeArguments = genericReturnType.actualTypeArguments
+                                        for (type in actualTypeArguments) {
+                                            println("---------type：$genericReturnType")
+                                            tType = type
+                                        }
+                                    }
+//                                }
+                                    if (tType != null) {
+                                        val bean = GsonUtils.fromJson<T>(data.toString(), tType)
+                                        if (!subscriber.isDisposed) {
+                                            subscriber.onNext(bean)
+                                        }
+                                    } else {
+                                        subscriber.onError(RequestError(ErrorCode.NETWORK_DATA_CONVERT_ERROR, ErrorDesc.NET_DATA_CONVERT))
                                     }
                                 } catch (e: Exception) {
                                     NetLogger.e("logout" + " :" + e.message)

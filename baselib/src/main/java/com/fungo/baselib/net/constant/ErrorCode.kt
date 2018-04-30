@@ -13,4 +13,8 @@ object ErrorCode {
     const val JSON_DATA_ERROR = 901  //receive a jsonException when try to analysis a string to bean
     const val HTTP_SERIES_ERROR = 904  //ConnectException ||SocketTimeoutException||TimeoutException|| HttpException
     const val NETWORK_UN_CONNECTED = 907//无网络
+
+    const val NETWORK_DATA_CONVERT_ERROR = 1008 // 数据转换异常
+
+
 }

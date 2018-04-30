@@ -1,6 +1,5 @@
 package com.fungo.baselib.net.api
 
-import com.fungo.baselib.net.entity.BaseEntity
 import com.fungo.baselib.net.entity.BaseRequestInfo
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -11,15 +10,16 @@ import retrofit2.http.*
  * Des     网络请求api
  */
 interface FungoApi {
+
     @POST("{sourceUrl}")
-    fun postRequest(@Path("sourceUrl") sourceUrl: String, @Body params: BaseRequestInfo): Observable<BaseEntity>
+    fun <T> postRequest(@Path("sourceUrl") sourceUrl: String, @Body params: BaseRequestInfo): Observable<T>
 
     @POST
-    fun postRequestWithFullUrl(@Url sourceUrl: String, @Body params: BaseRequestInfo): Observable<BaseEntity>
+    fun <T> postRequestWithFullUrl(@Url sourceUrl: String, @Body params: BaseRequestInfo): Observable<T>
 
     @POST("{sourceUrl}")
-    fun getRequest(@Path("sourceUrl") sourceUrl: String): Observable<BaseEntity>
+    fun <T> getRequest(@Path("sourceUrl") sourceUrl: String): Observable<T>
 
     @GET
-    fun getRequestWithFullUrl(@Url sourceUrl: String): Observable<BaseEntity>
+    fun <T> getRequestWithFullUrl(@Url sourceUrl: String): Observable<T>
 }
