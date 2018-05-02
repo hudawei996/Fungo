@@ -130,10 +130,17 @@ object ViewUtils {
     }
 
     /**
-     * determine view is empty.
+     * determine view is not null.
      */
     fun isNonNull(view: View?): Boolean {
         return view != null
+    }
+
+    /**
+     * determine view is null.
+     */
+    fun isNull(view: View?): Boolean {
+        return view == null
     }
 
     /**
@@ -165,6 +172,12 @@ object ViewUtils {
             view.isEnabled = isEnable
         }
     }
+
+
+//    fun getString(context: Context?, @ArrayRes id: Int): Array<String> {
+//        return context?.resources?.getStringArray(id) ?: Array(0,)
+//    }
+
 
     /**
      * copy string to clipboard
@@ -241,18 +254,16 @@ object ViewUtils {
      * screen height
      */
     fun getScreenHeight(context: Context): Int {
-        var height = 0
+        val height: Int
         val dm = DisplayMetrics()
         val windowMgr = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowMgr != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                windowMgr.defaultDisplay.getRealMetrics(dm)
-                height = dm.heightPixels
-            } else {
-                val point = Point()
-                windowMgr.defaultDisplay.getSize(point)
-                return point.y
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            windowMgr.defaultDisplay.getRealMetrics(dm)
+            height = dm.heightPixels
+        } else {
+            val point = Point()
+            windowMgr.defaultDisplay.getSize(point)
+            return point.y
         }
         return height
     }
@@ -261,18 +272,16 @@ object ViewUtils {
      * screen width
      */
     fun getScreenWidth(context: Context): Int {
-        var width = 0
+        val width: Int
         val dm = DisplayMetrics()
         val windowMgr = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        if (windowMgr != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                windowMgr.defaultDisplay.getRealMetrics(dm)
-                width = dm.widthPixels
-            } else {
-                val point = Point()
-                windowMgr.defaultDisplay.getSize(point)
-                return point.x
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            windowMgr.defaultDisplay.getRealMetrics(dm)
+            width = dm.widthPixels
+        } else {
+            val point = Point()
+            windowMgr.defaultDisplay.getSize(point)
+            return point.x
         }
         return width
     }

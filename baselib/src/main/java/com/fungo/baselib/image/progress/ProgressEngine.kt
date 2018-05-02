@@ -1,6 +1,8 @@
 package com.fungo.baselib.image.progress
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -12,21 +14,21 @@ import java.util.*
 object ProgressEngine {
 
     private val mListeners = Collections.synchronizedList<WeakReference<ProgressListener>>(ArrayList<WeakReference<ProgressListener>>())
-    private var mOkHttpClient: OkHttpClient? = null
 
     fun getOkHttpClient(): OkHttpClient {
-        if (mOkHttpClient == null) {
-            mOkHttpClient = OkHttpClient.Builder()
-                    .addNetworkInterceptor { chain ->
-                        val request = chain.request()
-                        val response = chain.proceed(request)
-                        response.newBuilder()
-                                .body(ProgressResponseBody(response.body(), mProgressListener))
-                                .build()
-                    }
+        return OkHttpClient.Builder()
+                .addNetworkInterceptor(ProgressInterceptor())
+                .build()
+    }
+
+    private class ProgressInterceptor : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request()
+            val response = chain.proceed(request)
+            return response.newBuilder()
+                    .body(ProgressResponseBody(response.body(), mProgressListener))
                     .build()
         }
-        return mOkHttpClient!!
     }
 
     private val mProgressListener = object : ProgressListener {
@@ -36,11 +38,7 @@ object ProgressEngine {
             for (i in 0 until mListeners.size) {
                 val listener = mListeners[i]
                 val progressListener = listener.get()
-                if (progressListener == null) {
-                    mListeners.removeAt(i)
-                } else {
-                    progressListener.onProgress(bytesRead, contentLength, isDone)
-                }
+                progressListener?.onProgress(bytesRead, contentLength, isDone)
             }
         }
     }

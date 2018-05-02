@@ -18,13 +18,13 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.fungo.baselib.R
 import com.fungo.baselib.image.listener.ImageListener
+import com.fungo.baselib.image.listener.ImageSaveListener
 import com.fungo.baselib.image.transfmer.BlurTransformation
 import com.fungo.baselib.image.transfmer.CircleTransformation
 import com.fungo.baselib.image.transfmer.GrayScaleTransformation
 import com.fungo.baselib.image.transfmer.RoundTransformation
 import com.fungo.baselib.manager.ThreadManager
 import com.fungo.baselib.utils.FileUtils
-import com.fungo.baselib.image.listener.ImageSaveListener
 import org.fungo.baselib.image.BaseImageStrategy
 import org.fungo.baselib.image.ImageConfiguration
 import java.io.File
@@ -228,7 +228,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
                 glideConfig.isAsGif() -> {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
-                    // 使用clone方法复用builder
+                    // 使用clone方法复用builder，不会请求网络
                     builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {

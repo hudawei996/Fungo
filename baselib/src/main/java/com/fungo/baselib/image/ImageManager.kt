@@ -4,12 +4,12 @@ import android.content.Context
 import android.text.TextUtils
 import android.widget.ImageView
 import com.fungo.baselib.image.listener.ImageListener
+import com.fungo.baselib.image.listener.ImageSaveListener
 import com.fungo.baselib.image.progress.ProgressEngine
 import com.fungo.baselib.image.progress.ProgressListener
 import com.fungo.baselib.image.strategy.GlideImageLoaderStrategy
 import com.fungo.baselib.image.strategy.ImageModel
 import com.fungo.baseuilib.utils.ViewUtils
-import com.fungo.baselib.image.listener.ImageSaveListener
 import org.fungo.baselib.image.BaseImageStrategy
 
 /**
@@ -69,6 +69,12 @@ class ImageManager {
         mImageStrategy!!.loadGifImage(url, imageView)
     }
 
+    /** GIF图片，带进度条 */
+    fun loadGifImageWithProgress(url: String?, imageView: ImageView?, listener: ProgressListener) {
+        ProgressEngine.addProgressListener(listener)
+        loadGifImage(url, imageView)
+    }
+
     /** 圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Int) {
         mImageStrategy!!.loadRoundImage(url, imageView, ViewUtils.dp2px(imageView?.context, roundRadius).toFloat())
@@ -98,7 +104,6 @@ class ImageManager {
     fun saveImage(context: Context?, url: String?, listener: ImageSaveListener?) {
         mImageStrategy!!.saveImage(context, url, listener)
     }
-
 
     /** 设置图片加载模式 */
     fun setLoadModel(model: Int) {

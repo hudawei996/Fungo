@@ -46,23 +46,23 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IBaseView {
         })
     }
 
-    fun onInitHolder() {}
+    open fun onInitHolder() {}
     abstract fun onBindData(data: T)
 
     override fun <T : View> findView(@IdRes id: Int): T {
         return itemView.findViewById<View>(id) as T
     }
 
-    protected fun onItemClick(data: T) {}
+    open fun onItemClick(data: T) {}
 
-    protected fun getData(): T? {
+    open fun getData(): T? {
         val adapter = getOwnerAdapter<RecyclerView.Adapter<*>>()
         return if (adapter != null && adapter is BaseRecyclerAdapter<*>) {
-            adapter.getItemData(getDataCount()) as T
+            adapter.getItemData(getDataCount() - 1) as T
         } else null
     }
 
-    protected fun getDataCount(): Int {
+    open fun getDataCount(): Int {
         val adapter = getOwnerAdapter<RecyclerView.Adapter<*>>()
         return if (adapter != null && adapter is BaseRecyclerAdapter<*>) {
             adapter.getCount()
@@ -75,6 +75,10 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IBaseView {
 
     override fun setOnClick(@IdRes id: Int) {
         setOnClick(findView<View>(id))
+    }
+
+    override fun onClick(id: Int) {
+
     }
 
     override fun setGone(@IdRes id: Int) {

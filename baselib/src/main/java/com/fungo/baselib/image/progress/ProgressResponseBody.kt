@@ -1,5 +1,6 @@
 package com.fungo.baselib.image.progress
 
+import com.fungo.baselib.manager.ThreadManager
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
@@ -48,7 +49,9 @@ class ProgressResponseBody(private val responseBody: ResponseBody?, val progress
             override fun read(sink: Buffer, byteCount: Long): Long {
                 val bytesRead = super.read(sink, byteCount)
                 totalBytesRead += if (bytesRead != (-1).toLong()) bytesRead else 0
-                progressListener.onProgress(totalBytesRead, contentLength(), bytesRead == (-1).toLong())
+                ThreadManager.runOnUIThread(Runnable {
+                    progressListener.onProgress(totalBytesRead, contentLength(), bytesRead == (-1).toLong())
+                })
                 return bytesRead
             }
         }

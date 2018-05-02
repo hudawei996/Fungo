@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidRepertory</string>
+    <string name="app_name">Fungo</string>
     <string name="widget_view_falling_snow">雪花飘落效果</string>
     <string name="widget_custom">自定义控件</string>
     <string name="widget_view_banner">Banner效果</string>
@@ -7,4 +7,19 @@
     <string name="recycler_view">RecyclerView</string>
     <string name="video_player">视频播放器</string>
     <string name="image_loader">图片加载</string>
+
+
+    <string-array name="image_action">
+        <item>普通图片：正常</item>
+        <item>普通图片：圆角</item>
+        <item>普通图片：圆形</item>
+        <item>普通图片：模糊</item>
+        <item>普通图片：保存</item>
+        <item>普通图片：进度</item>
+
+        <item>Gif图片：正常</item>
+        <item>Gif图片：保存</item>
+        <item>Gif图片：进度</item>
+    </string-array>
+
 </resources>

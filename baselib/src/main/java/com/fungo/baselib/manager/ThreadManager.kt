@@ -1,6 +1,7 @@
 package com.fungo.baselib.manager
 
 import android.os.Handler
+import android.os.Looper
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
@@ -28,7 +29,7 @@ object ThreadManager {
     private val mMap = HashMap<String, ThreadPoolProxy>()
     private val mSingleLock = Any()
 
-    private val mHandler: Handler = Handler()
+    private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     /** 获取下载线程  */
     val downloadPool: ThreadPoolProxy

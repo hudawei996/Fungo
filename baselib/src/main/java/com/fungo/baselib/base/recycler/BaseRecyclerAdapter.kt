@@ -154,7 +154,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
             }
         }
         val dataCount = collection?.size ?: 0
-        mObserver.onItemRangeInserted(getCount() - dataCount, dataCount)
+        //mObserver.onItemRangeInserted(getCount() - dataCount, dataCount)
         if (mNotifyOnChange) notifyItemRangeInserted(getCount() - dataCount, dataCount)
 
     }
@@ -171,7 +171,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
             }
         }
         val dataCount = datas?.size ?: 0
-        mObserver.onItemRangeInserted(getCount() - dataCount, dataCount)
+        //mObserver.onItemRangeInserted(getCount() - dataCount, dataCount)
         if (mNotifyOnChange) notifyItemRangeInserted(getCount() - dataCount, dataCount)
     }
 
