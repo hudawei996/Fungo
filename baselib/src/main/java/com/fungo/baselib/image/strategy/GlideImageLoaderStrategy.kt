@@ -184,7 +184,7 @@ class GlideImageLoaderStrategy : BaseImageStrategy {
     }
 
     override fun getCacheSize(context: Context?): String {
-        return ""
+        return "12M"
     }
 
     override fun resumeRequests(context: Context?) {

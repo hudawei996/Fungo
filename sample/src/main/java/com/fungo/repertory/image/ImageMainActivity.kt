@@ -1,16 +1,13 @@
 package com.fungo.repertory.image
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.support.v7.widget.LinearLayoutManager
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
-import com.fungo.baselib.base.recycler.BaseRecyclerAdapter
-import com.fungo.baselib.base.recycler.BaseViewHolder
+import com.fungo.baselib.image.ImageManager
+import com.fungo.baselib.image.listener.ImageSaveListener
+import com.fungo.baselib.image.progress.ProgressListener
+import com.fungo.baselib.utils.ToastUtils
+import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.repertory.R
-import com.fungo.repertory.constant.IntentConstant
 import kotlinx.android.synthetic.main.activity_image_main.*
 
 /**
@@ -20,40 +17,82 @@ import kotlinx.android.synthetic.main.activity_image_main.*
  */
 class ImageMainActivity : BaseActivity() {
 
+    private val mUrl by lazy {
+        "http://c.hiphotos.baidu.com/image/pic/item/e1fe9925bc315c609e11bbb781b1cb13485477e6.jpg"
+    }
+
+    private val mGifUrl by lazy {
+        "http://storage.slide.news.sina.com.cn/slidenews/77_ori/2018_18/74766_821684_756393.gif"
+    }
+
     override val layoutResID: Int
         get() = R.layout.activity_image_main
 
     override fun initView() {
         setActionBar(getString(R.string.image_loader), true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ImageItemAdapter(this)
-        recyclerView.adapter = adapter
-        adapter.addAll(this.resources.getStringArray(R.array.image_action))
+        ImageManager.instance.loadImage(mUrl, imageView)
+        setCacheSize()
     }
 
-    private class ImageItemAdapter(context: Context) : BaseRecyclerAdapter<String>(context) {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<String> {
-            return ImageItemHolder(parent)
-        }
+    private fun setCacheSize() {
+        setText(tvImageSize, "图片缓存大小：" + ImageManager.instance.getImageCacheSize(this))
+    }
 
-        class ImageItemHolder(parent: ViewGroup) : BaseViewHolder<String>(parent,
-                android.R.layout.test_list_item) {
-            override fun onBindData(data: String) {
+    override fun initEvent() {
+        setOnClick(tvImageClear)
+    }
 
-                val textView = findView<TextView>(android.R.id.text1)
-                textView.setPadding(36, 24, 0, 24)
-                textView.setTextColor(Color.DKGRAY)
-                textView.textSize = 24f
-                setText(android.R.id.text1, data)
+    override fun getMenuResID(): Int {
+        return R.menu.menu_image_action
+    }
+
+    override fun onOptionsItemSelected(itemId: Int) {
+        when (itemId) {
+            R.id.image_action_round -> {
+                ImageManager.instance.loadRoundImage(mUrl, imageView, 8)
             }
+            R.id.image_action_circle -> {
+                ImageManager.instance.loadCircleImage(mUrl, imageView)
+            }
+            R.id.image_action_blur -> {
+                ImageManager.instance.loadBlurImage(mUrl, imageView, 8f)
+            }
+            R.id.image_action_save -> {
+                ImageManager.instance.saveImage(this, mUrl, object : ImageSaveListener {
+                    override fun onSaveSuccess(msg: String) {
+                        ToastUtils.showToast(msg)
+                    }
 
-            override fun onItemClick(data: String) {
-                val intent = Intent(context, ImageItemActivity::class.java)
-                intent.putExtra(IntentConstant.IMAGE_ITEM_POSITION, dataPosition)
-                context.startActivity(intent)
+                    override fun onSaveFail(msg: String) {
+                        ToastUtils.showToast(msg)
+                    }
+                })
+            }
+            R.id.image_action_progress -> {
+                ImageManager.instance.loadGifImageWithProgress(mGifUrl, imageView, object : ProgressListener {
+                    override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
+                        ViewUtils.setVisible(circleProgressView)
+                        circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
+                        if (isDone) ViewUtils.setGone(circleProgressView)
+                    }
+                })
+            }
+            R.id.image_action_linear -> {
+                loadLinearImage()
             }
         }
     }
 
+    private fun loadLinearImage() {
+        ToastUtils.showToast(getString(R.string.image_action_linear))
+    }
+
+    override fun onClick(view: View) {
+        when (view) {
+            tvImageClear -> {
+                ImageManager.instance.clearImageCache(this)
+            }
+        }
+    }
 
 }

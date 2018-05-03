@@ -6,20 +6,14 @@
     <string name="recycler_page">功能列表页</string>
     <string name="recycler_view">RecyclerView</string>
     <string name="video_player">视频播放器</string>
+    <string name="clear_disk">清除缓存</string>
     <string name="image_loader">图片加载</string>
 
-
-    <string-array name="image_action">
-        <item>普通图片：正常</item>
-        <item>普通图片：圆角</item>
-        <item>普通图片：圆形</item>
-        <item>普通图片：模糊</item>
-        <item>普通图片：保存</item>
-        <item>普通图片：进度</item>
-
-        <item>Gif图片：正常</item>
-        <item>Gif图片：保存</item>
-        <item>Gif图片：进度</item>
-    </string-array>
+    <string name="image_action_round">圆角</string>
+    <string name="image_action_circle">圆形</string>
+    <string name="image_action_blur">模糊</string>
+    <string name="image_action_save">保存</string>
+    <string name="image_action_progress">进度条</string>
+    <string name="image_action_linear">瀑布流</string>
 
 </resources>

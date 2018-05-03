@@ -30,7 +30,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".image.ImageMainActivity" />
         <activity android:name=".social.SocialActivity" />
-        <activity android:name=".image.ImageItemActivity" />
     </application>
 
 </manifest>

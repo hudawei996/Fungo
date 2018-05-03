@@ -10,12 +10,14 @@ import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.fungo.baselib.base.page.IBaseView
+
 
 /**
  * @author Pinger
@@ -157,13 +159,32 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
     override fun onClick(@NonNull view: View) {}
     override fun onClick(id: Int) {}
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish() // 返回按键处理
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return if (getMenuResID() == 0) {
+            super.onCreateOptionsMenu(menu)
+        } else {
+            menuInflater.inflate(getMenuResID(), menu)
+            true
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        if (item.itemId == android.R.id.home) {
+            finish() // 返回按键处理
+            return true
+        }
+        onOptionsItemSelected(item.itemId)
+        return true
+    }
+
+    /** 获取菜单项资源ID */
+    open fun getMenuResID(): Int {
+        return 0
+    }
+
+    /** 菜单项点击 */
+    open fun onOptionsItemSelected(itemId: Int) {}
+
+
 }

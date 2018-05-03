@@ -109,4 +109,14 @@ class ImageManager {
     fun setLoadModel(model: Int) {
         this.mLoadModel = model
     }
+
+    /** 清除图片缓存 */
+    fun clearImageCache(context: Context?) {
+        mImageStrategy!!.clearImageCache(context)
+    }
+
+    /** 图片缓存大小 */
+    fun getImageCacheSize(context: Context?): String {
+        return mImageStrategy!!.getCacheSize(context)
+    }
 }
