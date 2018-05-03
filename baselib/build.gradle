@@ -13,6 +13,10 @@ android {
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
         multiDexEnabled true
+
+        kapt {
+            generateStubs = true
+        }
     }
 
     buildTypes {
