@@ -2,11 +2,11 @@ package com.fungo.repertory.image
 
 import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
-import com.fungo.baselib.image.ImageManager
-import com.fungo.baselib.image.listener.ImageSaveListener
-import com.fungo.baselib.image.progress.ProgressListener
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
+import com.fungo.imagego.ImageManager
+import com.fungo.imagego.listener.OnImageSaveListener
+import com.fungo.imagego.listener.OnProgressListener
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_image_main.*
 
@@ -58,7 +58,7 @@ class ImageMainActivity : BaseActivity() {
                 ImageManager.instance.loadBlurImage(mUrl, imageView, 8f)
             }
             R.id.image_action_save -> {
-                ImageManager.instance.saveImage(this, mUrl, object : ImageSaveListener {
+                ImageManager.instance.saveImage(this, mUrl, object : OnImageSaveListener {
                     override fun onSaveSuccess(msg: String) {
                         ToastUtils.showToast(msg)
                     }
@@ -69,7 +69,7 @@ class ImageMainActivity : BaseActivity() {
                 })
             }
             R.id.image_action_progress -> {
-                ImageManager.instance.loadGifImageWithProgress(mGifUrl, imageView, object : ProgressListener {
+                ImageManager.instance.loadGifImageWithProgress(mGifUrl, imageView, object : OnProgressListener {
                     override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
                         ViewUtils.setVisible(circleProgressView)
                         circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
