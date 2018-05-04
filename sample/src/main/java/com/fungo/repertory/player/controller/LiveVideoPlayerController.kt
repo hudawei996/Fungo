@@ -7,9 +7,9 @@ import android.widget.ImageView
 import com.fungo.baselib.player.VideoPlayer
 import com.fungo.baselib.player.controller.BaseVideoPlayerController
 import com.fungo.baseuilib.utils.ViewUtils
+import com.fungo.imagego.ImageManager
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.video_player_live_controller.view.*
-import com.fungo.baselib.image.ImageManager
 
 /**
  * @author Pinger

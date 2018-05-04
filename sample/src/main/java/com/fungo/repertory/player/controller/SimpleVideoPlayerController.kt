@@ -18,9 +18,9 @@ import com.fungo.baselib.player.VideoHandleUtils
 import com.fungo.baselib.player.VideoPlayer
 import com.fungo.baselib.player.controller.BaseVideoPlayerController
 import com.fungo.baseuilib.utils.ViewUtils
+import com.fungo.imagego.ImageManager
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.video_player_simple_controller.view.*
-import com.fungo.baselib.image.ImageManager
 import java.text.SimpleDateFormat
 import java.util.*
 

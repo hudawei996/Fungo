@@ -1,1 +1,1 @@
-include ':sample', ':baselib', ':baseuilib'
+include ':sample', ':baselib', ':baseuilib', ':imagego'

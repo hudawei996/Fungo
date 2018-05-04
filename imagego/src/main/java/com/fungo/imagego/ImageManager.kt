@@ -9,6 +9,7 @@ import com.fungo.imagego.progress.ProgressEngine
 import com.fungo.imagego.progress.ProgressListener
 import com.fungo.imagego.strategy.GlideImageLoaderStrategy
 import com.fungo.imagego.utils.ImageGoConfig
+import com.fungo.imagego.utils.ImageGoUtils
 import org.fungo.baselib.image.BaseImageStrategy
 
 /**
@@ -70,7 +71,7 @@ class ImageManager {
 
     /** 圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Int) {
-        mImageStrategy!!.loadRoundImage(url, imageView, ImageGoConfig.dp2px(imageView?.context, roundRadius).toFloat())
+        mImageStrategy!!.loadRoundImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, roundRadius).toFloat())
     }
 
     /** 灰色图片 */
@@ -90,7 +91,7 @@ class ImageManager {
 
     /** 圆形图片，带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Int, borderColor: Int) {
-        mImageStrategy!!.loadCircleImage(url, imageView, ImageGoConfig.dp2px(imageView?.context, borderWidth).toFloat(), borderColor)
+        mImageStrategy!!.loadCircleImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, borderWidth).toFloat(), borderColor)
     }
 
     /** 保存图片到本地 */
