@@ -73,7 +73,7 @@ class ImageManager {
     }
 
     /** 圆角图片 */
-    fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Int) {
+    fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
         mImageStrategy.loadRoundImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, roundRadius).toFloat())
     }
 
@@ -89,12 +89,12 @@ class ImageManager {
 
     /** 圆形图片 */
     fun loadCircleImage(url: String?, imageView: ImageView?) {
-        loadCircleImage(url, imageView, 0, 0)
+        loadCircleImage(url, imageView, 0f, 0)
     }
 
     /** 圆形图片，带边框 */
-    fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Int, borderColor: Int) {
-        mImageStrategy.loadCircleImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, borderWidth).toFloat(), borderColor)
+    fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
+        mImageStrategy.loadCircleImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, borderWidth), borderColor)
     }
 
     /** 保存图片到本地 */

@@ -29,5 +29,8 @@ dependencies {
     implementation rootProject.ext.dependencies.kotlin
 
     kapt 'com.google.dagger:dagger-compiler:2.9'
-    kapt 'com.github.bumptech.glide:compiler:4.6.1'
+
+    // seekBar样式
+    implementation 'org.adw.library:discrete-seekbar:1.0.1'
+
 }

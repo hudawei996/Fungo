@@ -1,6 +1,7 @@
 package com.fungo.imagego.create
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
@@ -16,6 +17,7 @@ class ImageGoEngine(private val builder: Builder) {
     fun parseBuilder(config: ImageGoEngine): Builder {
         val builder = Builder()
         builder.placeHolderResId = config.getPlaceHolderResId()
+        builder.placeHolderDrawable = config.getPlaceHolderDrawable()
         builder.errorResId = config.getErrorResId()
         builder.isCrossFade = config.isCrossFade()
         builder.size = config.getSize()
@@ -40,6 +42,10 @@ class ImageGoEngine(private val builder: Builder) {
 
     fun getPlaceHolderResId(): Int {
         return builder.placeHolderResId
+    }
+
+    fun getPlaceHolderDrawable(): Drawable? {
+        return builder.placeHolderDrawable
     }
 
     fun getErrorResId(): Int {
@@ -129,6 +135,7 @@ class ImageGoEngine(private val builder: Builder) {
      */
     class Builder {
         var placeHolderResId = 0
+        var placeHolderDrawable: Drawable? = null
         var errorResId = 0
         var isCrossFade = true
         var size: OverrideSize? = null
@@ -152,9 +159,13 @@ class ImageGoEngine(private val builder: Builder) {
         var borderWidth: Float = 0f
         var borderColor: Int = Color.TRANSPARENT
 
-
         fun setPlaceHolderResId(placeHolderResId: Int): Builder {
             this.placeHolderResId = placeHolderResId
+            return this
+        }
+
+        fun setPlaceHolderDrawable(placeHolderDrawable: Drawable): Builder {
+            this.placeHolderDrawable = placeHolderDrawable
             return this
         }
 

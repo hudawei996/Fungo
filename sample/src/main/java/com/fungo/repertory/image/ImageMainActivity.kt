@@ -9,6 +9,7 @@ import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.listener.OnProgressListener
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_image_main.*
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 
 /**
  * @author Pinger
@@ -28,6 +29,9 @@ class ImageMainActivity : BaseActivity() {
     override val layoutResID: Int
         get() = R.layout.activity_image_main
 
+    private var mCurrentProgress = 0
+    private var mCurrentMenuId = 0
+
     override fun initView() {
         setActionBar(getString(R.string.image_loader), true)
         ImageManager.instance.loadImage(mUrl, imageView)
@@ -40,6 +44,18 @@ class ImageMainActivity : BaseActivity() {
 
     override fun initEvent() {
         setOnClick(tvImageClear)
+        seekBar.setOnProgressChangeListener(object : DiscreteSeekBar.OnProgressChangeListener {
+            override fun onStartTrackingTouch(seekBar: DiscreteSeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: DiscreteSeekBar?) {
+            }
+
+            override fun onProgressChanged(seekBar: DiscreteSeekBar?, value: Int, fromUser: Boolean) {
+                mCurrentProgress = value
+                onOptionsItemProgress(mCurrentMenuId, mCurrentProgress)
+            }
+        })
     }
 
     override fun getMenuResID(): Int {
@@ -47,13 +63,24 @@ class ImageMainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(itemId: Int) {
+        hideViews()
+        mCurrentMenuId = itemId
+        mCurrentProgress = -1
+        onOptionsItemProgress(itemId, mCurrentProgress)
+    }
+
+
+    /** 隐藏不需要的View */
+    private fun hideViews() {
+        ViewUtils.setGone(seekBar)
+
+    }
+
+    private fun onOptionsItemProgress(itemId: Int, progress: Int) {
         when (itemId) {
-            R.id.image_action_round -> {
-                ImageManager.instance.loadRoundImage(mUrl, imageView, 8)
-            }
-            R.id.image_action_circle -> {
-                ImageManager.instance.loadCircleImage(mUrl, imageView)
-            }
+            R.id.image_action_round -> loadRoundImage(progress)
+            R.id.image_action_circle -> loadCircleImage(progress)
+
             R.id.image_action_blur -> {
                 ImageManager.instance.loadBlurImage(mUrl, imageView, 8f)
             }
@@ -81,6 +108,28 @@ class ImageMainActivity : BaseActivity() {
                 loadLinearImage()
             }
         }
+    }
+
+    /** 圆形图片 */
+    private fun loadCircleImage(progress: Int) {
+        if (progress == -1) {
+            setActionBar(getString(R.string.image_action_circle), true)
+            ViewUtils.setVisible(seekBar)
+            seekBar.min = 8
+            seekBar.max = 24
+        }
+        ImageManager.instance.loadCircleImage(mUrl, imageView)
+    }
+
+    /** 圆角图片 */
+    private fun loadRoundImage(progress: Int) {
+        if (progress == -1) {
+            setActionBar(getString(R.string.image_action_round), true)
+            ViewUtils.setVisible(seekBar)
+            seekBar.min = 8
+            seekBar.max = 24
+        }
+        ImageManager.instance.loadRoundImage(mUrl, imageView, progress * 1f)
     }
 
     private fun loadLinearImage() {
