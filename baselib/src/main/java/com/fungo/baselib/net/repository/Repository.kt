@@ -1,6 +1,8 @@
 package com.fungo.baselib.net.repository
 
 import com.fungo.baselib.net.api.FungoRequest
+import com.fungo.baselib.net.entity.BaseEntity
+import com.fungo.baselib.net.entity.BaseNewsEntity
 import com.fungo.baselib.net.retrofit.RetrofitManager
 
 /**
@@ -23,8 +25,8 @@ class Repository {
             }
     }
 
-    private var mFungoRequest: FungoRequest? = null
-    fun getFungoRequest(): FungoRequest {
+    private var mFungoRequest: FungoRequest<BaseEntity>? = null
+    fun getFungoRequest(): FungoRequest<BaseEntity> {
         if (mFungoRequest == null) {
             mFungoRequest = FungoRequest(RetrofitManager.instance.getFungoApi())
         }
@@ -33,9 +35,9 @@ class Repository {
 
 
 
-//    fun getNetDateStore(){
-//        val netDateStore = NetDataStore(getFungoRequest())
-//    }
+    fun getNetDateStore(){
+        val netDateStore = NetDataStore(getFungoRequest() )
+    }
 
 
 
