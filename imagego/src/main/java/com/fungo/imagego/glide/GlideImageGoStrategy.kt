@@ -18,10 +18,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
+import com.fungo.imagego.create.ImageGoEngine
 import com.fungo.imagego.create.ImageGoStrategy
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
-import com.fungo.imagego.create.ImageGoEngine
 import com.fungo.imagego.transfmer.BlurTransformation
 import com.fungo.imagego.transfmer.CircleTransformation
 import com.fungo.imagego.transfmer.GrayScaleTransformation
@@ -42,8 +42,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
     private val defaultConfiguration = ImageGoEngine.Builder()
             .setScaleType(ImageGoEngine.ScaleType.CENTER_CROP)
             .setAsBitmap(true)
-//            .setPlaceHolderResId(R.drawable.ic_placeholder)
-//            .setErrorResId(R.drawable.ic_placeholder)
+            .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoUtils.PLACE_HOLDER_COLOR)))
             .setDiskCacheStrategy(ImageGoEngine.DiskCache.AUTOMATIC)
             .setPriority(ImageGoEngine.LoadPriority.NORMAL)
             .build()
@@ -342,16 +341,22 @@ class GlideImageGoStrategy : ImageGoStrategy {
             glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))
         }
 
-        val colorDrawable = ColorDrawable(Color.parseColor("#F2F2F2"))
+        // 占位图
+        when {
+            glideConfig.getPlaceHolderResId() != 0 ->
+                options.placeholder(glideConfig.getPlaceHolderResId())
+            glideConfig.getErrorResId() != 0 ->
+                options.error(glideConfig.getErrorResId())
+                        .fallback(glideConfig.getErrorResId())
+            glideConfig.getPlaceHolderDrawable() != null ->
+                options.placeholder(glideConfig.getPlaceHolderDrawable())
+                        .error(glideConfig.getPlaceHolderDrawable())
+        }
 
+        // 优先级和内存跳过
         options
-                .placeholder(colorDrawable)          // 占位符
-                .error(colorDrawable)                // 错误占位符
-//                .placeholder(glideConfig.getPlaceHolderResId())    // 占位符
-//                .error(glideConfig.getErrorResId())                // 错误占位符
-                .fallback(glideConfig.getErrorResId())             // 传入null时占位
-                .priority(glideConfig.getPriority().strategy)      // 优先级
-                .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
+                .priority(glideConfig.getPriority().strategy)
+                .skipMemoryCache(glideConfig.isSkipMemoryCache())
 
         // 图片大小
         val size = glideConfig.getSize()

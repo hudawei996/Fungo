@@ -4,5 +4,7 @@
     <item name="recyclerView" type="id" />
     <item name="imageView" type="id" />
     <item name="circleProgressView" type="id" />
+    <item name="seekBar" type="id" />
+    <item name="container" type="id" />
 
 </resources>

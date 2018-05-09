@@ -12,8 +12,9 @@ import java.util.concurrent.Executors
 
 object ImageGoUtils {
 
-    const val PATH_IMAGE = "images"
-    const val sBufferSize = 8192
+    const val PLACE_HOLDER_COLOR = "#F2F2F2"
+    private const val PATH_IMAGE = "images"
+    private const val BUFFER_SIZE = 8192
     private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     /** 是否是GIF图 */
@@ -22,12 +23,12 @@ object ImageGoUtils {
     }
 
     /** 单位转换 */
-    fun dp2px(context: Context?, dipValue: Int): Int {
+    fun dp2px(context: Context?, dipValue: Float): Float {
         if (context == null) {
             return dipValue
         }
         val scale = context.resources.displayMetrics.density
-        return (dipValue * scale + 0.5f).toInt()
+        return dipValue * scale + 0.5f
     }
 
 
@@ -86,11 +87,11 @@ object ImageGoUtils {
         return try {
             stream = FileInputStream(srcFile)
             os = BufferedOutputStream(FileOutputStream(destFile))
-            val data = ByteArray(sBufferSize)
-            var len = stream.read(data, 0, sBufferSize)
+            val data = ByteArray(BUFFER_SIZE)
+            var len = stream.read(data, 0, BUFFER_SIZE)
             while (len != -1) {
                 os.write(data, 0, len)
-                len = stream.read(data, 0, sBufferSize)
+                len = stream.read(data, 0, BUFFER_SIZE)
             }
             true
         } catch (e: FileNotFoundException) {
