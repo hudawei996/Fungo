@@ -31,4 +31,17 @@ class Repository {
         return mFungoRequest!!
     }
 
+
+
+//    fun getNetDateStore(){
+//        val netDateStore = NetDataStore(getFungoRequest())
+//    }
+
+
+
+
+
+
+
+
 }

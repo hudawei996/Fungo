@@ -79,7 +79,7 @@ open class FungoRequest(private val fungoApi: FungoApi) {
      * @param <T>           请求成功对象data里面的实体对象，对过clazz确定
      * @return              返回成功后的数据
     </T> */
-    fun <T> getRequest(sourceUrl: String): Observable<T> {
+   open fun <T> getRequest(sourceUrl: String): Observable<T> {
         return request(RequestType.TYPE_GET, sourceUrl, null)
     }
 
