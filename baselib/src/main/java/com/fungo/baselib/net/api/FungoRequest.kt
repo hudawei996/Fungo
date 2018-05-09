@@ -94,12 +94,12 @@ open class FungoRequest<Entity:BaseEntity>(private val fungoApi: FungoApi) {
 
                     if (baseEntity.isSuccess()) {
                         Observable.create { subscriber ->
-                            if (baseEntity.data == null) {
+                            if (baseEntity.getData() == null) {
                                 val commonData = Any()
                                 subscriber.onNext(commonData as T)
                             } else {
                                 try {
-                                    val data = baseEntity.data
+                                    val data = baseEntity.getData()
                                     NetLogger.i("Fungo Request OK---> sourceUrl ：" + sourceUrl + "\n success response : ---> " + data!!.toString())
 
                                     var tType: Type? = null
@@ -135,8 +135,8 @@ open class FungoRequest<Entity:BaseEntity>(private val fungoApi: FungoApi) {
                             }
                         }
                     } else {
-                        NetLogger.e("logout" + " new RequestError: baseEntity.errno = " + baseEntity.getCode() + ",baseEntity.desc = " + baseEntity.getMsg())
-                        Observable.error(RequestError(baseEntity.getCode(), baseEntity.getMsg()
+                        NetLogger.e("logout" + " new RequestError: baseEntity.errno = " + baseEntity.getCode() + ",baseEntity.desc = " + baseEntity.getMessage())
+                        Observable.error(RequestError(baseEntity.getCode(), baseEntity.getMessage()
                                 ?: "", RequestError.TYPE_SERVER))
                     }
                 })
