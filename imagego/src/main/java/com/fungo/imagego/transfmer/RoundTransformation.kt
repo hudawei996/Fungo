@@ -17,19 +17,21 @@ class RoundTransformation(val context: Context, private val roundRadius: Float) 
         return roundCrop(pool, toTransform)
     }
 
-    private fun roundCrop(pool: BitmapPool, source: Bitmap): Bitmap {
-        var result: Bitmap? = pool.get(source.width, source.height, Bitmap.Config.ARGB_8888)
-        if (result == null) {
-            result = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
-        }
+    private fun roundCrop(pool: BitmapPool, toTransform: Bitmap): Bitmap {
+        val width = toTransform.width
+        val height = toTransform.height
 
-        val canvas = Canvas(result)
+        val bitmap = pool.get(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.setHasAlpha(true)
+
+        val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         paint.isAntiAlias = true
-        val rectF = RectF(0f, 0f, source.width.toFloat(), source.height.toFloat())
+        paint.shader = BitmapShader(toTransform, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        paint.isAntiAlias = true
+        val rectF = RectF(0f, 0f, width.toFloat(), height.toFloat())
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, paint)
-        return result!!
+        return bitmap
     }
 
 

@@ -335,7 +335,8 @@ class GlideImageGoStrategy : ImageGoStrategy {
 
         // transform
         when {
-            glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
+            glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(),
+                    glideConfig.getBorderColor()))
             glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
             glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))
             glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))

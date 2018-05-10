@@ -129,7 +129,9 @@ class ImageMainActivity : BaseActivity() {
             seekBar.min = 8
             seekBar.max = 24
         }
-        ImageManager.instance.loadRoundImage(mUrl, imageView, progress * 1f)
+        if (progress % 2 == 0) {
+            ImageManager.instance.loadRoundImage(mUrl, imageView, progress * 1f)
+        }
     }
 
     private fun loadLinearImage() {
