@@ -38,7 +38,6 @@ import java.io.File
  */
 class GlideImageGoStrategy : ImageGoStrategy {
 
-
     /** 默认的配置,可以手动配置 */
     private val defaultConfiguration = ImageGoEngine.Builder()
             .setScaleType(ImageGoEngine.ScaleType.CENTER_CROP)
@@ -341,7 +340,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
         }
 
         // transform
-               when {
+        when {
             glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
             glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
             glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))

@@ -74,7 +74,7 @@ class ImageManager {
 
     /** 圆角图片 */
     fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
-        mImageStrategy.loadRoundImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, roundRadius).toFloat())
+        mImageStrategy.loadRoundImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, roundRadius))
     }
 
     /** 灰色图片 */
