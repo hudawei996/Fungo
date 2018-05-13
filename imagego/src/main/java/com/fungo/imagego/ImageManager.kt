@@ -92,6 +92,11 @@ class ImageManager {
         loadCircleImage(url, imageView, 0f, 0)
     }
 
+    /** 加载圆形图片，指定图片大小 */
+    fun loadCircleImage(url:String,imageView: ImageView?,width:Int,height:Int){
+        mImageStrategy.loadCircleImage(url,imageView,width,height)
+    }
+
     /** 圆形图片，带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
         mImageStrategy.loadCircleImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, borderWidth), borderColor)

@@ -1,8 +1,6 @@
 package com.fungo.baselib.app
 
 import android.app.Application
-import com.fungo.baselib.player.VideoPlayerManager
-import com.fungo.baselib.player.ijkplayer.IjkVideoPlayerFactory
 import com.fungo.baselib.utils.BaseUtils
 
 /**
@@ -23,7 +21,6 @@ open class BaseApplication : Application() {
 
     private fun init() {
         initUtils()
-        initPlayer()
     }
 
 
@@ -34,11 +31,4 @@ open class BaseApplication : Application() {
         BaseUtils.init(this)
     }
 
-
-    /**
-     * 播放器策略设置
-     */
-    private fun initPlayer() {
-        VideoPlayerManager.instance.setVideoPlayer(IjkVideoPlayerFactory())
-    }
 }

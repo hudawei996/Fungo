@@ -38,6 +38,7 @@ import java.io.File
  */
 class GlideImageGoStrategy : ImageGoStrategy {
 
+
     /** 默认的配置,可以手动配置 */
     private val defaultConfiguration = ImageGoEngine.Builder()
             .setScaleType(ImageGoEngine.ScaleType.CENTER_CROP)
@@ -154,6 +155,12 @@ class GlideImageGoStrategy : ImageGoStrategy {
     override fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
         loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
                 .isCircleTransform(true).setBorderWidth(borderWidth).setBorderColor(borderColor).build(), null)
+    }
+
+    override fun loadCircleImage(url: String?, imageView: ImageView?, width: Int, height: Int) {
+       val imageSize =  ImageGoEngine.OverrideSize(width,height)
+        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
+                .isCircleTransform(true).setSize(imageSize).build(), null)
     }
 
     override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
@@ -334,7 +341,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
         }
 
         // transform
-        when {
+               when {
             glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
             glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
             glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))

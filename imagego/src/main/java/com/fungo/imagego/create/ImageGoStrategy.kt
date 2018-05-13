@@ -55,6 +55,9 @@ interface ImageGoStrategy {
     /** 加载图片，生成Bitmap */
     fun loadBitmapImage(context: Context?, url: String?): Bitmap?
 
+    /** 加载圆形图片，指定图片大小 */
+    fun loadCircleImage(url: String?,imageView: ImageView?,width:Int,height:Int)
+
     /** 加载圆形图片带边框 */
     fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int)
 

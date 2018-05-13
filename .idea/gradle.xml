@@ -11,7 +11,9 @@
             <option value="$PROJECT_DIR$/baselib" />
             <option value="$PROJECT_DIR$/baseuilib" />
             <option value="$PROJECT_DIR$/imagego" />
+            <option value="$PROJECT_DIR$/playergo" />
             <option value="$PROJECT_DIR$/sample" />
+            <option value="$PROJECT_DIR$/socialgo" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

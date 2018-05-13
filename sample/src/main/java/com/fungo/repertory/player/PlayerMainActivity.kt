@@ -2,7 +2,7 @@ package com.fungo.repertory.player
 
 import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
-import com.fungo.baselib.player.VideoPlayerManager
+import com.fungo.playergo.VideoPlayerManager
 import com.fungo.repertory.R
 import com.fungo.repertory.player.controller.LiveVideoPlayerController
 import com.fungo.repertory.player.controller.SimpleVideoPlayerController

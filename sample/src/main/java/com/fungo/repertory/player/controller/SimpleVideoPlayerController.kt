@@ -13,12 +13,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
-import com.fungo.baselib.player.IVideoPlayer
-import com.fungo.baselib.player.VideoHandleUtils
-import com.fungo.baselib.player.VideoPlayer
-import com.fungo.baselib.player.controller.BaseVideoPlayerController
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.imagego.ImageManager
+import com.fungo.playergo.IVideoPlayer
+import com.fungo.playergo.VideoPlayerUtils
+import com.fungo.playergo.VideoPlayer
+import com.fungo.playergo.controller.BaseVideoPlayerController
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.video_player_simple_controller.view.*
 import java.text.SimpleDateFormat
@@ -38,7 +38,6 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
 
     private var hasRegisterBatteryReceiver: Boolean = false // 是否已经注册了电池广播
     private var mLastPosition: Long = 0  // 上一次的播放位置
-
 
     /**
      * 电池状态即电量变化广播接收器
@@ -223,7 +222,6 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         } else if (v == ivBottomStartOrPause || v == ivCenterStartOrPause) {
             if (mVideoPlayer!!.isPlaying() || mVideoPlayer!!.isBufferingPlaying()) {
                 mVideoPlayer!!.pause()
-                startLoadAD()
             } else if (mVideoPlayer!!.isPaused() || mVideoPlayer!!.isBufferingPaused() || mVideoPlayer!!.isCompleted()) {
                 mVideoPlayer!!.restart()
             }
@@ -248,14 +246,6 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         }
     }
 
-
-    /**
-     * 暂停视频请求广告数据，弹窗展示
-     */
-    private fun startLoadAD() {
-        // TODO 广告
-        Toast.makeText(context, "广告", Toast.LENGTH_SHORT).show()
-    }
 
     /**
      * 分享视频
@@ -334,8 +324,8 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         skBottomSeek?.secondaryProgress = bufferPercentage
         val progress = (100f * position / duration).toInt()
         skBottomSeek?.progress = progress
-        tvBottomPosition?.text = VideoHandleUtils.formatTime(position)
-        tvBottomDuration?.text = VideoHandleUtils.formatTime(duration)
+        tvBottomPosition?.text = VideoPlayerUtils.formatTime(position)
+        tvBottomDuration?.text = VideoPlayerUtils.formatTime(duration)
         // 更新时间
         tvTopTime?.text = SimpleDateFormat("HH:mm", Locale.CHINA).format(Date())
     }
@@ -353,13 +343,13 @@ class SimpleVideoPlayerController(context: Context) : BaseVideoPlayerController(
         } else {
             "+$dTime"
         }
-        tvChangeCurrentTime?.text = VideoHandleUtils.formatTime(newPosition)
-        tvChangeTotalTime?.text = VideoHandleUtils.formatTime(duration)
+        tvChangeCurrentTime?.text = VideoPlayerUtils.formatTime(newPosition)
+        tvChangeTotalTime?.text = VideoPlayerUtils.formatTime(duration)
         pbChangePosition?.progress = newPositionProgress
 
         // 底下进度更新的位置
         skBottomSeek?.progress = newPositionProgress
-        tvBottomPosition?.text = VideoHandleUtils.formatTime(newPosition)
+        tvBottomPosition?.text = VideoPlayerUtils.formatTime(newPosition)
     }
 
     override fun hideChangePosition(newPosition: Long) {

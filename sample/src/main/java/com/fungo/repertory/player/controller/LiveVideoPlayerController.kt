@@ -4,10 +4,10 @@ package com.fungo.repertory.player.controller
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.ImageView
-import com.fungo.baselib.player.VideoPlayer
-import com.fungo.baselib.player.controller.BaseVideoPlayerController
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.imagego.ImageManager
+import com.fungo.playergo.VideoPlayer
+import com.fungo.playergo.controller.BaseVideoPlayerController
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.video_player_live_controller.view.*
 
