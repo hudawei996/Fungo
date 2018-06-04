@@ -1,6 +1,8 @@
 package com.fungo.repertory.image
 
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageView
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
@@ -26,6 +28,8 @@ class ImageMainActivity : BaseActivity() {
         "http://storage.slide.news.sina.com.cn/slidenews/77_ori/2018_18/74766_821684_756393.gif"
     }
 
+    private var mImageVIew: ImageView? = null
+
     override val layoutResID: Int
         get() = R.layout.activity_image_main
 
@@ -35,8 +39,8 @@ class ImageMainActivity : BaseActivity() {
     override fun initView() {
         setActionBar(getString(R.string.image_loader), true)
         setCacheSize()
-
-        ImageManager.instance.loadImage(mUrl, imageView)
+        generateImageView()
+        ImageManager.instance.loadImage(mUrl, mImageVIew)
     }
 
     private fun setCacheSize() {
@@ -55,7 +59,7 @@ class ImageMainActivity : BaseActivity() {
             override fun onProgressChanged(seekBar: DiscreteSeekBar?, value: Int, fromUser: Boolean) {
                 mCurrentProgress = value
                 if (mCurrentProgress % 2 == 0) {
-                    onOptionsItemProgress(mCurrentMenuId, mCurrentProgress)
+                    //onOptionsItemProgress(mCurrentMenuId, mCurrentProgress)
                 }
             }
         })
@@ -66,17 +70,18 @@ class ImageMainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(itemId: Int) {
-        hideViews()
+        handleViews()
         mCurrentMenuId = itemId
         mCurrentProgress = -1
         onOptionsItemProgress(itemId, mCurrentProgress)
     }
 
 
-    /** 隐藏不需要的View */
-    private fun hideViews() {
+    /** 处理初始状态 */
+    private fun handleViews() {
         ViewUtils.setGone(seekBar)
-
+        container.removeAllViews()
+        mImageVIew = null
     }
 
     private fun onOptionsItemProgress(itemId: Int, progress: Int) {
@@ -93,7 +98,7 @@ class ImageMainActivity : BaseActivity() {
                 })
             }
             R.id.image_action_progress -> {
-                ImageManager.instance.loadGifImageWithProgress(mGifUrl, imageView, object : OnProgressListener {
+                ImageManager.instance.loadGifImageWithProgress(mGifUrl, mImageVIew, object : OnProgressListener {
                     override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
                         ViewUtils.setVisible(circleProgressView)
                         circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
@@ -118,5 +123,17 @@ class ImageMainActivity : BaseActivity() {
             }
         }
     }
+
+    private fun generateImageView() {
+        if (mImageVIew == null) {
+            mImageVIew = ImageView(this)
+            val params = FrameLayout.LayoutParams(-1, -1)
+            mImageVIew!!.layoutParams = params
+            mImageVIew!!.scaleType = ImageView.ScaleType.CENTER_CROP
+            container.removeAllViews()
+            container.addView(mImageVIew)
+        }
+    }
+
 
 }
