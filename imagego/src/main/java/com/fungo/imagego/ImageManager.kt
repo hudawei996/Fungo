@@ -9,7 +9,6 @@ import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.listener.OnProgressListener
 import com.fungo.imagego.progress.ProgressEngine
-import com.fungo.imagego.utils.ImageGoUtils
 
 /**
  * @author Pinger
@@ -70,36 +69,6 @@ class ImageManager {
     fun loadGifImageWithProgress(url: String?, imageView: ImageView?, listener: OnProgressListener) {
         ProgressEngine.addProgressListener(listener)
         loadGifImage(url, imageView)
-    }
-
-    /** 圆角图片 */
-    fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
-        mImageStrategy.loadRoundImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, roundRadius))
-    }
-
-    /** 灰色图片 */
-    fun loadGrayImage(url: String?, imageView: ImageView?) {
-        mImageStrategy.loadGrayImage(url, imageView)
-    }
-
-    /** 模糊图片 */
-    fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float) {
-        mImageStrategy.loadBlurImage(url, imageView, blurRadius)
-    }
-
-    /** 圆形图片 */
-    fun loadCircleImage(url: String?, imageView: ImageView?) {
-        loadCircleImage(url, imageView, 0f, 0)
-    }
-
-    /** 加载圆形图片，指定图片大小 */
-    fun loadCircleImage(url:String,imageView: ImageView?,width:Int,height:Int){
-        mImageStrategy.loadCircleImage(url,imageView,width,height)
-    }
-
-    /** 圆形图片，带边框 */
-    fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
-        mImageStrategy.loadCircleImage(url, imageView, ImageGoUtils.dp2px(imageView?.context, borderWidth), borderColor)
     }
 
     /** 保存图片到本地 */

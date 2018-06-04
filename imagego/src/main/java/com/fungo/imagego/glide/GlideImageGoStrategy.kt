@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -22,10 +24,6 @@ import com.fungo.imagego.create.ImageGoEngine
 import com.fungo.imagego.create.ImageGoStrategy
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
-import com.fungo.imagego.transfmer.BlurTransformation
-import com.fungo.imagego.transfmer.CircleTransformation
-import com.fungo.imagego.transfmer.GrayScaleTransformation
-import com.fungo.imagego.transfmer.RoundTransformation
 import com.fungo.imagego.utils.ImageGoUtils
 import java.io.File
 
@@ -39,8 +37,8 @@ import java.io.File
 class GlideImageGoStrategy : ImageGoStrategy {
 
     /** 默认的配置,可以手动配置 */
-    private val defaultConfiguration = ImageGoEngine.Builder()
-            .setScaleType(ImageGoEngine.ScaleType.CENTER_CROP)
+    private val defaultConfiguration = ImageGoEngine
+            .Builder()
             .setAsBitmap(true)
             .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoUtils.PLACE_HOLDER_COLOR)))
             .setDiskCacheStrategy(ImageGoEngine.DiskCache.AUTOMATIC)
@@ -131,37 +129,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
         })
     }
 
-    override fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isRoundTransform(true).setRoundRadius(roundRadius).build(), null)
-    }
-
-    override fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isBlurTransform(true).setBlurRadius(blurRadius).build(), null)
-    }
-
-    override fun loadGrayImage(url: String?, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isGrayScaleTransform(true).build(), null)
-    }
-
-    override fun loadCircleImage(url: String?, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .setScaleType(ImageGoEngine.ScaleType.CIRCLE_CROP).build(), null)
-    }
-
-    override fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isCircleTransform(true).setBorderWidth(borderWidth).setBorderColor(borderColor).build(), null)
-    }
-
-    override fun loadCircleImage(url: String?, imageView: ImageView?, width: Int, height: Int) {
-       val imageSize =  ImageGoEngine.OverrideSize(width,height)
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isCircleTransform(true).setSize(imageSize).build(), null)
-    }
-
     override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
         if (context != null && !TextUtils.isEmpty(url)) {
             return Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
@@ -232,12 +199,12 @@ class GlideImageGoStrategy : ImageGoStrategy {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
                     // 使用clone方法复用builder，不会请求网络
-                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
+                    builder.clone().apply(buildOptions(obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {
                     val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
                     val builder = buildBitmap(context, obj, glideConfig, bitmapBuilder, listener)
-                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
+                    builder.clone().apply(buildOptions(obj, glideConfig)).into(imageView)
                 }
             }
         } catch (e: Exception) {
@@ -253,9 +220,8 @@ class GlideImageGoStrategy : ImageGoStrategy {
     private fun buildBitmap(context: Context, obj: Any, glideConfig: ImageGoEngine, bitmapBuilder: RequestBuilder<Bitmap>, listener: OnImageListener?): RequestBuilder<Bitmap> {
         var builder = bitmapBuilder
         // 渐变展示
-        // TODO 渐变和缩放冲突，暂时去除
         if (glideConfig.isCrossFade()) {
-            // builder.transition(BitmapTransitionOptions.withCrossFade())
+            builder.transition(BitmapTransitionOptions.withCrossFade())
         }
 
         builder.listener(object : RequestListener<Bitmap> {
@@ -294,7 +260,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
 
         // 渐变展示
         if (glideConfig.isCrossFade()) {
-            //builder.transition(DrawableTransitionOptions.withCrossFade())
+            builder.transition(DrawableTransitionOptions.withCrossFade())
         }
 
         builder.listener(object : RequestListener<GifDrawable> {
@@ -325,27 +291,11 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置图片加载选项并且加载图片
      */
-    private fun buildOptions(context: Context, obj: Any, glideConfig: ImageGoEngine): RequestOptions {
+    private fun buildOptions(obj: Any, glideConfig: ImageGoEngine): RequestOptions {
         val options = RequestOptions()
 
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
-
-        // 缩放类型,TODO Glide缩放类型对于占位图无效，所以一般使用ImageView的ScaleType属性
-        when (glideConfig.getScaleType()) {
-            ImageGoEngine.ScaleType.FIT_CENTER -> options.fitCenter()
-            ImageGoEngine.ScaleType.CENTER_CROP -> options.centerCrop()
-            ImageGoEngine.ScaleType.CENTER_INSIDE -> options.centerInside()
-            ImageGoEngine.ScaleType.CIRCLE_CROP -> options.circleCrop()
-        }
-
-        // transform
-        when {
-            glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
-            glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
-            glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))
-            glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))
-        }
 
         // 占位图
         when {
@@ -363,12 +313,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
         options
                 .priority(glideConfig.getPriority().strategy)
                 .skipMemoryCache(glideConfig.isSkipMemoryCache())
-
-        // 图片大小
-        val size = glideConfig.getSize()
-        if (size != null) {
-            options.override(size.width, size.height)
-        }
 
         // Tag
         val tag = glideConfig.getTag()

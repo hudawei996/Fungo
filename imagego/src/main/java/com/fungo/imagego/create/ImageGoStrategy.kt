@@ -40,30 +40,11 @@ interface ImageGoStrategy {
     /** 保存图片 */
     fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?)
 
-    /** 加载圆角图片 */
-    fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float)
-
-    /** 加载模糊图片 */
-    fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float)
-
-    /** 加载灰色图片 */
-    fun loadGrayImage(url: String?, imageView: ImageView?)
-
-    /** 加载圆形图片 */
-    fun loadCircleImage(url: String?, imageView: ImageView?)
-
     /** 加载图片，生成Bitmap */
     fun loadBitmapImage(context: Context?, url: String?): Bitmap?
 
-    /** 加载圆形图片，指定图片大小 */
-    fun loadCircleImage(url: String?,imageView: ImageView?,width:Int,height:Int)
-
-    /** 加载圆形图片带边框 */
-    fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int)
-
     // 通过其他的资源，加载图片
     fun loadImage(file: File?, imageView: ImageView?)       // 加载本地文件
-
     fun loadImage(bitmap: Bitmap?, imageView: ImageView?)   // 加载Bitmap
     fun loadImage(uri: Uri?, imageView: ImageView?)         // 路由
     fun loadImage(resId: Int?, imageView: ImageView?)       // 加载本地资源

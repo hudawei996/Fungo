@@ -1,18 +1,14 @@
 package com.fungo.repertory.image
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.imagego.ImageManager
 import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.listener.OnProgressListener
-import com.fungo.imagego.transfmer.RoundTransformation
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_image_main.*
-import kotlinx.android.synthetic.main.activity_main.*
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 
 /**
@@ -40,9 +36,7 @@ class ImageMainActivity : BaseActivity() {
         setActionBar(getString(R.string.image_loader), true)
         setCacheSize()
 
-        ImageManager.instance.loadImage(mUrl,imageView)
-//        Glide.with(this).load(mUrl).apply(RequestOptions()
-//                .transform(RoundTransformation(this,10f))).into(imageView)
+        ImageManager.instance.loadImage(mUrl, imageView)
     }
 
     private fun setCacheSize() {
@@ -60,7 +54,7 @@ class ImageMainActivity : BaseActivity() {
 
             override fun onProgressChanged(seekBar: DiscreteSeekBar?, value: Int, fromUser: Boolean) {
                 mCurrentProgress = value
-                if (mCurrentProgress %2==0) {
+                if (mCurrentProgress % 2 == 0) {
                     onOptionsItemProgress(mCurrentMenuId, mCurrentProgress)
                 }
             }
@@ -87,10 +81,6 @@ class ImageMainActivity : BaseActivity() {
 
     private fun onOptionsItemProgress(itemId: Int, progress: Int) {
         when (itemId) {
-            R.id.image_action_round -> loadRoundImage(progress)
-            R.id.image_action_circle -> loadCircleImage(progress)
-            R.id.image_action_blur -> loadBlurImage(progress)
-
             R.id.image_action_save -> {
                 ImageManager.instance.saveImage(this, mUrl, object : OnImageSaveListener {
                     override fun onSaveSuccess(msg: String) {
@@ -115,42 +105,6 @@ class ImageMainActivity : BaseActivity() {
                 loadLinearImage()
             }
         }
-    }
-
-    /** 加载模糊图片 */
-    private fun loadBlurImage(progress: Int) {
-        if (progress == -1) {
-            setActionBar(getString(R.string.image_action_blur), true)
-            ViewUtils.setVisible(seekBar)
-            seekBar.min = 2
-            seekBar.max = 24
-            seekBar.progress = 8
-        }
-        ImageManager.instance.loadBlurImage(mUrl, imageView,progress.toFloat())
-    }
-
-    /** 圆形图片 */
-    private fun loadCircleImage(progress: Int) {
-        if (progress == -1) {
-            setActionBar(getString(R.string.image_action_circle), true)
-            ViewUtils.setVisible(seekBar)
-            seekBar.min = 100
-            seekBar.max = 500
-            seekBar.progress = 200
-        }
-        ImageManager.instance.loadCircleImage(mUrl,imageView, progress,progress)
-    }
-
-    /** 圆角图片 */
-    private fun loadRoundImage(progress: Int) {
-        if (progress == -1) {
-            setActionBar(getString(R.string.image_action_round), true)
-            ViewUtils.setVisible(seekBar)
-            seekBar.min = 8
-            seekBar.max = 24
-            seekBar.progress = 12
-        }
-        ImageManager.instance.loadRoundImage(mUrl, imageView, progress.toFloat())
     }
 
     private fun loadLinearImage() {

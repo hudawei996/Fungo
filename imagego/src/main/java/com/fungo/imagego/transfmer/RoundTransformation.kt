@@ -31,6 +31,7 @@ class RoundTransformation(val context: Context, private val roundRadius: Float) 
         paint.isAntiAlias = true
         val rectF = RectF(0f, 0f, width.toFloat(), height.toFloat())
         canvas.drawRoundRect(rectF, roundRadius, roundRadius, paint)
+
         return bitmap
     }
 

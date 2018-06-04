@@ -38,7 +38,7 @@ class LiveVideoPlayerController(context: Context) : BaseVideoPlayerController(co
     }
 
     override fun setImage(imageURl: String) {
-        ImageManager.instance.loadBlurImage(imageURl, ivPlaceImage, 12f)
+        //ImageManager.instance.loadBlurImage(imageURl, ivPlaceImage, 12f)
     }
 
     override fun imageView(): ImageView {
