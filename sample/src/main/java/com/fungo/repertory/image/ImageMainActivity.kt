@@ -1,5 +1,6 @@
 package com.fungo.repertory.image
 
+import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -135,14 +136,13 @@ class ImageMainActivity : BaseActivity() {
         if (mCurrentProgress == -1) {
             setActionBar(getString(R.string.image_action_circle), true)
             ViewUtils.setVisible(seekBar)
-            seekBar.min = 0
-            seekBar.max = 100
-            mCurrentProgress = 18
+            seekBar.min = 100
+            seekBar.max = 500
+            mCurrentProgress = 250
             seekBar.progress = mCurrentProgress
             ImageManager.instance.loadImage(mUrl, generateCircleImageView())
         }
-//        mCircleImageView?.setIm(mCurrentProgress)
-
+        mCircleImageView?.layoutParams = generateParams(mCurrentProgress, mCurrentProgress)
     }
 
 
@@ -196,8 +196,14 @@ class ImageMainActivity : BaseActivity() {
     }
 
     private fun generateParams(): FrameLayout.LayoutParams {
-        return FrameLayout.LayoutParams(-1, -1)
+        return generateParams(-1, -1)
     }
 
+
+    private fun generateParams(width: Int, height: Int): FrameLayout.LayoutParams {
+        val params = FrameLayout.LayoutParams(width, height)
+        params.gravity = Gravity.CENTER
+        return params
+    }
 
 }

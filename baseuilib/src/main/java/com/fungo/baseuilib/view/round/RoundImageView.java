@@ -79,6 +79,6 @@ public class RoundImageView extends ImageWrapper {
 
     public void setRadius(int radius) {
         mRadius = radius;
-        requestLayout();
+        invalidate();
     }
 }
