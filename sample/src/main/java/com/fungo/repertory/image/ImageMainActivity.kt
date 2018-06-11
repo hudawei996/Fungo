@@ -120,6 +120,7 @@ class ImageMainActivity : BaseActivity() {
         when (view) {
             tvImageClear -> {
                 ImageManager.instance.clearImageCache(this)
+                setCacheSize()
             }
         }
     }

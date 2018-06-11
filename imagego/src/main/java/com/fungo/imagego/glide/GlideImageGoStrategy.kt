@@ -106,7 +106,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
                         "${System.currentTimeMillis()}.jpg"
                     }
 
-                    val destFile = File(ImageGoUtils.getImagePath(context) + suffix)
+                    val destFile = File(ImageGoUtils.getImageSavePath(context) + suffix)
                     val imageFile = download(context, url!!)
                     val isCopySuccess = ImageGoUtils.copyFile(imageFile, destFile)
 
@@ -115,7 +115,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
                             Uri.fromFile(destFile)))
                     ImageGoUtils.runOnUIThread(Runnable {
                         if (isCopySuccess) {
-                            listener?.onSaveSuccess("图片已保存至 " + ImageGoUtils.getImagePath(context))
+                            listener?.onSaveSuccess("图片已保存至 " + ImageGoUtils.getImageSavePath(context))
                         } else {
                             listener?.onSaveFail("保存失败")
                         }
@@ -138,10 +138,11 @@ class GlideImageGoStrategy : ImageGoStrategy {
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            ImageGoUtils.runOnSubThread(Runnable { Glide.get(context).clearDiskCache() })
+            Glide.get(context).clearDiskCache()
         }
     }
 
+    /** 清除内存缓存，只能在主线程调用本方法 */
     override fun clearImageMemoryCache(context: Context?) {
         if (context != null) {
             Glide.get(context).clearMemory()
@@ -149,12 +150,16 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun clearImageCache(context: Context?) {
+        ImageGoUtils.showToast(context, "正在清除缓存...")
         clearImageMemoryCache(context)
-        clearImageDiskCache(context)
+        ImageGoUtils.runOnSubThread(Runnable {
+            clearImageDiskCache(context)
+            ImageGoUtils.showToast(context, "清除成功")
+        })
     }
 
     override fun getCacheSize(context: Context?): String {
-        return "12M"
+        return ImageGoUtils.getImageCacheSize(context)
     }
 
     override fun resumeRequests(context: Context?) {

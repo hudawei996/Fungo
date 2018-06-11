@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 
 /**
  * 用于需要圆角矩形框背景的RelativeLayout的情况,减少直接使用RelativeLayout时引入的shape资源文件
+ * 参考：https://github.com/H07000223/FlycoRoundView
  */
 public class RoundRelativeLayout extends RelativeLayout {
 

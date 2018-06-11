@@ -25,7 +25,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
     implementation project(':imagego')
-    implementation project(':playergo')
+    implementation project(':funplayer')
     implementation rootProject.ext.dependencies.constraintlayout
     implementation rootProject.ext.dependencies.kotlin
 

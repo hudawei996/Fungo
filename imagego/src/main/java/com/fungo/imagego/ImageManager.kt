@@ -59,7 +59,6 @@ class ImageManager {
         loadImage(url, imageView, null)
     }
 
-
     /** GIF图片 */
     fun loadGifImage(url: String?, imageView: ImageView?) {
         mImageStrategy.loadGifImage(url, imageView)

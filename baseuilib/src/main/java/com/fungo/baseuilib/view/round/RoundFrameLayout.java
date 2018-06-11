@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 
 /**
  * 用于需要圆角矩形框背景的FrameLayout的情况,减少直接使用FrameLayout时引入的shape资源文件
+ * 参考：https://github.com/H07000223/FlycoRoundView
  */
 public class RoundFrameLayout extends FrameLayout {
 
