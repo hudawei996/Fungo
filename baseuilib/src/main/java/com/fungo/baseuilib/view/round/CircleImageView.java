@@ -38,13 +38,13 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import com.fungo.baseuilib.R;
+import com.fungo.baseuilib.view.base.ImageWrapper;
 
 
 /**
@@ -53,7 +53,7 @@ import com.fungo.baseuilib.R;
  * 参考：https://github.com/hdodenhof/CircleImageView
  */
 
-public class CircleImageView extends AppCompatImageView {
+public class CircleImageView extends ImageWrapper {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 

@@ -8,17 +8,17 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import com.fungo.baseuilib.R;
+import com.fungo.baseuilib.view.base.ImageWrapper;
 
 /**
  * @author Pinger
  * @since 18-6-11 下午12:34
  */
 
-public class RoundImageView extends AppCompatImageView {
+public class RoundImageView extends ImageWrapper {
 
     private final RectF roundRect = new RectF();
     private final Paint maskPaint = new Paint();
@@ -75,5 +75,10 @@ public class RoundImageView extends AppCompatImageView {
         super.draw(canvas);
 
         canvas.restore();
+    }
+
+    public void setRadius(int radius) {
+        mRadius = radius;
+        requestLayout();
     }
 }

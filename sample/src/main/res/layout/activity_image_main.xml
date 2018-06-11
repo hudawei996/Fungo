@@ -32,12 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:visibility="gone"
-        app:dsb_max="100"
-        app:dsb_min="0"
-        app:dsb_value="50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/container" />
 
     <TextView
         android:id="@+id/tvImageSize"

@@ -174,7 +174,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
             finish() // 返回按键处理
             return true
         }
-        onOptionsItemSelected(item.itemId)
+        onMenuItemSelected(item.itemId)
         return true
     }
 
@@ -184,7 +184,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
     }
 
     /** 菜单项点击 */
-    open fun onOptionsItemSelected(itemId: Int) {}
+    open fun onMenuItemSelected(itemId: Int) {}
 
 
 }
