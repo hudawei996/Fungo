@@ -10,6 +10,7 @@ import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.listener.OnProgressListener
 import com.fungo.imagego.progress.ProgressEngine
 import com.fungo.imagego.utils.ImageGoConstant
+import com.fungo.imagego.utils.ImageGoUtils
 
 /**
  * @author Pinger
@@ -47,13 +48,20 @@ class ImageManager {
     }
 
     /**
+     * 普通图片，没有加载的渐变动画
+     */
+    fun loadImageNoFade(url: String?, imageView: ImageView?) {
+        mImageStrategy.loadImageNoFade(url, imageView)
+    }
+
+    /**
      * 加载图片，根据图片后缀是否以.GIF结尾，如果是则加载GIF图片
      */
     fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
         if (TextUtils.isEmpty(url)) {
             listener?.onFail(ImageGoConstant.IMAGE_FAILED_URL_EMPTY)
         } else {
-            if (url!!.endsWith(ImageGoConstant.IMAGE_GIF, true)) {
+            if (ImageGoUtils.isGif(url)) {
                 mImageStrategy.loadGifImage(url, imageView, listener)
             } else {
                 mImageStrategy.loadImage(url, imageView, listener)

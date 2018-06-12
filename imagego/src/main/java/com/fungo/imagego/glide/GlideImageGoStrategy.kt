@@ -22,6 +22,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.fungo.imagego.create.ImageGoStrategy
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
+import com.fungo.imagego.utils.ImageGoConstant
 import com.fungo.imagego.utils.ImageGoUtils
 import java.io.File
 
@@ -35,12 +36,13 @@ import java.io.File
 class GlideImageGoStrategy : ImageGoStrategy {
 
     /** 默认的配置,可以手动配置 */
-    private val defaultConfiguration = GlideConfig
+    private val defaultConfig = GlideConfig
             .Builder()
             .setAsBitmap(true)
-            .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoUtils.PLACE_HOLDER_COLOR)))
+            .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoConstant.IMAGE_PLACE_HOLDER_COLOR)))
             .setDiskCacheStrategy(GlideConfig.DiskCache.AUTOMATIC)
             .setPriority(GlideConfig.LoadPriority.NORMAL)
+            .isCrossFade(true)
             .build()
 
 
@@ -49,11 +51,13 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun loadImage(url: String?, placeholder: Int, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration).build(), null)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
+                .setPlaceHolderResId(placeholder).build(), null)
     }
 
+
     override fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
-        loadImage(url, imageView, null, listener)
+        loadImage(url, imageView, defaultConfig, listener)
     }
 
     override fun loadGifImage(url: String?, imageView: ImageView?) {
@@ -61,17 +65,23 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun loadGifImage(url: String?, placeholder: Int, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
                 .setAsGif(true).setAsBitmap(false).build(), null)
     }
 
     override fun loadGifImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
                 .setAsGif(true).setAsBitmap(false).build(), listener)
     }
 
     override fun loadImage(obj: Any?, imageView: ImageView?) {
-        loadImage(obj, imageView, null, null)
+        loadImage(obj, imageView, defaultConfig, null)
+    }
+
+
+    override fun loadImageNoFade(url: String?, imageView: ImageView?) {
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
+                .isCrossFade(false).build(), null)
     }
 
     override fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?) {
@@ -175,7 +185,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
             listener?.onFail("GlideImageGoStrategy：context is null...")
             return
         }
-        val glideConfig: GlideConfig = config ?: defaultConfiguration
+        val glideConfig: GlideConfig = config ?: defaultConfig
         try {
             when {
                 glideConfig.isAsGif() -> {

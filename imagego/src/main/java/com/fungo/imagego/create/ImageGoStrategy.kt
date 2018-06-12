@@ -17,17 +17,26 @@ import java.io.File
 
 interface ImageGoStrategy {
 
-    /** 加载图片，使用默认的配置 */
+    /**
+     * 加载图片，使用默认的配置
+     */
     fun loadImage(url: String?, imageView: ImageView?)
 
-    /** 加载图片，自定义展位图 */
+    /**
+     * 加载图片，自定义占位图
+     */
     fun loadImage(url: String?, placeholder: Int, imageView: ImageView?)
 
-    /** 加载图片，使用监听 */
+    /**
+     * 加载图片，使用图片加载监听
+     */
     fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?)
 
-    /** 加载Gif图片 */
+    /**
+     * 加载Gif图片
+     */
     fun loadGifImage(url: String?, imageView: ImageView?)
+
 
     /** 加载Gif图片，自定义占位图 */
     fun loadGifImage(url: String?, placeholder: Int, imageView: ImageView?)
@@ -46,6 +55,11 @@ interface ImageGoStrategy {
      * 可以是File,Bitmap,URI,ResID,Drawable
      */
     fun loadImage(obj: Any?, imageView: ImageView?)
+
+    /**
+     * 加载图片，没有渐变动画
+     */
+    fun loadImageNoFade(url: String?, imageView: ImageView?)
 
     /** 清除手机磁盘图片缓存 */
     fun clearImageDiskCache(context: Context?)
