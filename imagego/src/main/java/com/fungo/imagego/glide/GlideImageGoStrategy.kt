@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
@@ -20,7 +19,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import com.fungo.imagego.create.ImageGoEngine
 import com.fungo.imagego.create.ImageGoStrategy
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
@@ -37,12 +35,12 @@ import java.io.File
 class GlideImageGoStrategy : ImageGoStrategy {
 
     /** 默认的配置,可以手动配置 */
-    private val defaultConfiguration = ImageGoEngine
+    private val defaultConfiguration = GlideConfig
             .Builder()
             .setAsBitmap(true)
             .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoUtils.PLACE_HOLDER_COLOR)))
-            .setDiskCacheStrategy(ImageGoEngine.DiskCache.AUTOMATIC)
-            .setPriority(ImageGoEngine.LoadPriority.NORMAL)
+            .setDiskCacheStrategy(GlideConfig.DiskCache.AUTOMATIC)
+            .setPriority(GlideConfig.LoadPriority.NORMAL)
             .build()
 
 
@@ -70,26 +68,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
     override fun loadGifImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
         loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
                 .setAsGif(true).setAsBitmap(false).build(), listener)
-    }
-
-    override fun loadImage(file: File?, imageView: ImageView?) {
-        loadImage(file, imageView, null, null)
-    }
-
-    override fun loadImage(bitmap: Bitmap?, imageView: ImageView?) {
-        loadImage(bitmap, imageView, null, null)
-    }
-
-    override fun loadImage(uri: Uri?, imageView: ImageView?) {
-        loadImage(uri, imageView, null, null)
-    }
-
-    override fun loadImage(resId: Int?, imageView: ImageView?) {
-        loadImage(resId, imageView, null, null)
-    }
-
-    override fun loadImage(drawable: Drawable?, imageView: ImageView?) {
-        loadImage(drawable, imageView, null, null)
     }
 
     override fun loadImage(obj: Any?, imageView: ImageView?) {
@@ -174,7 +152,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
         }
     }
 
-    private fun loadImage(obj: Any?, imageView: ImageView?, config: ImageGoEngine?, listener: OnImageListener?) {
+    private fun loadImage(obj: Any?, imageView: ImageView?, config: GlideConfig?, listener: OnImageListener?) {
         if (obj == null) {
             listener?.onFail("GlideImageGoStrategy：image request url is null...")
             return
@@ -197,7 +175,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
             listener?.onFail("GlideImageGoStrategy：context is null...")
             return
         }
-        val glideConfig: ImageGoEngine = config ?: defaultConfiguration
+        val glideConfig: GlideConfig = config ?: defaultConfiguration
         try {
             when {
                 glideConfig.isAsGif() -> {
@@ -222,7 +200,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置bitmap属性
      */
-    private fun buildBitmap(context: Context, obj: Any, glideConfig: ImageGoEngine, bitmapBuilder: RequestBuilder<Bitmap>, listener: OnImageListener?): RequestBuilder<Bitmap> {
+    private fun buildBitmap(context: Context, obj: Any, glideConfig: GlideConfig, bitmapBuilder: RequestBuilder<Bitmap>, listener: OnImageListener?): RequestBuilder<Bitmap> {
         var builder = bitmapBuilder
         // 渐变展示
         if (glideConfig.isCrossFade()) {
@@ -239,7 +217,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
                 listener?.onSuccess()
                 return false
             }
-
         })
 
         // 缩略图大小
@@ -260,7 +237,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置Gift属性
      */
-    private fun buildGift(context: Context, obj: Any, glideConfig: ImageGoEngine, gifBuilder: RequestBuilder<GifDrawable>, listener: OnImageListener?): RequestBuilder<GifDrawable> {
+    private fun buildGift(context: Context, obj: Any, glideConfig: GlideConfig, gifBuilder: RequestBuilder<GifDrawable>, listener: OnImageListener?): RequestBuilder<GifDrawable> {
         var builder = gifBuilder
 
         // 渐变展示
@@ -296,7 +273,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置图片加载选项并且加载图片
      */
-    private fun buildOptions(obj: Any, glideConfig: ImageGoEngine): RequestOptions {
+    private fun buildOptions(obj: Any, glideConfig: GlideConfig): RequestOptions {
         val options = RequestOptions()
 
         // 是否跳过内存缓存

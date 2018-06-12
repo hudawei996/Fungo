@@ -27,7 +27,7 @@ import java.io.InputStream
  * Glide 配置
  */
 @GlideModule
-class ConfigGlideModule : AppGlideModule() {
+class GlideConfigModule : AppGlideModule() {
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         super.registerComponents(context, glide, registry)

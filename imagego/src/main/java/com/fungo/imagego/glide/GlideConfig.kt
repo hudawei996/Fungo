@@ -1,4 +1,4 @@
-package com.fungo.imagego.create
+package com.fungo.imagego.glide
 
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Priority
@@ -10,10 +10,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
  *
  * 图片加载库的配置引擎，封装原始接口，进行转换
  */
-class ImageGoEngine(private val builder: Builder) {
+class GlideConfig(private val builder: Builder) {
 
     /** 解析配置 */
-    fun parseBuilder(config: ImageGoEngine): Builder {
+    fun parseBuilder(config: GlideConfig): Builder {
         val builder = Builder()
         builder.placeHolderResId = config.getPlaceHolderResId()
         builder.placeHolderDrawable = config.getPlaceHolderDrawable()
@@ -155,8 +155,8 @@ class ImageGoEngine(private val builder: Builder) {
             return this
         }
 
-        fun build(): ImageGoEngine {
-            return ImageGoEngine(this)
+        fun build(): GlideConfig {
+            return GlideConfig(this)
         }
     }
 

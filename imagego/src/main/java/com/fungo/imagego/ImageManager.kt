@@ -9,6 +9,7 @@ import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.listener.OnProgressListener
 import com.fungo.imagego.progress.ProgressEngine
+import com.fungo.imagego.utils.ImageGoConstant
 
 /**
  * @author Pinger
@@ -16,36 +17,43 @@ import com.fungo.imagego.progress.ProgressEngine
  */
 class ImageManager {
 
+    /**
+     * 单利对象（恶汉式）
+     */
     companion object {
-        private var mInstance: ImageManager? = null
-
-        val instance: ImageManager
-            @Synchronized get() {
-                if (mInstance == null) {
-                    mInstance = ImageManager()
-                }
-                return mInstance!!
-            }
+        @JvmStatic
+        val instance: ImageManager = ImageManager()
     }
 
-
+    /***
+     * 图片的加载策略，抽取常用的图片加载方法到基类里，由具体的去实现，使用时只需要基类接口
+     */
     private lateinit var mImageStrategy: ImageGoStrategy
 
-    /** 初始化加载策略 */
+
+    /**
+     * 初始化加载策略，在Application中设置
+     * 目前可提供选择的策略有#GlideImageGoFactory和#PicassoImageGoFactory两种
+     */
     fun setImageGoFactory(factory: ImageGoFactory) {
         mImageStrategy = factory.create()
     }
 
-
-    /** 普通图片 */
+    /**
+     * 普通图片，默认的监听对象为null
+     */
     fun loadImage(url: String?, imageView: ImageView?) {
         loadImage(url, imageView, null)
     }
 
-    /** 加载图片，默认根据图片后缀加载GIF图片 */
+    /**
+     * 加载图片，根据图片后缀是否以.GIF结尾，如果是则加载GIF图片
+     */
     fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
-        if (!TextUtils.isEmpty(url)) {
-            if (url!!.endsWith(".gif") || url.endsWith(".GIF")) {
+        if (TextUtils.isEmpty(url)) {
+            listener?.onFail(ImageGoConstant.IMAGE_FAILED_URL_EMPTY)
+        } else {
+            if (url!!.endsWith(ImageGoConstant.IMAGE_GIF, true)) {
                 mImageStrategy.loadGifImage(url, imageView, listener)
             } else {
                 mImageStrategy.loadImage(url, imageView, listener)
@@ -53,34 +61,31 @@ class ImageManager {
         }
     }
 
-    /** 加载图片，带进度条 */
+    /**
+     * 加载图片，带进度条
+     */
     fun loadImageWithProgress(url: String?, imageView: ImageView?, listener: OnProgressListener) {
         ProgressEngine.addProgressListener(listener)
         loadImage(url, imageView, null)
     }
 
-    /** GIF图片 */
-    fun loadGifImage(url: String?, imageView: ImageView?) {
-        mImageStrategy.loadGifImage(url, imageView)
-    }
-
-    /** GIF图片，带进度条 */
-    fun loadGifImageWithProgress(url: String?, imageView: ImageView?, listener: OnProgressListener) {
-        ProgressEngine.addProgressListener(listener)
-        loadGifImage(url, imageView)
-    }
-
-    /** 保存图片到本地 */
+    /**
+     * 保存图片到本地
+     */
     fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?) {
         mImageStrategy.saveImage(context, url, listener)
     }
 
-    /** 清除图片缓存 */
+    /**
+     * 清除图片缓存
+     */
     fun clearImageCache(context: Context?) {
         mImageStrategy.clearImageCache(context)
     }
 
-    /** 图片缓存大小 */
+    /**
+     * 图片缓存大小
+     */
     fun getImageCacheSize(context: Context?): String {
         return mImageStrategy.getCacheSize(context)
     }

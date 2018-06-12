@@ -51,6 +51,7 @@ import com.fungo.baseuilib.view.base.ImageWrapper;
  * @author Pinger
  * @since 18-6-11 下午12:30
  * 参考：https://github.com/hdodenhof/CircleImageView
+ * 注意：CircleImageView不支持动画加载，不支持变换属性等等
  */
 
 public class CircleImageView extends ImageWrapper {

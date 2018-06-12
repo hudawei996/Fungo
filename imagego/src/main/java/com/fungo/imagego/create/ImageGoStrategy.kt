@@ -3,8 +3,6 @@ package com.fungo.imagego.create
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.widget.ImageView
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
@@ -43,14 +41,11 @@ interface ImageGoStrategy {
     /** 加载图片，生成Bitmap */
     fun loadBitmapImage(context: Context?, url: String?): Bitmap?
 
-    // 通过其他的资源，加载图片
-    fun loadImage(file: File?, imageView: ImageView?)       // 加载本地文件
-    fun loadImage(bitmap: Bitmap?, imageView: ImageView?)   // 加载Bitmap
-    fun loadImage(uri: Uri?, imageView: ImageView?)         // 路由
-    fun loadImage(resId: Int?, imageView: ImageView?)       // 加载本地资源
-    fun loadImage(drawable: Drawable?, imageView: ImageView?) // 加载drawable
-    fun loadImage(obj: Any?, imageView: ImageView?)             // 加载任意资源
-
+    /**
+     * 通过其他资源加载图片
+     * 可以是File,Bitmap,URI,ResID,Drawable
+     */
+    fun loadImage(obj: Any?, imageView: ImageView?)
 
     /** 清除手机磁盘图片缓存 */
     fun clearImageDiskCache(context: Context?)

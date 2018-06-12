@@ -2,8 +2,10 @@ package com.fungo.repertory.image
 
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
@@ -82,6 +84,9 @@ class ImageMainActivity : BaseActivity() {
     /** 处理初始状态 */
     private fun handleViews() {
         ViewUtils.setGone(seekBar)
+        mCircleImageView = null
+        mRoundImageView = null
+        mImageVIew = null
     }
 
     private fun onMenuItemProgress(itemId: Int) {
@@ -97,7 +102,7 @@ class ImageMainActivity : BaseActivity() {
 
 
     private fun setImageProgress() {
-        ImageManager.instance.loadGifImageWithProgress(mGifUrl, mImageVIew, object : OnProgressListener {
+        ImageManager.instance.loadImageWithProgress(mGifUrl, mImageVIew, object : OnProgressListener {
             override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
                 ViewUtils.setVisible(circleProgressView)
                 circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
@@ -122,9 +127,9 @@ class ImageMainActivity : BaseActivity() {
         if (mCurrentProgress == -1) {
             setActionBar(getString(R.string.image_action_round), true)
             ViewUtils.setVisible(seekBar)
+            mCurrentProgress = 18
             seekBar.min = 0
             seekBar.max = 100
-            mCurrentProgress = 18
             seekBar.progress = mCurrentProgress
             ImageManager.instance.loadImage(mUrl, generateRoundImageView())
         }
@@ -136,15 +141,13 @@ class ImageMainActivity : BaseActivity() {
         if (mCurrentProgress == -1) {
             setActionBar(getString(R.string.image_action_circle), true)
             ViewUtils.setVisible(seekBar)
-            seekBar.min = 100
-            seekBar.max = 500
             mCurrentProgress = 250
+            seekBar.min = 0
+            seekBar.max = 500
             seekBar.progress = mCurrentProgress
-            ImageManager.instance.loadImage(mUrl, generateCircleImageView())
         }
-        mCircleImageView?.layoutParams = generateParams(mCurrentProgress, mCurrentProgress)
+        ImageManager.instance.loadImage(mUrl, generateCircleImageView())
     }
-
 
     private fun loadLinearImage() {
         ToastUtils.showToast(getString(R.string.image_action_linear))
@@ -175,11 +178,11 @@ class ImageMainActivity : BaseActivity() {
     private fun generateCircleImageView(): CircleImageView {
         if (mCircleImageView == null) {
             mCircleImageView = CircleImageView(this)
-            mCircleImageView!!.layoutParams = generateParams()
             mCircleImageView!!.scaleType = ImageView.ScaleType.CENTER_CROP
             container.removeAllViews()
             container.addView(mCircleImageView)
         }
+        mCircleImageView!!.layoutParams = generateParams(mCurrentProgress, mCurrentProgress)
         return mCircleImageView!!
     }
 
@@ -196,7 +199,7 @@ class ImageMainActivity : BaseActivity() {
     }
 
     private fun generateParams(): FrameLayout.LayoutParams {
-        return generateParams(-1, -1)
+        return generateParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
 
