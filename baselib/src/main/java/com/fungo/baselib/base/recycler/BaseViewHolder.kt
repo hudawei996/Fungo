@@ -15,14 +15,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baselib.base.page.IBaseView
+import com.fungo.baselib.base.page.IView
 
 /**
  * @author pinger
  * @since 2018/1/13 23:53
  * RecyclerView的Holder二次封装，只关心试图初始化和数据绑定
  */
-abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IBaseView {
+abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
 
     protected val context: Context
         get() = itemView.context

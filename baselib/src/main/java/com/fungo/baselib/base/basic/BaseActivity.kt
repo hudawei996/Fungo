@@ -16,7 +16,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baselib.base.page.IBaseView
+import com.fungo.baselib.base.page.IView
 
 
 /**
@@ -25,7 +25,7 @@ import com.fungo.baselib.base.page.IBaseView
  * Activity基类，封装常用属性和方法
  */
 
-abstract class BaseActivity : AppCompatActivity(), IBaseView {
+abstract class BaseActivity : AppCompatActivity(), IView {
 
     /**
      * 获取控件ID

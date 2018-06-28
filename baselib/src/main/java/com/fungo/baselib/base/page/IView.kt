@@ -15,7 +15,7 @@ import android.widget.TextView
  * View的一些基本操作行为，一般放在基类里实现
  *
  */
-interface IBaseView : View.OnClickListener {
+interface IView : View.OnClickListener {
 
     fun <T : View> findView(@IdRes id: Int): T
 

@@ -2,6 +2,7 @@ package com.fungo.baselib.app
 
 import android.app.Application
 import com.fungo.baselib.utils.BaseUtils
+import com.fungo.baselib.utils.LayoutUtils
 
 /**
  * @author Pinger
@@ -29,6 +30,7 @@ open class BaseApplication : Application() {
      */
     private fun initUtils() {
         BaseUtils.init(this)
+        LayoutUtils.initLayout(this)
     }
 
 }
