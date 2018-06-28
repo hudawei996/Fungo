@@ -15,14 +15,11 @@ import java.util.concurrent.Executors
 
 object ImageGoUtils {
 
-    const val PLACE_HOLDER_COLOR = "#F2F2F2"
-    private const val PATH_IMAGE = "images"
-    private const val BUFFER_SIZE = 8192
     private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     /** 是否是GIF图 */
     fun isGif(url: String?): Boolean {
-        return !TextUtils.isEmpty(url) && url!!.endsWith("gif", true)
+        return !TextUtils.isEmpty(url) && url!!.endsWith(ImageGoConstant.IMAGE_GIF, true)
     }
 
     /** 单位转换 */
@@ -68,7 +65,7 @@ object ImageGoUtils {
 
     /** 获取图片存储的路径 */
     fun getImageSavePath(context: Context?): String {
-        val path = getAppDataPath(context) + File.separator + PATH_IMAGE + File.separator
+        val path = getAppDataPath(context) + File.separator + ImageGoConstant.IMAGE_PATH + File.separator
         createOrExistsDir(path)
         return path
     }
@@ -102,11 +99,11 @@ object ImageGoUtils {
         return try {
             stream = FileInputStream(srcFile)
             os = BufferedOutputStream(FileOutputStream(destFile))
-            val data = ByteArray(BUFFER_SIZE)
-            var len = stream.read(data, 0, BUFFER_SIZE)
+            val data = ByteArray(8192)
+            var len = stream.read(data, 0, 8192)
             while (len != -1) {
                 os.write(data, 0, len)
-                len = stream.read(data, 0, BUFFER_SIZE)
+                len = stream.read(data, 0, 8192)
             }
             true
         } catch (e: FileNotFoundException) {

@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
@@ -84,6 +83,7 @@ class ImageMainActivity : BaseActivity() {
     /** 处理初始状态 */
     private fun handleViews() {
         ViewUtils.setGone(seekBar)
+        ViewUtils.setGone(circleProgressView)
         mCircleImageView = null
         mRoundImageView = null
         mImageVIew = null
@@ -102,7 +102,7 @@ class ImageMainActivity : BaseActivity() {
 
 
     private fun setImageProgress() {
-        ImageManager.instance.loadImageWithProgress(mGifUrl, mImageVIew, object : OnProgressListener {
+        ImageManager.instance.loadImageWithProgress(mGifUrl, generateImageView(), object : OnProgressListener {
             override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
                 ViewUtils.setVisible(circleProgressView)
                 circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
@@ -112,7 +112,7 @@ class ImageMainActivity : BaseActivity() {
     }
 
     private fun saveImageView() {
-        ImageManager.instance.saveImage(this, mUrl, object : OnImageSaveListener {
+        ImageManager.instance.saveImage(this, mGifUrl, object : OnImageSaveListener {
             override fun onSaveSuccess(msg: String) {
                 ToastUtils.showToast(msg)
             }
@@ -146,7 +146,7 @@ class ImageMainActivity : BaseActivity() {
             seekBar.max = 500
             seekBar.progress = mCurrentProgress
         }
-        ImageManager.instance.loadImage(mUrl, generateCircleImageView())
+        ImageManager.instance.loadImageNoFade(mUrl, generateCircleImageView())
     }
 
     private fun loadLinearImage() {

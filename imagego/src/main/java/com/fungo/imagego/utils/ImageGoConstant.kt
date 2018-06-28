@@ -9,8 +9,9 @@ package com.fungo.imagego.utils
 object ImageGoConstant {
 
     const val IMAGE_GIF = ".GIF"
+    const val IMAGE_PATH = "Fungo"
+    const val IMAGE_PLACE_HOLDER_COLOR = "#F2F2F2"
 
     const val IMAGE_FAILED_URL_EMPTY = "----> image go load failed：url is empty."
-
 
 }

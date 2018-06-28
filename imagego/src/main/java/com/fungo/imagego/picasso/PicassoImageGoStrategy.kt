@@ -16,6 +16,9 @@ import java.io.File
  *
  */
 class PicassoImageGoStrategy : ImageGoStrategy {
+    override fun loadImageNoFade(url: String?, imageView: ImageView?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     override fun loadImage(url: String?, imageView: ImageView?) {
