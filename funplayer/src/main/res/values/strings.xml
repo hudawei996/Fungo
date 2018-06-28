@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">playergo</string>
+    <string name="player_name">funplayer</string>
+    <string name="player_retry">重新播放</string>
+    <string name="player_net_error">网络异常请重试</string>
+    <string name="player_net_mobile">继续播放将消耗流量</string>
+    <string name="player_confirm">确定</string>
+    <string name="player_continue_play">继续播放</string>
+    <string name="player_completed">播放完成</string>
+    <string name="player_prepared">正在准备中…</string>
+    <string name="player_error">播放异常请重试</string>
+    <string name="player_buffering_update">正在缓冲中…</string>
+    <string name="player_lock">已锁定</string>
+    <string name="player_unlock">已解锁</string>
+    <string name="player_unlock_first">请先解锁屏幕</string>
 </resources>
