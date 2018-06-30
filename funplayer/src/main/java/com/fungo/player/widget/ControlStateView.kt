@@ -46,18 +46,21 @@ class ControlStateView(context: Context) : LinearLayout(context) {
 
 
     fun showLoading() {
+        hideState()
         setBackgroundColor(Color.BLACK)
         setVisible(mSateProgressContainer)
         mSateProgressBtn.text = context.getString(R.string.player_prepared)
     }
 
     fun showBufferingUpdate() {
+        hideState()
         setBackgroundColor(Color.TRANSPARENT)
         setVisible(mSateProgressContainer)
         mSateProgressBtn.text = context.getString(R.string.player_buffering_update)
     }
 
     fun showError(listener: OnClickListener) {
+        hideState()
         setBackgroundColor(Color.BLACK)
         setVisible(mSateImageContainer)
         mSateImage.setImageResource(R.mipmap.ic_player_replay)
@@ -66,6 +69,7 @@ class ControlStateView(context: Context) : LinearLayout(context) {
     }
 
     fun showCompleted(listener: OnClickListener) {
+        hideState()
         setBackgroundColor(Color.TRANSPARENT)
         setVisible(mSateImageContainer)
         mSateImage.setImageResource(R.mipmap.ic_player_replay)
@@ -75,6 +79,7 @@ class ControlStateView(context: Context) : LinearLayout(context) {
 
 
     fun showNetError(listener: OnClickListener) {
+        hideState()
         setBackgroundColor(Color.BLACK)
         setVisible(mSateTextContainer)
         mSateText.text = context.getString(R.string.player_net_error)
@@ -84,6 +89,7 @@ class ControlStateView(context: Context) : LinearLayout(context) {
 
 
     fun showNetMobile(listener: OnClickListener) {
+        hideState()
         setBackgroundColor(Color.BLACK)
         setVisible(mSateTextContainer)
         mSateText.text = context.getString(R.string.player_net_mobile)
@@ -98,7 +104,6 @@ class ControlStateView(context: Context) : LinearLayout(context) {
         setGone(mSateProgressContainer)
         setGone(mSateTextContainer)
     }
-
 
     private fun setVisible(view: View?) {
         if (this.visibility != View.VISIBLE) {

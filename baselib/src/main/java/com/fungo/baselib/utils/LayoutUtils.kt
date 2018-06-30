@@ -21,8 +21,8 @@ object LayoutUtils {
     private var appScaledDensity: Float = 0f
     private var appDisplayMetrics: DisplayMetrics? = null
 
-    private var LAYOUT_HEIGHT = 1920
-    private var LAYOUT_WIDTH = 1080
+    private var LAYOUT_HEIGHT = 1920 / 3
+    private var LAYOUT_WIDTH = 1080 / 3
 
     var STANDARD_WIDTH = 1  // 以宽为标准计算适配
     var STANDARD_HEIGHT = 2  // 以高为标准计算适配
