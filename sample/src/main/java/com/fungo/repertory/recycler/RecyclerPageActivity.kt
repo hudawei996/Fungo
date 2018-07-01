@@ -21,6 +21,6 @@ class RecyclerPageActivity : BaseActivity() {
     }
 
     override fun initView() {
-        setActionBar(getString(R.string.recycler_page), true)
+        setToolBar(getString(R.string.recycler_page), true)
     }
 }

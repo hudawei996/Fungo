@@ -18,7 +18,7 @@ class CustomViewActivity : BaseActivity() {
         get() = R.layout.activity_custom_view
 
     override fun initView() {
-        setActionBar(getString(R.string.widget_custom), true)
+        setToolBar(getString(R.string.widget_custom), true)
     }
 
 

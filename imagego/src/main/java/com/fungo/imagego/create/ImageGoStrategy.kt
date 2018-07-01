@@ -48,7 +48,7 @@ interface ImageGoStrategy {
     fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?)
 
     /** 加载图片，生成Bitmap */
-    fun loadBitmapImage(context: Context?, url: String?): Bitmap?
+    fun loadBitmapImage(context: Context?, url: String?, listener: OnImageListener?)
 
     /**
      * 通过其他资源加载图片

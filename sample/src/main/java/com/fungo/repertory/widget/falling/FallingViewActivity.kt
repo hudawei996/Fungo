@@ -16,7 +16,7 @@ class FallingViewActivity : BaseActivity() {
         get() = R.layout.activity_falling_view
 
     override fun initView() {
-        setActionBar(getString(R.string.widget_view_falling_snow), true)
+        setToolBar(getString(R.string.widget_view_falling_snow), true)
 
         val fallingView = findViewById<FallingView>(R.id.falling_view)
 

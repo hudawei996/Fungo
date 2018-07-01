@@ -16,6 +16,10 @@ import java.io.File
  *
  */
 class PicassoImageGoStrategy : ImageGoStrategy {
+    override fun loadBitmapImage(context: Context?, url: String?, listener: OnImageListener?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun loadImageNoFade(url: String?, imageView: ImageView?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -46,10 +50,6 @@ class PicassoImageGoStrategy : ImageGoStrategy {
     }
 
     override fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

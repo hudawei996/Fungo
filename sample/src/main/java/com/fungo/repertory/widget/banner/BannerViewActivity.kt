@@ -27,7 +27,7 @@ class BannerViewActivity : BaseActivity() {
         get() = R.layout.activity_banner_view
 
     override fun initView() {
-        setActionBar(getString(R.string.widget_view_banner), true)
+        setToolBar(getString(R.string.widget_view_banner), true)
         mBannerView.duration = 3000
         mBannerView.setDelayedTime(3000)
         mBannerView.setIndicatorVisible(false)

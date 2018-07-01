@@ -6,6 +6,7 @@ import com.fungo.repertory.R
 import com.fungo.repertory.image.ImageMainActivity
 import com.fungo.repertory.player.PlayerMainActivity
 import com.fungo.repertory.recycler.RecyclerPageActivity
+import com.fungo.repertory.social.SocialActivity
 import com.fungo.repertory.widget.CustomViewActivity
 
 class MainActivity : BaseActivity() {
@@ -13,13 +14,23 @@ class MainActivity : BaseActivity() {
     override val layoutResID: Int
         get() = R.layout.activity_main
 
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_widget -> startActivity(CustomViewActivity::class.java)
-            R.id.btn_recycler -> startActivity(RecyclerPageActivity::class.java)
-            R.id.btn_player -> startActivity(PlayerMainActivity::class.java)
-            R.id.btn_image -> startActivity(ImageMainActivity::class.java)
-        }
+    fun onWidget(view: View) {
+        startActivity(CustomViewActivity::class.java)
     }
 
+    fun onRecycler(view: View) {
+        startActivity(RecyclerPageActivity::class.java)
+    }
+
+    fun onVideoPlayer(view: View) {
+        startActivity(PlayerMainActivity::class.java)
+    }
+
+    fun onImageManager(view: View) {
+        startActivity(ImageMainActivity::class.java)
+    }
+
+    fun onSocial(view: View) {
+        startActivity(SocialActivity::class.java)
+    }
 }
