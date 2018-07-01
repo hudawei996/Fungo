@@ -4,14 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.fungo.baseuilib.view.round.RoundTextView
+        android:padding="20dp"
         android:id="@+id/textView"
         android:layout_width="wrap_content"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:text="@string/recycler_view"
         android:textSize="20sp"
+        app:rv_isRippleEnable="true"
+        app:rv_cornerRadius="8dp"
+        app:rv_backgroundColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

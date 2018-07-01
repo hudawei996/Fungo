@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
+import android.support.annotation.ArrayRes
 import android.support.annotation.StringRes
 import android.text.TextUtils
 import android.util.DisplayMetrics
@@ -15,6 +16,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import java.util.*
 
 /**
  * @author Pinger
@@ -173,10 +175,16 @@ object ViewUtils {
         }
     }
 
+    /**
+     * 获取String资源集合
+     */
+    fun getString(context: Context?, @ArrayRes id: Int): Array<String>? {
+        if (context != null) {
+            return context.resources?.getStringArray(id)
+        }
+        return null
 
-//    fun getString(context: Context?, @ArrayRes id: Int): Array<String> {
-//        return context?.resources?.getStringArray(id) ?: Array(0,)
-//    }
+    }
 
 
     /**

@@ -27,23 +27,7 @@ import java.util.regex.Pattern
  * Date    2018/1/24
  * Des     网络请求
  */
-open class FungoRequest(private val fungoApi: FungoApi) {
-
-    /**
-     * POST请求  不具体处理返回值，只是转化成BaseEntity实例
-     *
-     * @param sourceUrl 接口号
-     * @param params    请求中data对应的参数，一个json格式数据
-     *
-     */
-    fun postRequestNoResult(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
-        val encryptionParams = ParamsUtils.getPostBody(sourceUrl, params)
-        return if (sourceUrl.contains("http:") || sourceUrl.contains("https:")) {
-            fungoApi.postRequestWithFullUrl(sourceUrl, encryptionParams)
-        } else {
-            fungoApi.postRequest(sourceUrl, encryptionParams)
-        }
-    }
+open class FungoRequest<Entity:BaseEntity>(private val fungoApi: FungoApi) {
 
     /**
      * POST请求   处理返回值成<T>
@@ -54,7 +38,12 @@ open class FungoRequest(private val fungoApi: FungoApi) {
      * @return              返回成功后的数据
     </T> */
     fun <T> postRequest(sourceUrl: String, params: Map<String, Any?>?): Observable<T> {
-        return request(RequestType.TYPE_POST, sourceUrl, params)
+        val encryptionParams = ParamsUtils.getPostBody(sourceUrl, params)
+        return if (sourceUrl.contains("http:") || sourceUrl.contains("https:")) {
+            fungoApi.postRequestWithFullUrl(sourceUrl, encryptionParams)
+        } else {
+            fungoApi.postRequest(sourceUrl, encryptionParams)
+        }
     }
 
     /**
@@ -63,7 +52,7 @@ open class FungoRequest(private val fungoApi: FungoApi) {
      * @param sourceUrl 接口号+参数
      *
      */
-    fun getRequestNoResult(sourceUrl: String, params: Map<String, Any?>?): Observable<BaseEntity> {
+    fun <T> getRequest(sourceUrl: String, params: Map<String, Any?>?): Observable<T> {
         val url = ParamsUtils.appendUrlParams(sourceUrl, params)
         return if (url.contains("http:") || url.contains("https:")) {
             fungoApi.getRequestWithFullUrl(url)
@@ -79,7 +68,7 @@ open class FungoRequest(private val fungoApi: FungoApi) {
      * @param <T>           请求成功对象data里面的实体对象，对过clazz确定
      * @return              返回成功后的数据
     </T> */
-    fun <T> getRequest(sourceUrl: String): Observable<T> {
+   open fun <T> getRequest(sourceUrl: String): Observable<T> {
         return request(RequestType.TYPE_GET, sourceUrl, null)
     }
 
@@ -88,27 +77,29 @@ open class FungoRequest(private val fungoApi: FungoApi) {
         return if (isNetworkDisconnected()) {
             Observable.create { e ->
                 if (!e.isDisposed) {
-                    e.onError(RequestError(ErrorCode.NETWORK_UN_CONNECTED, ErrorDesc.NET_UN_CONNECTED))//当前无网络
+                    e.onError(RequestError(ErrorCode.NETWORK_UN_CONNECTED, ErrorDesc.NET_UN_CONNECTED))
                     e.onComplete()
                 }
             }
         } else Observable.just(sourceUrl)
                 .flatMap({ url ->
                     if (RequestType.TYPE_POST == requestType) {
-                        postRequestNoResult(url, params)
+                        postRequest<BaseEntity>(url, params)
                     } else {
-                        getRequestNoResult(url, params)
+                        getRequest<BaseEntity>(url, params)
                     }
-                })
-                .flatMap(Function<BaseEntity, ObservableSource<T>> { baseEntity ->
+                }) .flatMap(Function<BaseEntity, ObservableSource<T>> { baseEntity ->
+
+
+
                     if (baseEntity.isSuccess()) {
                         Observable.create { subscriber ->
-                            if (baseEntity.data == null) {
+                            if (baseEntity.getData() == null) {
                                 val commonData = Any()
                                 subscriber.onNext(commonData as T)
                             } else {
                                 try {
-                                    val data = baseEntity.data
+                                    val data = baseEntity.getData()
                                     NetLogger.i("Fungo Request OK---> sourceUrl ：" + sourceUrl + "\n success response : ---> " + data!!.toString())
 
                                     var tType: Type? = null
@@ -144,11 +135,14 @@ open class FungoRequest(private val fungoApi: FungoApi) {
                             }
                         }
                     } else {
-                        NetLogger.e("logout" + " new RequestError: baseEntity.errno = " + baseEntity.getCode() + ",baseEntity.desc = " + baseEntity.getMsg())
-                        Observable.error(RequestError(baseEntity.getCode(), baseEntity.getMsg()
+                        NetLogger.e("logout" + " new RequestError: baseEntity.errno = " + baseEntity.getCode() + ",baseEntity.desc = " + baseEntity.getMessage())
+                        Observable.error(RequestError(baseEntity.getCode(), baseEntity.getMessage()
                                 ?: "", RequestError.TYPE_SERVER))
                     }
                 })
+
+
+
                 .onErrorResumeNext(Function<Throwable, ObservableSource<T>> { error ->
                     val e = convertError(error)
                     if (e is RequestError) {

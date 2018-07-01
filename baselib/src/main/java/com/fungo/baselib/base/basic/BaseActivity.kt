@@ -16,7 +16,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baselib.base.page.IBaseView
+import com.fungo.baselib.base.page.IView
 
 
 /**
@@ -25,7 +25,7 @@ import com.fungo.baselib.base.page.IBaseView
  * Activity基类，封装常用属性和方法
  */
 
-abstract class BaseActivity : AppCompatActivity(), IBaseView {
+abstract class BaseActivity : AppCompatActivity(), IView {
 
     /**
      * 获取控件ID
@@ -174,7 +174,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
             finish() // 返回按键处理
             return true
         }
-        onOptionsItemSelected(item.itemId)
+        onMenuItemSelected(item.itemId)
         return true
     }
 
@@ -184,7 +184,7 @@ abstract class BaseActivity : AppCompatActivity(), IBaseView {
     }
 
     /** 菜单项点击 */
-    open fun onOptionsItemSelected(itemId: Int) {}
+    open fun onMenuItemSelected(itemId: Int) {}
 
 
 }

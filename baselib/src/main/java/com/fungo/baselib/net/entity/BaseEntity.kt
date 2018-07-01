@@ -7,11 +7,10 @@ import com.google.gson.JsonElement
  * Date    2018/1/24
  * Des     服务器返回数据结构
  */
-abstract class BaseEntity {
+ interface BaseEntity {
 
-    var data: JsonElement? = null
-
-    abstract fun isSuccess(): Boolean
-    abstract fun getMsg(): String?
-    abstract fun getCode(): Int
+    fun getData():JsonElement?
+    fun isSuccess(): Boolean
+    fun getMessage(): String?
+    fun getCode(): Int
 }

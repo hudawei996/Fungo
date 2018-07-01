@@ -5,29 +5,30 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
+import android.util.Log
+import android.widget.Toast
 import java.io.*
+import java.text.DecimalFormat
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
 object ImageGoUtils {
 
-    const val PATH_IMAGE = "images"
-    const val sBufferSize = 8192
     private val mHandler: Handler = Handler(Looper.getMainLooper())
 
     /** 是否是GIF图 */
     fun isGif(url: String?): Boolean {
-        return !TextUtils.isEmpty(url) && url!!.endsWith("gif", true)
+        return !TextUtils.isEmpty(url) && url!!.endsWith(ImageGoConstant.IMAGE_GIF, true)
     }
 
     /** 单位转换 */
-    fun dp2px(context: Context?, dipValue: Int): Int {
+    fun dp2px(context: Context?, dipValue: Float): Float {
         if (context == null) {
             return dipValue
         }
         val scale = context.resources.displayMetrics.density
-        return (dipValue * scale + 0.5f).toInt()
+        return dipValue * scale + 0.5f
     }
 
 
@@ -63,10 +64,22 @@ object ImageGoUtils {
     }
 
     /** 获取图片存储的路径 */
-    fun getImagePath(context: Context?): String {
-        val path = getAppDataPath(context) + File.separator + PATH_IMAGE + File.separator
+    fun getImageSavePath(context: Context?): String {
+        val path = getAppDataPath(context) + File.separator + ImageGoConstant.IMAGE_PATH + File.separator
         createOrExistsDir(path)
         return path
+    }
+
+
+    /**　获取图片缓存目录　*/
+    fun getImageCacheDir(context: Context?): File {
+        return if (Environment.getExternalStorageState() == Environment.MEDIA_UNMOUNTED) {
+            // 没有存储卡
+            File(context?.cacheDir, context?.packageName + "/imageCache")
+        } else {
+            // 有储存卡
+            File(Environment.getExternalStorageDirectory(), context?.packageName + "/imageCache")
+        }
     }
 
 
@@ -86,11 +99,11 @@ object ImageGoUtils {
         return try {
             stream = FileInputStream(srcFile)
             os = BufferedOutputStream(FileOutputStream(destFile))
-            val data = ByteArray(sBufferSize)
-            var len = stream.read(data, 0, sBufferSize)
+            val data = ByteArray(8192)
+            var len = stream.read(data, 0, 8192)
             while (len != -1) {
                 os.write(data, 0, len)
-                len = stream.read(data, 0, sBufferSize)
+                len = stream.read(data, 0, 8192)
             }
             true
         } catch (e: FileNotFoundException) {
@@ -103,11 +116,52 @@ object ImageGoUtils {
 
     }
 
-
     private fun createOrExistsDir(dataPath: String) {
         val file = File(dataPath)
         if (!file.exists()) {
             file.mkdirs()
         }
+    }
+
+    fun showToast(context: Context?, content: String) {
+        if (context == null) {
+            return
+        }
+        ImageGoUtils.runOnUIThread(Runnable {
+            Toast.makeText(context, content, Toast.LENGTH_SHORT).show()
+        })
+    }
+
+    fun getImageCacheSize(context: Context?): String {
+        return try {
+            val file = ImageGoUtils.getImageCacheDir(context)
+            var blockSize: Long = 0
+            file.listFiles().forEach {
+                blockSize += it.length()
+            }
+            formatFileSize(blockSize)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "0M"
+        }
+    }
+
+    /** 转换文件大小 */
+    private fun formatFileSize(fileSize: Long): String {
+        val df = DecimalFormat("#")
+        val wrongSize = "0M"
+        if (fileSize == 0L) {
+            return wrongSize
+        }
+        return when {
+            fileSize < 1024 -> df.format(fileSize.toDouble()) + "B"
+            fileSize < 1048576 -> df.format(fileSize.toDouble() / 1024) + "KB"
+            fileSize < 1073741824 -> df.format(fileSize.toDouble() / 1048576) + "MB"
+            else -> df.format(fileSize.toDouble() / 1073741824) + "GB"
+        }
+    }
+
+    fun log(msg: String) {
+        Log.d("ImageGo", msg)
     }
 }

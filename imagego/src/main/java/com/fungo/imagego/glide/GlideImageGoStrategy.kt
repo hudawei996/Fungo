@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
 import android.widget.ImageView
@@ -13,6 +12,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -21,11 +22,7 @@ import com.bumptech.glide.signature.ObjectKey
 import com.fungo.imagego.create.ImageGoStrategy
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
-import com.fungo.imagego.create.ImageGoEngine
-import com.fungo.imagego.transfmer.BlurTransformation
-import com.fungo.imagego.transfmer.CircleTransformation
-import com.fungo.imagego.transfmer.GrayScaleTransformation
-import com.fungo.imagego.transfmer.RoundTransformation
+import com.fungo.imagego.utils.ImageGoConstant
 import com.fungo.imagego.utils.ImageGoUtils
 import java.io.File
 
@@ -39,13 +36,13 @@ import java.io.File
 class GlideImageGoStrategy : ImageGoStrategy {
 
     /** 默认的配置,可以手动配置 */
-    private val defaultConfiguration = ImageGoEngine.Builder()
-            .setScaleType(ImageGoEngine.ScaleType.CENTER_CROP)
+    private val defaultConfig = GlideConfig
+            .Builder()
             .setAsBitmap(true)
-//            .setPlaceHolderResId(R.drawable.ic_placeholder)
-//            .setErrorResId(R.drawable.ic_placeholder)
-            .setDiskCacheStrategy(ImageGoEngine.DiskCache.AUTOMATIC)
-            .setPriority(ImageGoEngine.LoadPriority.NORMAL)
+            .setPlaceHolderDrawable(ColorDrawable(Color.parseColor(ImageGoConstant.IMAGE_PLACE_HOLDER_COLOR)))
+            .setDiskCacheStrategy(GlideConfig.DiskCache.AUTOMATIC)
+            .setPriority(GlideConfig.LoadPriority.NORMAL)
+            .isCrossFade(true)
             .build()
 
 
@@ -54,11 +51,13 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun loadImage(url: String?, placeholder: Int, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration).build(), null)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
+                .setPlaceHolderResId(placeholder).build(), null)
     }
 
+
     override fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
-        loadImage(url, imageView, null, listener)
+        loadImage(url, imageView, defaultConfig, listener)
     }
 
     override fun loadGifImage(url: String?, imageView: ImageView?) {
@@ -66,37 +65,23 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun loadGifImage(url: String?, placeholder: Int, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
                 .setAsGif(true).setAsBitmap(false).build(), null)
     }
 
     override fun loadGifImage(url: String?, imageView: ImageView?, listener: OnImageListener?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
                 .setAsGif(true).setAsBitmap(false).build(), listener)
     }
 
-    override fun loadImage(file: File?, imageView: ImageView?) {
-        loadImage(file, imageView, null, null)
-    }
-
-    override fun loadImage(bitmap: Bitmap?, imageView: ImageView?) {
-        loadImage(bitmap, imageView, null, null)
-    }
-
-    override fun loadImage(uri: Uri?, imageView: ImageView?) {
-        loadImage(uri, imageView, null, null)
-    }
-
-    override fun loadImage(resId: Int?, imageView: ImageView?) {
-        loadImage(resId, imageView, null, null)
-    }
-
-    override fun loadImage(drawable: Drawable?, imageView: ImageView?) {
-        loadImage(drawable, imageView, null, null)
-    }
-
     override fun loadImage(obj: Any?, imageView: ImageView?) {
-        loadImage(obj, imageView, null, null)
+        loadImage(obj, imageView, defaultConfig, null)
+    }
+
+
+    override fun loadImageNoFade(url: String?, imageView: ImageView?) {
+        loadImage(url, imageView, defaultConfig.parseBuilder(defaultConfig)
+                .isCrossFade(false).build(), null)
     }
 
     override fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?) {
@@ -109,7 +94,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
                         "${System.currentTimeMillis()}.jpg"
                     }
 
-                    val destFile = File(ImageGoUtils.getImagePath(context) + suffix)
+                    val destFile = File(ImageGoUtils.getImageSavePath(context) + suffix)
                     val imageFile = download(context, url!!)
                     val isCopySuccess = ImageGoUtils.copyFile(imageFile, destFile)
 
@@ -118,7 +103,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
                             Uri.fromFile(destFile)))
                     ImageGoUtils.runOnUIThread(Runnable {
                         if (isCopySuccess) {
-                            listener?.onSaveSuccess("图片已保存至 " + ImageGoUtils.getImagePath(context))
+                            listener?.onSaveSuccess("图片已保存至 " + ImageGoUtils.getImageSavePath(context))
                         } else {
                             listener?.onSaveFail("保存失败")
                         }
@@ -132,31 +117,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
         })
     }
 
-    override fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isRoundTransform(true).setRoundRadius(roundRadius).build(), null)
-    }
-
-    override fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isBlurTransform(true).setBlurRadius(blurRadius).build(), null)
-    }
-
-    override fun loadGrayImage(url: String?, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isGrayScaleTransform(true).build(), null)
-    }
-
-    override fun loadCircleImage(url: String?, imageView: ImageView?) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .setScaleType(ImageGoEngine.ScaleType.CIRCLE_CROP).build(), null)
-    }
-
-    override fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int) {
-        loadImage(url, imageView, defaultConfiguration.parseBuilder(defaultConfiguration)
-                .isCircleTransform(true).setBorderWidth(borderWidth).setBorderColor(borderColor).build(), null)
-    }
-
     override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
         if (context != null && !TextUtils.isEmpty(url)) {
             return Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
@@ -166,10 +126,11 @@ class GlideImageGoStrategy : ImageGoStrategy {
 
     override fun clearImageDiskCache(context: Context?) {
         if (context != null) {
-            ImageGoUtils.runOnSubThread(Runnable { Glide.get(context).clearDiskCache() })
+            Glide.get(context).clearDiskCache()
         }
     }
 
+    /** 清除内存缓存，只能在主线程调用本方法 */
     override fun clearImageMemoryCache(context: Context?) {
         if (context != null) {
             Glide.get(context).clearMemory()
@@ -177,12 +138,16 @@ class GlideImageGoStrategy : ImageGoStrategy {
     }
 
     override fun clearImageCache(context: Context?) {
+        ImageGoUtils.showToast(context, "正在清除缓存...")
         clearImageMemoryCache(context)
-        clearImageDiskCache(context)
+        ImageGoUtils.runOnSubThread(Runnable {
+            clearImageDiskCache(context)
+            ImageGoUtils.showToast(context, "清除成功")
+        })
     }
 
     override fun getCacheSize(context: Context?): String {
-        return "12M"
+        return ImageGoUtils.getImageCacheSize(context)
     }
 
     override fun resumeRequests(context: Context?) {
@@ -197,7 +162,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
         }
     }
 
-    private fun loadImage(obj: Any?, imageView: ImageView?, config: ImageGoEngine?, listener: OnImageListener?) {
+    private fun loadImage(obj: Any?, imageView: ImageView?, config: GlideConfig?, listener: OnImageListener?) {
         if (obj == null) {
             listener?.onFail("GlideImageGoStrategy：image request url is null...")
             return
@@ -220,19 +185,19 @@ class GlideImageGoStrategy : ImageGoStrategy {
             listener?.onFail("GlideImageGoStrategy：context is null...")
             return
         }
-        val glideConfig: ImageGoEngine = config ?: defaultConfiguration
+        val glideConfig: GlideConfig = config ?: defaultConfig
         try {
             when {
                 glideConfig.isAsGif() -> {
                     val gifBuilder = Glide.with(context).asGif().load(obj)
                     val builder = buildGift(context, obj, glideConfig, gifBuilder, listener)
                     // 使用clone方法复用builder，不会请求网络
-                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
+                    builder.clone().apply(buildOptions(obj, glideConfig)).into(imageView)
                 }
                 glideConfig.isAsBitmap() -> {
                     val bitmapBuilder = Glide.with(context).asBitmap().load(obj)
                     val builder = buildBitmap(context, obj, glideConfig, bitmapBuilder, listener)
-                    builder.clone().apply(buildOptions(context, obj, glideConfig)).into(imageView)
+                    builder.clone().apply(buildOptions(obj, glideConfig)).into(imageView)
                 }
             }
         } catch (e: Exception) {
@@ -245,12 +210,11 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置bitmap属性
      */
-    private fun buildBitmap(context: Context, obj: Any, glideConfig: ImageGoEngine, bitmapBuilder: RequestBuilder<Bitmap>, listener: OnImageListener?): RequestBuilder<Bitmap> {
+    private fun buildBitmap(context: Context, obj: Any, glideConfig: GlideConfig, bitmapBuilder: RequestBuilder<Bitmap>, listener: OnImageListener?): RequestBuilder<Bitmap> {
         var builder = bitmapBuilder
         // 渐变展示
-        // TODO 渐变和缩放冲突，暂时去除
         if (glideConfig.isCrossFade()) {
-            // builder.transition(BitmapTransitionOptions.withCrossFade())
+            builder.transition(BitmapTransitionOptions.withCrossFade())
         }
 
         builder.listener(object : RequestListener<Bitmap> {
@@ -263,7 +227,6 @@ class GlideImageGoStrategy : ImageGoStrategy {
                 listener?.onSuccess()
                 return false
             }
-
         })
 
         // 缩略图大小
@@ -284,12 +247,12 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置Gift属性
      */
-    private fun buildGift(context: Context, obj: Any, glideConfig: ImageGoEngine, gifBuilder: RequestBuilder<GifDrawable>, listener: OnImageListener?): RequestBuilder<GifDrawable> {
+    private fun buildGift(context: Context, obj: Any, glideConfig: GlideConfig, gifBuilder: RequestBuilder<GifDrawable>, listener: OnImageListener?): RequestBuilder<GifDrawable> {
         var builder = gifBuilder
 
         // 渐变展示
         if (glideConfig.isCrossFade()) {
-            //builder.transition(DrawableTransitionOptions.withCrossFade())
+            builder.transition(DrawableTransitionOptions.withCrossFade())
         }
 
         builder.listener(object : RequestListener<GifDrawable> {
@@ -320,44 +283,28 @@ class GlideImageGoStrategy : ImageGoStrategy {
     /**
      * 设置图片加载选项并且加载图片
      */
-    private fun buildOptions(context: Context, obj: Any, glideConfig: ImageGoEngine): RequestOptions {
+    private fun buildOptions(obj: Any, glideConfig: GlideConfig): RequestOptions {
         val options = RequestOptions()
 
         // 是否跳过内存缓存
         options.diskCacheStrategy(glideConfig.getDiskCacheStrategy().strategy)
 
-        // 缩放类型,TODO Glide缩放类型对于占位图无效，所以一般使用ImageView的ScaleType属性
-        when (glideConfig.getScaleType()) {
-            ImageGoEngine.ScaleType.FIT_CENTER -> options.fitCenter()
-            ImageGoEngine.ScaleType.CENTER_CROP -> options.centerCrop()
-            ImageGoEngine.ScaleType.CENTER_INSIDE -> options.centerInside()
-            ImageGoEngine.ScaleType.CIRCLE_CROP -> options.circleCrop()
-        }
-
-        // transform
+        // 占位图
         when {
-            glideConfig.isCircleTransform() -> options.transform(CircleTransformation(context, glideConfig.getBorderWidth(), glideConfig.getBorderColor()))
-            glideConfig.isBlurTransform() -> options.transform(BlurTransformation(context, glideConfig.getBlurRadius()))
-            glideConfig.isRoundTransform() -> options.transform(RoundTransformation(context, glideConfig.getRoundRadius()))
-            glideConfig.isGrayScaleTransform() -> options.transform(GrayScaleTransformation(context))
+            glideConfig.getPlaceHolderResId() != 0 ->
+                options.placeholder(glideConfig.getPlaceHolderResId())
+            glideConfig.getErrorResId() != 0 ->
+                options.error(glideConfig.getErrorResId())
+                        .fallback(glideConfig.getErrorResId())
+            glideConfig.getPlaceHolderDrawable() != null ->
+                options.placeholder(glideConfig.getPlaceHolderDrawable())
+                        .error(glideConfig.getPlaceHolderDrawable())
         }
 
-        val colorDrawable = ColorDrawable(Color.parseColor("#F2F2F2"))
-
+        // 优先级和内存跳过
         options
-                .placeholder(colorDrawable)          // 占位符
-                .error(colorDrawable)                // 错误占位符
-//                .placeholder(glideConfig.getPlaceHolderResId())    // 占位符
-//                .error(glideConfig.getErrorResId())                // 错误占位符
-                .fallback(glideConfig.getErrorResId())             // 传入null时占位
-                .priority(glideConfig.getPriority().strategy)      // 优先级
-                .skipMemoryCache(glideConfig.isSkipMemoryCache())  // 是否跳过内存缓存
-
-        // 图片大小
-        val size = glideConfig.getSize()
-        if (size != null) {
-            options.override(size.width, size.height)
-        }
+                .priority(glideConfig.getPriority().strategy)
+                .skipMemoryCache(glideConfig.isSkipMemoryCache())
 
         // Tag
         val tag = glideConfig.getTag()

@@ -3,8 +3,6 @@ package com.fungo.imagego.create
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.widget.ImageView
 import com.fungo.imagego.listener.OnImageListener
 import com.fungo.imagego.listener.OnImageSaveListener
@@ -19,17 +17,26 @@ import java.io.File
 
 interface ImageGoStrategy {
 
-    /** 加载图片，使用默认的配置 */
+    /**
+     * 加载图片，使用默认的配置
+     */
     fun loadImage(url: String?, imageView: ImageView?)
 
-    /** 加载图片，自定义展位图 */
+    /**
+     * 加载图片，自定义占位图
+     */
     fun loadImage(url: String?, placeholder: Int, imageView: ImageView?)
 
-    /** 加载图片，使用监听 */
+    /**
+     * 加载图片，使用图片加载监听
+     */
     fun loadImage(url: String?, imageView: ImageView?, listener: OnImageListener?)
 
-    /** 加载Gif图片 */
+    /**
+     * 加载Gif图片
+     */
     fun loadGifImage(url: String?, imageView: ImageView?)
+
 
     /** 加载Gif图片，自定义占位图 */
     fun loadGifImage(url: String?, placeholder: Int, imageView: ImageView?)
@@ -40,33 +47,19 @@ interface ImageGoStrategy {
     /** 保存图片 */
     fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?)
 
-    /** 加载圆角图片 */
-    fun loadRoundImage(url: String?, imageView: ImageView?, roundRadius: Float)
-
-    /** 加载模糊图片 */
-    fun loadBlurImage(url: String?, imageView: ImageView?, blurRadius: Float)
-
-    /** 加载灰色图片 */
-    fun loadGrayImage(url: String?, imageView: ImageView?)
-
-    /** 加载圆形图片 */
-    fun loadCircleImage(url: String?, imageView: ImageView?)
-
     /** 加载图片，生成Bitmap */
     fun loadBitmapImage(context: Context?, url: String?): Bitmap?
 
-    /** 加载圆形图片带边框 */
-    fun loadCircleImage(url: String?, imageView: ImageView?, borderWidth: Float, borderColor: Int)
+    /**
+     * 通过其他资源加载图片
+     * 可以是File,Bitmap,URI,ResID,Drawable
+     */
+    fun loadImage(obj: Any?, imageView: ImageView?)
 
-    // 通过其他的资源，加载图片
-    fun loadImage(file: File?, imageView: ImageView?)       // 加载本地文件
-
-    fun loadImage(bitmap: Bitmap?, imageView: ImageView?)   // 加载Bitmap
-    fun loadImage(uri: Uri?, imageView: ImageView?)         // 路由
-    fun loadImage(resId: Int?, imageView: ImageView?)       // 加载本地资源
-    fun loadImage(drawable: Drawable?, imageView: ImageView?) // 加载drawable
-    fun loadImage(obj: Any?, imageView: ImageView?)             // 加载任意资源
-
+    /**
+     * 加载图片，没有渐变动画
+     */
+    fun loadImageNoFade(url: String?, imageView: ImageView?)
 
     /** 清除手机磁盘图片缓存 */
     fun clearImageDiskCache(context: Context?)
