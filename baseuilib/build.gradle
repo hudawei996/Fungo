@@ -29,5 +29,5 @@ dependencies {
     implementation rootProject.ext.dependencies.kotlin
     api rootProject.ext.dependencies.appcompat_v7
     api rootProject.ext.dependencies.design
-    api 'com.android.support.constraint:constraint-layout:1.1.0'
+    api rootProject.ext.dependencies.constraintlayout
 }

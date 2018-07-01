@@ -29,8 +29,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':baseuilib')
     implementation rootProject.ext.dependencies.kotlin
+    implementation rootProject.ext.dependencies.appcompat_v7
+    implementation rootProject.ext.dependencies.design
 
     implementation 'com.google.dagger:dagger:2.9'
     kapt 'com.google.dagger:dagger-compiler:2.9'
