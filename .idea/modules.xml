@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Fungo.iml" filepath="$PROJECT_DIR$/Fungo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Fungo.iml" filepath="$PROJECT_DIR$/.idea/Fungo.iml" />
       <module fileurl="file://$PROJECT_DIR$/baselib/baselib.iml" filepath="$PROJECT_DIR$/baselib/baselib.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseuilib/baseuilib.iml" filepath="$PROJECT_DIR$/baseuilib/baseuilib.iml" />
       <module fileurl="file://$PROJECT_DIR$/funplayer/funplayer.iml" filepath="$PROJECT_DIR$/funplayer/funplayer.iml" />
