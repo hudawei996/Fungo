@@ -4,10 +4,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.alipay.sdk.app.PayTask;
-import com.fungo.baselib.manager.ThreadManager;
 import com.fungo.socialgo.pay.PayApi;
 import com.fungo.socialgo.pay.entity.ALiPayResult;
 import com.fungo.socialgo.pay.entity.PayParams;
+import com.fungo.socialgo.utils.SocialUtils;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class ALiPayStrategy extends BasePayStrategy {
             if (msg.what != PAY_RESULT_MSG) {
                 return;
             }
-            ThreadManager.INSTANCE.getSinglePool().shutdown();
+            SocialUtils.INSTANCE.getSinglePool().shutdown();
             ALiPayResult result = new ALiPayResult((Map<String, String>) msg.obj);
             switch (result.getResultStatus()) {
                 case ALiPayResult.PAY_OK_STATUS:
@@ -86,6 +86,6 @@ public class ALiPayStrategy extends BasePayStrategy {
                 mHandler.sendMessage(message);
             }
         };
-        ThreadManager.INSTANCE.getSinglePool().execute(payRun);
+        SocialUtils.INSTANCE.getSinglePool().execute(payRun);
     }
 }
