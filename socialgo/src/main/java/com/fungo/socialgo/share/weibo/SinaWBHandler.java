@@ -10,7 +10,7 @@ import com.fungo.socialgo.share.listener.OnAuthListener;
 import com.fungo.socialgo.share.listener.OnShareListener;
 import com.fungo.socialgo.share.media.IShareMedia;
 import com.fungo.socialgo.share.media.ShareTextImageMedia;
-import com.fungo.baselib.utils.LogUtils;
+import com.fungo.socialgo.utils.SocialUtils;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -84,7 +84,7 @@ public class SinaWBHandler extends SSOHandler {
                     mAuthListener.onComplete(mConfig.getName(), map);
                 } else {
                     String errmsg = "errmsg=accessToken is not SessionValid";
-                    LogUtils.INSTANCE.e(errmsg);
+                    SocialUtils.INSTANCE.e(errmsg);
                     mAuthListener.onError(mConfig.getName(), errmsg);
                 }
             }
@@ -97,7 +97,7 @@ public class SinaWBHandler extends SSOHandler {
             @Override
             public void onFailure(WbConnectErrorMessage wbConnectErrorMessage) {
                 String errmsg = "errmsg=" + wbConnectErrorMessage.getErrorMessage();
-                LogUtils.INSTANCE.e(errmsg);
+                SocialUtils.INSTANCE.e(errmsg);
                 mAuthListener.onError(mConfig.getName(), errmsg);
             }
         });

@@ -10,7 +10,7 @@ import com.fungo.socialgo.pay.listener.OnPayRequestListener;
 import com.fungo.socialgo.pay.paystrategy.ALiPayStrategy;
 import com.fungo.socialgo.pay.paystrategy.PayContext;
 import com.fungo.socialgo.pay.paystrategy.WeChatPayStrategy;
-import com.fungo.baselib.utils.NetWorkUtils;
+import com.fungo.socialgo.utils.SocialUtils;
 
 
 /**
@@ -70,7 +70,7 @@ public final class PayApi {
 
     public void toPay(@NonNull OnPayListener onPayResultListener) {
         mOnPayListener = onPayResultListener;
-        if (!NetWorkUtils.INSTANCE.isConnectedByState(mPayParams.getActivity().getApplicationContext())) {
+        if (!SocialUtils.INSTANCE.isNetWorkAvailable(mPayParams.getActivity().getApplicationContext())) {
             sendPayResult(COMMON_NETWORK_NOT_AVAILABLE_ERR);
         }
     }

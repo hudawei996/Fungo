@@ -16,8 +16,7 @@ import com.fungo.socialgo.share.media.ShareMusicMedia;
 import com.fungo.socialgo.share.media.ShareTextMedia;
 import com.fungo.socialgo.share.media.ShareVideoMedia;
 import com.fungo.socialgo.share.media.ShareWebMedia;
-import com.fungo.baselib.utils.BitmapUtils;
-import com.fungo.baselib.utils.LogUtils;
+import com.fungo.socialgo.utils.SocialUtils;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -111,7 +110,7 @@ public class WXHandler extends SSOHandler {
     public void authorize(Activity activity, OnAuthListener authListener) {
         if(!isInstall()) {
             authListener.onError(this.mConfig.getName(), "wx not install");
-            LogUtils.INSTANCE.e("wx not install");
+            SocialUtils.INSTANCE.e("wx not install");
             return ;
         }
 
@@ -126,7 +125,7 @@ public class WXHandler extends SSOHandler {
 
         if(!this.mWXApi.sendReq(req1)) {
             this.mAuthListener.onError(this.mConfig.getName(), "sendReq fail");
-            LogUtils.INSTANCE.e("wxapi sendReq fail");
+            SocialUtils.INSTANCE.e("wxapi sendReq fail");
         }
     }
 
@@ -158,7 +157,7 @@ public class WXHandler extends SSOHandler {
     public void share(Activity activity, IShareMedia shareMedia, OnShareListener shareListener) {
         if(!isInstall()) {
             shareListener.onError(this.mConfig.getName(), "wx not install");
-            LogUtils.INSTANCE.e("wx not install");
+            SocialUtils.INSTANCE.e("wx not install");
             return ;
         }
 
@@ -179,7 +178,7 @@ public class WXHandler extends SSOHandler {
             msg.mediaObject = webpageObject;
             msg.title = shareWebMedia.getTitle();
             msg.description = shareWebMedia.getDescription();
-            msg.thumbData = BitmapUtils.INSTANCE.bitmap2Bytes(shareWebMedia.getThumb());
+            msg.thumbData = SocialUtils.INSTANCE.bitmap2Bytes(shareWebMedia.getThumb());
         } else if(shareMedia instanceof ShareTextMedia) {   //文字分享
             ShareTextMedia shareTextMedia = (ShareTextMedia) shareMedia;
             type = "text";
@@ -197,13 +196,13 @@ public class WXHandler extends SSOHandler {
             //image object
             WXImageObject imageObject = new WXImageObject();
             //image限制10M
-            imageObject.imageData = BitmapUtils.INSTANCE.compressBitmap(BitmapUtils.INSTANCE.bitmap2Bytes(shareImageMedia.getImage()), 10 * 1024 * 1024);
+            imageObject.imageData = SocialUtils.INSTANCE.compressBitmap(SocialUtils.INSTANCE.bitmap2Bytes(shareImageMedia.getImage()), 10 * 1024 * 1024);
 
             msg.mediaObject = imageObject;
 
             //直接缩放图片
             Bitmap thumb = Bitmap.createScaledBitmap(shareImageMedia.getImage(), 200, 200, true);
-            msg.thumbData = BitmapUtils.INSTANCE.bitmap2Bytes(thumb);
+            msg.thumbData = SocialUtils.INSTANCE.bitmap2Bytes(thumb);
             thumb.recycle();
         } else if(shareMedia instanceof ShareMusicMedia) {  //音乐分享
             ShareMusicMedia shareMusicMedia = (ShareMusicMedia) shareMedia;
@@ -215,7 +214,7 @@ public class WXHandler extends SSOHandler {
             msg.mediaObject = musicObject;
             msg.title = shareMusicMedia.getTitle();
             msg.description = shareMusicMedia.getDescription();
-            msg.thumbData = BitmapUtils.INSTANCE.bitmap2Bytes(shareMusicMedia.getThumb());
+            msg.thumbData = SocialUtils.INSTANCE.bitmap2Bytes(shareMusicMedia.getThumb());
         } else if(shareMedia instanceof ShareVideoMedia) {      //视频分享
             ShareVideoMedia shareVideoMedia = (ShareVideoMedia) shareMedia;
             type = "video";
@@ -226,7 +225,7 @@ public class WXHandler extends SSOHandler {
             msg.mediaObject = videoObject;
             msg.title = shareVideoMedia.getTitle();
             msg.description = shareVideoMedia.getDescription();
-            msg.thumbData = BitmapUtils.INSTANCE.bitmap2Bytes(shareVideoMedia.getThumb());
+            msg.thumbData = SocialUtils.INSTANCE.bitmap2Bytes(shareVideoMedia.getThumb());
         } else {
             if(this.mShareListener != null) {
                 this.mShareListener.onError(this.mConfig.getName(), "weixin is not support this shareMedia");
@@ -236,7 +235,7 @@ public class WXHandler extends SSOHandler {
 
         //压缩缩略图到32kb
         if(msg.thumbData != null && msg.thumbData.length > '耀') {        //微信sdk里面判断的大小
-            msg.thumbData = BitmapUtils.INSTANCE.compressBitmap(msg.thumbData, '耀');
+            msg.thumbData = SocialUtils.INSTANCE.compressBitmap(msg.thumbData, '耀');
         }
 
         //发起request
@@ -255,7 +254,7 @@ public class WXHandler extends SSOHandler {
             if(this.mShareListener != null) {
                 this.mShareListener.onError(this.mConfig.getName(), "sendReq fail");
             }
-            LogUtils.INSTANCE.e("wxapi sendReq fail");
+            SocialUtils.INSTANCE.e("wxapi sendReq fail");
         }
     }
 

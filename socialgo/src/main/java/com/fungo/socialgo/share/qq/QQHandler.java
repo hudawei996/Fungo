@@ -15,9 +15,7 @@ import com.fungo.socialgo.share.media.IShareMedia;
 import com.fungo.socialgo.share.media.ShareImageMedia;
 import com.fungo.socialgo.share.media.ShareMusicMedia;
 import com.fungo.socialgo.share.media.ShareWebMedia;
-import com.fungo.baselib.utils.BitmapUtils;
-import com.fungo.baselib.utils.GsonUtils;
-import com.fungo.baselib.utils.LogUtils;
+import com.fungo.socialgo.utils.SocialUtils;
 import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.tauth.IUiListener;
@@ -67,7 +65,7 @@ public class QQHandler extends SSOHandler {
             @Override
             public void onComplete(Object o) {
                 if (null == o || ((JSONObject) o) == null) {
-                    LogUtils.INSTANCE.e("onComplete response=null");
+                    SocialUtils.INSTANCE.e("onComplete response=null");
                     mAuthListener.onError(mConfig.getName(), "onComplete response=null");
                     return;
                 }
@@ -76,7 +74,7 @@ public class QQHandler extends SSOHandler {
 
                 initOpenidAndToken(response);
 
-                mAuthListener.onComplete(mConfig.getName(), GsonUtils.INSTANCE.jsonToMap(response));
+                mAuthListener.onComplete(mConfig.getName(), SocialUtils.INSTANCE.jsonToMap(response));
 
                 mTencent.logout(mActivity);
             }
@@ -84,7 +82,7 @@ public class QQHandler extends SSOHandler {
             @Override
             public void onError(UiError uiError) {
                 String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                LogUtils.INSTANCE.e(errmsg);
+                SocialUtils.INSTANCE.e(errmsg);
                 mAuthListener.onError(mConfig.getName(), errmsg);
             }
 
@@ -118,7 +116,7 @@ public class QQHandler extends SSOHandler {
                 ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
 
                 // 图片保存本地
-                BitmapUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
+                SocialUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
 
                 params.putInt(QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_IMAGE_TEXT);
                 params.putString(QzoneShare.SHARE_TO_QQ_TITLE, shareWebMedia.getTitle());
@@ -149,7 +147,7 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onError(UiError uiError) {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                    LogUtils.INSTANCE.e(errmsg);
+                    SocialUtils.INSTANCE.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
 
                     if (file.exists()) {
@@ -171,7 +169,7 @@ public class QQHandler extends SSOHandler {
                 ShareWebMedia shareWebMedia = (ShareWebMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
+                SocialUtils.INSTANCE.saveBitmapFile(shareWebMedia.getThumb(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
                 params.putString(QQShare.SHARE_TO_QQ_TITLE, shareWebMedia.getTitle());
@@ -182,7 +180,7 @@ public class QQHandler extends SSOHandler {
                 ShareImageMedia shareImageMedia = (ShareImageMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.INSTANCE.saveBitmapFile(shareImageMedia.getImage(), path);
+                SocialUtils.INSTANCE.saveBitmapFile(shareImageMedia.getImage(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);
                 params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);
@@ -190,7 +188,7 @@ public class QQHandler extends SSOHandler {
                 ShareMusicMedia shareMusicMedia = (ShareMusicMedia) shareMedia;
 
                 //图片保存本地
-                BitmapUtils.INSTANCE.saveBitmapFile(shareMusicMedia.getThumb(), path);
+                SocialUtils.INSTANCE.saveBitmapFile(shareMusicMedia.getThumb(), path);
 
                 params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_AUDIO);
                 params.putString(QQShare.SHARE_TO_QQ_TITLE, shareMusicMedia.getTitle());
@@ -219,7 +217,7 @@ public class QQHandler extends SSOHandler {
                 @Override
                 public void onError(UiError uiError) {
                     String errmsg = "errcode=" + uiError.errorCode + " errmsg=" + uiError.errorMessage + " errdetail=" + uiError.errorDetail;
-                    LogUtils.INSTANCE.e(errmsg);
+                    SocialUtils.INSTANCE.e(errmsg);
                     mShareListener.onError(mConfig.getName(), errmsg);
 
                     if (file.exists()) {

@@ -1,6 +1,5 @@
 package com.fungo.socialgo.pay.entity;
 
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Author: michaelx
@@ -18,7 +17,6 @@ public class PrePayInfo {
     public String appid;
     public String partnerid;
     public String prepayid;
-    @SerializedName("package")
     public String packageValue;
     public String noncestr;
     public String timestamp;
