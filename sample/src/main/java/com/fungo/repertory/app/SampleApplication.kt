@@ -15,6 +15,7 @@ class SampleApplication : BaseApplication() {
     override fun initSDK() {
         ImageManager.instance.setImageGoFactory(GlideImageGoFactory())
         PlatformConfig.setQQ(AppConstant.QQ_APP_ID)
+        PlatformConfig.setSinaWB(AppConstant.SINA_APP_KEY)
     }
 
 }

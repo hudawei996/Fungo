@@ -27,7 +27,7 @@ class SocialActivity : BaseActivity() {
     private var shareMedia: IShareMedia? = null
 
     private var mImageUrl = "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1530450487&di=0adadc8f9b25f8f7176a4e79eca56580&src=http://img0.ph.126.net/HTy8QOnZk_jQ9T2wfOEvNA==/3141823690144359477.jpg"
-    private var mShareUrl = ""
+    private var mShareUrl = "https://www.baidu.com/"
 
 
     override val layoutResID: Int
@@ -117,12 +117,12 @@ class SocialActivity : BaseActivity() {
 
             override fun onError(platform_type: PlatformType?, err_msg: String?) {
                 dismissProgress()
-                tvConsole.text = "登录发生错误"
+                tvConsole.text = "QQ登录发生错误:$err_msg"
             }
 
             override fun onCancel(platform_type: PlatformType?) {
                 dismissProgress()
-                tvConsole.text = "登录取消"
+                tvConsole.text = "QQ登录取消"
             }
 
         })
@@ -134,7 +134,23 @@ class SocialActivity : BaseActivity() {
     }
 
     fun onSinaLogin(view: View) {
+        showProgress()
+        SocialApi.get(this).doOauthVerify(this, PlatformType.SINA_WB, object : OnAuthListener {
+            override fun onComplete(platform_type: PlatformType?, map: MutableMap<String, String>?) {
+                performLoginSuccess(map)
+            }
 
+            override fun onError(platform_type: PlatformType?, err_msg: String?) {
+                dismissProgress()
+                tvConsole.text = "WB登录发生错误:$err_msg"
+            }
+
+            override fun onCancel(platform_type: PlatformType?) {
+                dismissProgress()
+                tvConsole.text = "WB登录取消"
+            }
+
+        })
     }
 
     fun onShare(view: View) {
