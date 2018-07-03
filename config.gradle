@@ -19,4 +19,11 @@ ext {
             SmartRefreshLayout: 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7',
             SmartRefreshHeader: 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7',
     ]
+
+    signingConfigs = [
+            STORE_PASSWORD: "fungo2018",
+            KEY_PASSWORD  : "fungo2018",
+            KEY_ALIAS     : "fungo",
+            STORE_FILE    : "../config/keystore/fungo.jks"
+    ]
 }
