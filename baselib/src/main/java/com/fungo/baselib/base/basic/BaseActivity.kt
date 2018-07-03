@@ -17,7 +17,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baselib.R
 import com.fungo.baselib.base.page.IView
 
 
@@ -54,9 +53,13 @@ abstract class BaseActivity : AppCompatActivity(), IView {
     }
 
     fun showProgress() {
+       showProgress("加载中...")
+    }
+
+    fun showProgress(msg:String) {
         if (mProgressDialog == null) {
             mProgressDialog = ProgressDialog(this)
-            mProgressDialog?.setMessage("加载中...")
+            mProgressDialog?.setMessage(msg)
         }
         if (mProgressDialog?.isShowing == true || this.isFinishing) {
             return
