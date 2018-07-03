@@ -32,6 +32,9 @@ import java.util.Date;
 /**
  * QQ 第三方 Handler
  * Created by tsy on 16/8/18.
+ *
+ * QQ登录分享官方文档：http://wiki.open.qq.com/index.php?title=Android_API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E&=45038#1.11_.E5.88.86.E4.BA.AB.E6.B6.88.E6.81.AF.E5.88.B0QQ.EF.BC.88.E6.97.A0.E9.9C.80QQ.E7.99.BB.E5.BD.95.EF.BC.89
+ *
  */
 public class QQHandler extends SSOHandler {
 
@@ -64,7 +67,7 @@ public class QQHandler extends SSOHandler {
         this.mTencent.login(this.mActivity, "all", new IUiListener() {
             @Override
             public void onComplete(Object o) {
-                if (null == o || ((JSONObject) o) == null) {
+                if (null == o) {
                     SocialUtils.INSTANCE.e("onComplete response=null");
                     mAuthListener.onError(mConfig.getName(), "onComplete response=null");
                     return;

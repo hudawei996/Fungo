@@ -7,7 +7,6 @@ import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.imagego.ImageManager
 import com.fungo.imagego.listener.OnImageListener
-import com.fungo.imagego.utils.ImageGoUtils
 import com.fungo.repertory.R
 import com.fungo.socialgo.share.SocialApi
 import com.fungo.socialgo.share.config.PlatformType
@@ -36,11 +35,7 @@ class SocialActivity : BaseActivity() {
     override fun initView() {
         setToolBar(getString(R.string.social), true)
         tvConsole.movementMethod = ScrollingMovementMethod.getInstance()
-
-        rbTypeText.isChecked = true
-        rbPlatformQQ.isChecked = true
     }
-
 
     override fun initEvent() {
         containerType.setOnCheckedChangeListener { _, checkedId ->
@@ -107,6 +102,10 @@ class SocialActivity : BaseActivity() {
         }
     }
 
+    override fun initData() {
+        rbTypeText.isChecked = true
+        rbPlatformQQ.isChecked = true
+    }
 
     fun onQQLogin(view: View) {
         showProgress()
