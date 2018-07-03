@@ -1,5 +1,6 @@
 package com.fungo.baselib.base.basic
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -16,6 +17,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.fungo.baselib.R
 import com.fungo.baselib.base.page.IView
 
 
@@ -31,6 +33,7 @@ abstract class BaseActivity : AppCompatActivity(), IView {
      * 获取控件ID
      */
     protected abstract val layoutResID: Int
+    private var mProgressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,21 @@ abstract class BaseActivity : AppCompatActivity(), IView {
 
     override fun <T : View> findView(id: Int): T {
         return findViewById(id)
+    }
+
+    fun showProgress() {
+        if (mProgressDialog == null) {
+            mProgressDialog = ProgressDialog(this)
+            mProgressDialog?.setMessage("加载中...")
+        }
+        if (mProgressDialog?.isShowing == true || this.isFinishing) {
+            return
+        }
+        mProgressDialog?.show()
+    }
+
+    fun dismissProgress() {
+        mProgressDialog?.dismiss()
     }
 
     override fun setOnClick(view: View?) {
@@ -144,7 +162,7 @@ abstract class BaseActivity : AppCompatActivity(), IView {
         showLongToast(getString(resId))
     }
 
-    protected fun setActionBar(title: String, isBack: Boolean) {
+    protected fun setToolBar(title: String, isBack: Boolean) {
         val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.title = title

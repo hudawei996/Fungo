@@ -11,9 +11,11 @@ import com.fungo.socialgo.share.listener.OnShareListener;
 import com.fungo.socialgo.share.media.IShareMedia;
 import com.fungo.socialgo.share.media.ShareTextImageMedia;
 import com.fungo.socialgo.utils.SocialUtils;
+import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WbAuthListener;
 import com.sina.weibo.sdk.auth.WbConnectErrorMessage;
@@ -58,6 +60,7 @@ public class SinaWBHandler extends SSOHandler {
         this.mContext = context;
         this.mActivity = (Activity) context;
         this.mConfig = (PlatformConfig.SinaWB) config;
+        WbSdk.install(context, new AuthInfo(context, mConfig.appKey, REDIRECT_URL, SCOPE));
         mWbShareHandler = new WbShareHandler((Activity) context);
         mWbShareHandler.registerApp();
     }

@@ -1,6 +1,7 @@
 package com.fungo.imagego
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.text.TextUtils
 import android.widget.ImageView
 import com.fungo.imagego.create.ImageGoFactory
@@ -52,6 +53,10 @@ class ImageManager {
      */
     fun loadImageNoFade(url: String?, imageView: ImageView?) {
         mImageStrategy.loadImageNoFade(url, imageView)
+    }
+
+    fun loadBitmap(context: Context?, url: String?, listener: OnImageListener?) {
+        return mImageStrategy.loadBitmapImage(context, url, listener)
     }
 
     /**

@@ -117,11 +117,17 @@ class GlideImageGoStrategy : ImageGoStrategy {
         })
     }
 
-    override fun loadBitmapImage(context: Context?, url: String?): Bitmap? {
-        if (context != null && !TextUtils.isEmpty(url)) {
-            return Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
+    override fun loadBitmapImage(context: Context?, url: String?, listener: OnImageListener?) {
+        if (context == null || TextUtils.isEmpty(url)) {
+            listener?.onFail("context or url is null...")
+            return
         }
-        return null
+        ImageGoUtils.runOnSubThread(Runnable {
+            val bitmap = Glide.with(context).asBitmap().load(url).submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
+            ImageGoUtils.runOnUIThread(Runnable {
+                listener?.onSuccess(bitmap)
+            })
+        })
     }
 
     override fun clearImageDiskCache(context: Context?) {
@@ -224,7 +230,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
             }
 
             override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                listener?.onSuccess()
+                listener?.onSuccess(resource)
                 return false
             }
         })
@@ -262,7 +268,7 @@ class GlideImageGoStrategy : ImageGoStrategy {
             }
 
             override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                listener?.onSuccess()
+                listener?.onSuccess(resource?.firstFrame)
                 return false
             }
         })

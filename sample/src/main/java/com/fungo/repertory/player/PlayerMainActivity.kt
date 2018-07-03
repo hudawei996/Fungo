@@ -24,7 +24,7 @@ class PlayerMainActivity : BaseActivity() {
         get() = R.layout.activity_player_main
 
     override fun initView() {
-        setActionBar(getString(R.string.video_player), true)
+        setToolBar(getString(R.string.video_player), true)
         video_normal.performClick()
     }
 

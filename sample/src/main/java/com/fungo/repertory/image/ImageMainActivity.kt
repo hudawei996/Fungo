@@ -43,7 +43,7 @@ class ImageMainActivity : BaseActivity() {
     private var mRoundImageView: RoundImageView? = null
 
     override fun initView() {
-        setActionBar(getString(R.string.image_loader), true)
+        setToolBar(getString(R.string.image_loader), true)
         setCacheSize()
         ImageManager.instance.loadImage(mUrl, generateImageView())
     }
@@ -125,7 +125,7 @@ class ImageMainActivity : BaseActivity() {
 
     private fun setRoundImageView() {
         if (mCurrentProgress == -1) {
-            setActionBar(getString(R.string.image_action_round), true)
+            setToolBar(getString(R.string.image_action_round), true)
             ViewUtils.setVisible(seekBar)
             mCurrentProgress = 18
             seekBar.min = 0
@@ -139,7 +139,7 @@ class ImageMainActivity : BaseActivity() {
 
     private fun setCircleImageView() {
         if (mCurrentProgress == -1) {
-            setActionBar(getString(R.string.image_action_circle), true)
+            setToolBar(getString(R.string.image_action_circle), true)
             ViewUtils.setVisible(seekBar)
             mCurrentProgress = 250
             seekBar.min = 0

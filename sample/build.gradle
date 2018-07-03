@@ -14,25 +14,31 @@ android {
         versionName rootProject.ext.android.versionName
     }
 
+
+    signingConfigs {
+        config {
+            storeFile file(rootProject.ext.signingConfigs.STORE_FILE)
+            keyAlias rootProject.ext.signingConfigs.KEY_ALIAS
+            keyPassword rootProject.ext.signingConfigs.KEY_PASSWORD
+            storePassword rootProject.ext.signingConfigs.STORE_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'armeabi-v7a','x86_64'
-            universalApk true
-        }
-    }
 }
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
+    implementation project(':baseuilib')
     implementation project(':imagego')
+    implementation project(':socialgo')
     implementation project(':funplayer')
     implementation rootProject.ext.dependencies.constraintlayout
     implementation rootProject.ext.dependencies.kotlin
