@@ -25,6 +25,7 @@ import com.fungo.imagego.listener.OnImageSaveListener
 import com.fungo.imagego.utils.ImageGoConstant
 import com.fungo.imagego.utils.ImageGoUtils
 import java.io.File
+import java.io.FileOutputStream
 
 
 /**
@@ -116,6 +117,28 @@ class GlideImageGoStrategy : ImageGoStrategy {
             }
         })
     }
+
+    override fun saveImage(context: Context?, bitmap: Bitmap?, listener: OnImageSaveListener?) {
+        ImageGoUtils.runOnSubThread(Runnable {
+            try {
+                val destFile = File(ImageGoUtils.getImageSavePath(context) + System.currentTimeMillis() + ".jpg")
+                val fos = FileOutputStream(destFile)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.flush()
+                fos.close()
+                // 最后通知图库更新
+                context?.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(destFile)))
+                ImageGoUtils.runOnUIThread(Runnable {
+                    listener?.onSaveSuccess("图片已保存至 " + ImageGoUtils.getImageSavePath(context))
+                })
+            } catch (e: Exception) {
+                ImageGoUtils.runOnUIThread(Runnable {
+                    listener?.onSaveFail("保存失败")
+                })
+            }
+        })
+    }
+
 
     override fun loadBitmapImage(context: Context?, url: String?, listener: OnImageListener?) {
         if (context == null || TextUtils.isEmpty(url)) {

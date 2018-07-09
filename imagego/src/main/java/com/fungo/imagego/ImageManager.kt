@@ -84,10 +84,21 @@ class ImageManager {
 
     /**
      * 保存图片到本地
+     * @param url 保存的图片由链接生成
      */
     fun saveImage(context: Context?, url: String?, listener: OnImageSaveListener?) {
         mImageStrategy.saveImage(context, url, listener)
     }
+
+
+    /**
+     * 保存图片到本地
+     * @param bitmap 保存的图片由bitmap生成
+     */
+    fun saveImage(context: Context?, bitmap: Bitmap?, listener: OnImageSaveListener?) {
+        mImageStrategy.saveImage(context, bitmap, listener)
+    }
+
 
     /**
      * 清除图片缓存
