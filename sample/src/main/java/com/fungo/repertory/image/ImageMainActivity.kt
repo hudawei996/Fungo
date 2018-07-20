@@ -10,9 +10,9 @@ import com.fungo.baselib.utils.ToastUtils
 import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.baseuilib.view.round.CircleImageView
 import com.fungo.baseuilib.view.round.RoundImageView
-import com.fungo.imagego.ImageManager
-import com.fungo.imagego.listener.OnImageSaveListener
+import com.fungo.imagego.*
 import com.fungo.imagego.listener.OnProgressListener
+import com.fungo.imagego.utils.ImageUtils.getImageCacheSize
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_image_main.*
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -45,11 +45,11 @@ class ImageMainActivity : BaseActivity() {
     override fun initView() {
         setToolBar(getString(R.string.image_loader), true)
         setCacheSize()
-        ImageManager.instance.loadImage(mUrl, generateImageView())
+        loadImage(mUrl, generateImageView())
     }
 
     private fun setCacheSize() {
-        setText(tvImageSize, "图片缓存大小：" + ImageManager.instance.getImageCacheSize(this))
+        setText(tvImageSize, "图片缓存大小：" + getImageCacheSize(this))
     }
 
     override fun initEvent() {
@@ -102,25 +102,17 @@ class ImageMainActivity : BaseActivity() {
 
 
     private fun setImageProgress() {
-        ImageManager.instance.loadImageWithProgress(mGifUrl, generateImageView(), object : OnProgressListener {
-            override fun onProgress(bytesRead: Long, contentLength: Long, isDone: Boolean) {
+        loadProgress(mGifUrl, generateImageView(), object : OnProgressListener {
+            override fun onProgress(bytesRead: Long, contentLength: Long, isFinish: Boolean) {
                 ViewUtils.setVisible(circleProgressView)
                 circleProgressView.progress = (100f * bytesRead / contentLength).toInt()
-                if (isDone) ViewUtils.setGone(circleProgressView)
+                if (isFinish) ViewUtils.setGone(circleProgressView)
             }
         })
     }
 
     private fun saveImageView() {
-        ImageManager.instance.saveImage(this, mGifUrl, object : OnImageSaveListener {
-            override fun onSaveSuccess(msg: String) {
-                ToastUtils.showToast(msg)
-            }
-
-            override fun onSaveFail(msg: String) {
-                ToastUtils.showToast(msg)
-            }
-        })
+       saveImage(this, mGifUrl)
     }
 
     private fun setRoundImageView() {
@@ -131,7 +123,7 @@ class ImageMainActivity : BaseActivity() {
             seekBar.min = 0
             seekBar.max = 100
             seekBar.progress = mCurrentProgress
-            ImageManager.instance.loadImage(mUrl, generateRoundImageView())
+            loadImage(mUrl, generateRoundImageView())
         }
         mRoundImageView?.setRadius(mCurrentProgress)
     }
@@ -146,7 +138,7 @@ class ImageMainActivity : BaseActivity() {
             seekBar.max = 500
             seekBar.progress = mCurrentProgress
         }
-        ImageManager.instance.loadImageNoFade(mUrl, generateCircleImageView())
+        loadCircle(mUrl, generateCircleImageView())
     }
 
     private fun loadLinearImage() {
@@ -156,7 +148,8 @@ class ImageMainActivity : BaseActivity() {
     override fun onClick(view: View) {
         when (view) {
             tvImageClear -> {
-                ImageManager.instance.clearImageCache(this)
+                clearImageMemoryCache(this)
+                clearImageDiskCache(this)
                 setCacheSize()
             }
         }

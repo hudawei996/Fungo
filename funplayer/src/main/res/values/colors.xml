@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <color name="player_control_background">#96000000</color>
-    <color name="player_control_progress_background">#cc999999</color>
-    <color name="player_primary">#ffc000</color>
-
-</resources>

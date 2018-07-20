@@ -37,9 +37,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
     implementation project(':baseuilib')
-    implementation project(':imagego')
-    implementation project(':socialgo')
-    implementation project(':funplayer')
+
     implementation rootProject.ext.dependencies.constraintlayout
     implementation rootProject.ext.dependencies.kotlin
 
@@ -48,4 +46,7 @@ dependencies {
     // seekBar样式
     implementation 'org.adw.library:discrete-seekbar:1.0.1'
 
+    implementation 'com.github.PingerOne:ImageGo:2.0.1'
+    implementation 'com.github.PingerOne:SocialGo:1.0.0'
+    implementation 'com.github.PingerOne:FunPlayer:1.0.0'
 }
