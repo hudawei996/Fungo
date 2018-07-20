@@ -1,22 +1,22 @@
-package com.fungo.baseuilib.view.round;
+package com.fungo.baselib.view.round;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 
 /**
- * 用于需要圆角矩形框背景的RelativeLayout的情况,减少直接使用RelativeLayout时引入的shape资源文件
+ * 用于需要圆角矩形框背景的FrameLayout的情况,减少直接使用FrameLayout时引入的shape资源文件
  * 参考：https://github.com/H07000223/FlycoRoundView
  */
-public class RoundRelativeLayout extends RelativeLayout {
+public class RoundFrameLayout extends FrameLayout {
 
     private RoundViewDelegate delegate;
 
-    public RoundRelativeLayout(Context context) {
+    public RoundFrameLayout(Context context) {
         this(context, null);
     }
 
-    public RoundRelativeLayout(Context context, AttributeSet attrs) {
+    public RoundFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         delegate = new RoundViewDelegate(this, context, attrs);
     }
@@ -30,7 +30,6 @@ public class RoundRelativeLayout extends RelativeLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (delegate.isWidthHeightEqual() && getWidth() > 0 && getHeight() > 0) {
             int max = Math.max(getWidth(), getHeight());
             int measureSpec = MeasureSpec.makeMeasureSpec(max, MeasureSpec.EXACTLY);

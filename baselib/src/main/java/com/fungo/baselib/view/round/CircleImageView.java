@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.round;
+package com.fungo.baselib.view.round;
 
 /*
  * Copyright 2014 - 2018 Henning Dodenhof

@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.base;
+package com.fungo.baselib.view.base;
 
 import android.content.Context;
 import android.graphics.Color;

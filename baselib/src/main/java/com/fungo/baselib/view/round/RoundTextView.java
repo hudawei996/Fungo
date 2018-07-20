@@ -1,23 +1,27 @@
-package com.fungo.baseuilib.view.round;
+package com.fungo.baselib.view.round;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 
 /**
- * 用于需要圆角矩形框背景的FrameLayout的情况,减少直接使用FrameLayout时引入的shape资源文件
+ * 用于需要圆角矩形框背景的TextView的情况,减少直接使用TextView时引入的shape资源文件
  * 参考：https://github.com/H07000223/FlycoRoundView
  */
-public class RoundFrameLayout extends FrameLayout {
+public class RoundTextView extends AppCompatTextView {
 
     private RoundViewDelegate delegate;
 
-    public RoundFrameLayout(Context context) {
+    public RoundTextView(Context context) {
         this(context, null);
     }
 
-    public RoundFrameLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public RoundTextView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public RoundTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         delegate = new RoundViewDelegate(this, context, attrs);
     }
 

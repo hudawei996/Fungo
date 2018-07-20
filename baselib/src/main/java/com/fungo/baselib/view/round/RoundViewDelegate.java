@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.round;
+package com.fungo.baselib.view.round;
 
 import android.annotation.TargetApi;
 import android.content.Context;

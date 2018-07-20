@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.utils
+package com.fungo.baselib.utils
 
 import android.annotation.TargetApi
 import android.app.Activity

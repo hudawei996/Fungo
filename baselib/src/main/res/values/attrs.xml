@@ -153,4 +153,5 @@
         <attr name="rv_isRippleEnable" />
     </declare-styleable>
 
+
 </resources>
