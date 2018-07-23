@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.progress
+package com.fungo.baselib.view.progress
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -12,8 +12,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ProgressBar
-import com.fungo.baseuilib.R
-import com.fungo.baseuilib.utils.ViewUtils
+import com.fungo.baselib.R
+import com.fungo.baselib.utils.ViewUtils
 
 
 /**

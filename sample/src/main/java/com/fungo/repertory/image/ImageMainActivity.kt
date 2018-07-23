@@ -1,18 +1,19 @@
 package com.fungo.repertory.image
 
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.utils.ToastUtils
-import com.fungo.baseuilib.utils.ViewUtils
-import com.fungo.baseuilib.view.round.CircleImageView
-import com.fungo.baseuilib.view.round.RoundImageView
-import com.fungo.imagego.*
+import com.fungo.baselib.utils.ViewUtils
+import com.fungo.baselib.view.round.CircleImageView
+import com.fungo.baselib.view.round.RoundImageView
 import com.fungo.imagego.listener.OnProgressListener
-import com.fungo.imagego.utils.ImageUtils.getImageCacheSize
+import com.fungo.imagego.loadCircle
+import com.fungo.imagego.loadImage
+import com.fungo.imagego.loadProgress
+import com.fungo.imagego.saveImage
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_image_main.*
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -43,17 +44,16 @@ class ImageMainActivity : BaseActivity() {
     private var mRoundImageView: RoundImageView? = null
 
     override fun initView() {
-        setToolBar(getString(R.string.image_loader), true)
         setCacheSize()
         loadImage(mUrl, generateImageView())
     }
 
     private fun setCacheSize() {
-        setText(tvImageSize, "图片缓存大小：" + getImageCacheSize(this))
+        //setText(tvImageSize, "图片缓存大小：" + getImageCacheSize(this))
     }
 
     override fun initEvent() {
-        setOnClick(tvImageClear)
+        //setOnClick(tvImageClear)
         seekBar.setOnProgressChangeListener(object : DiscreteSeekBar.OnProgressChangeListener {
             override fun onStartTrackingTouch(seekBar: DiscreteSeekBar?) {
             }
@@ -72,6 +72,7 @@ class ImageMainActivity : BaseActivity() {
     override fun getMenuResID(): Int {
         return R.menu.menu_image_action
     }
+
 
     override fun onMenuItemSelected(itemId: Int) {
         handleViews()
@@ -112,12 +113,11 @@ class ImageMainActivity : BaseActivity() {
     }
 
     private fun saveImageView() {
-       saveImage(this, mGifUrl)
+        saveImage(this, mGifUrl)
     }
 
     private fun setRoundImageView() {
         if (mCurrentProgress == -1) {
-            setToolBar(getString(R.string.image_action_round), true)
             ViewUtils.setVisible(seekBar)
             mCurrentProgress = 18
             seekBar.min = 0
@@ -131,7 +131,6 @@ class ImageMainActivity : BaseActivity() {
 
     private fun setCircleImageView() {
         if (mCurrentProgress == -1) {
-            setToolBar(getString(R.string.image_action_circle), true)
             ViewUtils.setVisible(seekBar)
             mCurrentProgress = 250
             seekBar.min = 0
@@ -145,15 +144,6 @@ class ImageMainActivity : BaseActivity() {
         ToastUtils.showToast(getString(R.string.image_action_linear))
     }
 
-    override fun onClick(view: View) {
-        when (view) {
-            tvImageClear -> {
-                clearImageMemoryCache(this)
-                clearImageDiskCache(this)
-                setCacheSize()
-            }
-        }
-    }
 
     private fun generateImageView(): ImageView {
         if (mImageVIew == null) {

@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import com.fungo.baselib.base.basic.BaseActivity
-import com.fungo.baseuilib.view.banner.MZBannerView
-import com.fungo.baseuilib.view.banner.holder.MZHolderCreator
-import com.fungo.baseuilib.view.banner.holder.MZViewHolder
+import com.fungo.baselib.view.banner.MZBannerView
+import com.fungo.baselib.view.banner.holder.MZHolderCreator
+import com.fungo.baselib.view.banner.holder.MZViewHolder
 import com.fungo.repertory.R
 import java.util.*
 
@@ -27,7 +27,6 @@ class BannerViewActivity : BaseActivity() {
         get() = R.layout.activity_banner_view
 
     override fun initView() {
-        setToolBar(getString(R.string.widget_view_banner), true)
         mBannerView.duration = 3000
         mBannerView.setDelayedTime(3000)
         mBannerView.setIndicatorVisible(false)

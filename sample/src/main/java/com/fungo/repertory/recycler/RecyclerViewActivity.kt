@@ -16,8 +16,6 @@ class RecyclerViewActivity : BaseActivity() {
         get() = R.layout.activity_recycler_view
 
     override fun initView() {
-        setToolBar(getString(R.string.recycler_view), true)
-
         textView.setOnClickListener({
             Toast.makeText(this@RecyclerViewActivity,"哈哈哈哈",Toast.LENGTH_SHORT).show()
         })

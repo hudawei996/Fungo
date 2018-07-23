@@ -37,7 +37,6 @@ open class BaseFragment : Fragment(), IView {
     }
 
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
     }

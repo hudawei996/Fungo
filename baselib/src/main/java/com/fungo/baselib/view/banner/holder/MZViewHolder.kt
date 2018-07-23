@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.banner.holder
+package com.fungo.baselib.view.banner.holder
 
 import android.content.Context
 import android.view.View

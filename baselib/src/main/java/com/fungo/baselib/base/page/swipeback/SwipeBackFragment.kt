@@ -1,7 +1,7 @@
 package com.fungo.baselib.base.page.swipeback
 
-import android.animation.Animator
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -14,21 +14,24 @@ import com.fungo.baselib.base.basic.BaseFragment
 /**
  * @author Pinger
  * @since 18-7-20 下午6:29
- *
+ *　可以右滑返回的Fragment
  */
 
-open class SwipeBackFragment: BaseFragment() {
+abstract class SwipeBackFragment : BaseFragment() {
 
-    private val SWIPEBACKFRAGMENT_STATE_SAVE_IS_HIDDEN = "SWIPEBACKFRAGMENT_STATE_SAVE_IS_HIDDEN"
     private var mSwipeBackLayout: SwipeBackLayout? = null
     private var mNoAnim: Animation? = null
+    private var mActivity: Activity? = null
+
     var mLocking = false
 
-    protected var _mActivity: Activity? = null
+    companion object {
+        private const val SWIPEBACKFRAGMENT_STATE_SAVE_IS_HIDDEN = "SWIPEBACKFRAGMENT_STATE_SAVE_IS_HIDDEN"
+    }
 
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
-        _mActivity = activity
+        mActivity = activity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +59,7 @@ open class SwipeBackFragment: BaseFragment() {
     }
 
     private fun onFragmentCreate() {
-        mSwipeBackLayout = SwipeBackLayout(activity)
+        mSwipeBackLayout = SwipeBackLayout(activity as Context)
         val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         mSwipeBackLayout!!.layoutParams = params
         mSwipeBackLayout!!.setBackgroundColor(Color.TRANSPARENT)
@@ -110,8 +113,8 @@ open class SwipeBackFragment: BaseFragment() {
     private fun setBackground(view: View?) {
         if (view != null && view.background == null) {
             var defaultBg = 0
-            if (_mActivity is SwipeBackActivity) {
-                defaultBg = (_mActivity as SwipeBackActivity).getDefaultFragmentBackground()
+            if (mActivity is SwipeBackActivity) {
+                defaultBg = (mActivity as SwipeBackActivity).getDefaultFragmentBackground()
             }
             if (defaultBg == 0) {
                 val background = getWindowBackground()

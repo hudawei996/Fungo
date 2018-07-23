@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.fungo.baseuilib.view.banner.MZBannerView
+    <com.fungo.baselib.view.banner.MZBannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

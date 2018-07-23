@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.fungo.baselib.utils.StatusBarUtils
 
 
 /**
@@ -27,15 +28,24 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initPre()
         setContentView(layoutResID)
+        initAfter()
         initView()
         initEvent()
         initData()
     }
 
-    private fun initPre() {}
+    protected open fun initAfter() {}
     protected open fun initView() {}
     protected open fun initEvent() {}
     protected open fun initData() {}
+
+
+    protected open fun initPre() {
+        if (isTranslate()) {
+            StatusBarUtils.setStatusBarTranslucent(this)
+        }
+    }
+
 
     protected fun <T : View> findView(id: Int): T {
         return findViewById(id)
@@ -80,13 +90,25 @@ abstract class BaseActivity : AppCompatActivity() {
         return true
     }
 
-    /** 获取菜单项资源ID */
-    open fun getMenuResID(): Int {
+    /**
+     * 获取菜单项资源ID
+     */
+    protected open fun getMenuResID(): Int {
         return 0
     }
 
-    /** 菜单项点击 */
-    open fun onMenuItemSelected(itemId: Int) {}
+    /**
+     * 菜单项点击
+     */
+    protected open fun onMenuItemSelected(itemId: Int) {}
+
+
+    /**
+     * 状态栏是否沉浸
+     */
+    protected open fun isTranslate(): Boolean {
+        return true
+    }
 
 
 }

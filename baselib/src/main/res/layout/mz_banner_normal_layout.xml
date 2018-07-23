@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.fungo.baseuilib.view.banner.CustomViewPager
+    <com.fungo.baselib.view.banner.CustomViewPager
         android:id="@+id/mzbanner_vp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

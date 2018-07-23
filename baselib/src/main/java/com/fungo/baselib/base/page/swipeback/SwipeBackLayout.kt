@@ -1,7 +1,6 @@
 package com.fungo.baselib.base.page.swipeback
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -17,21 +16,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-
 import com.fungo.baselib.R
-
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
-import java.lang.reflect.Field
-import java.util.ArrayList
+import java.util.*
 
 
 /**
- * Thx https://github.com/ikew0ng/SwipeBackLayout
- * SwipeBackLayout
- * Created by YoKeyword on 16/4/19.
+ * 滑动返回的控件
  */
-class SwipeBackLayout constructor(private var context1: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
+class SwipeBackLayout constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr) {
 
     private var mScrollFinishThreshold = DEFAULT_SCROLL_THRESHOLD
 
@@ -52,6 +44,7 @@ class SwipeBackLayout constructor(private var context1: Context, attrs: Attribut
     private var mEdgeFlag: Int = 0
     private var mEnable = true
     private var mCurrentSwipeOrientation: Int = 0
+
     var edgeLevel: EdgeLevel? = null
         set(edgeLevel) {
             field = edgeLevel
@@ -103,7 +96,7 @@ class SwipeBackLayout constructor(private var context1: Context, attrs: Attribut
      */
     fun setEdgeOrientation(orientation: Int) {
         mEdgeFlag = orientation
-        mHelper!!.setEdgeTrackingEnabled(orientation)
+        mHelper?.setEdgeTrackingEnabled(orientation)
 
         if (orientation == EDGE_RIGHT || orientation == EDGE_ALL) {
             setShadow(R.mipmap.ic_shadow_right, EDGE_RIGHT)
@@ -141,7 +134,7 @@ class SwipeBackLayout constructor(private var context1: Context, attrs: Attribut
     }
 
     @IntDef(EDGE_LEFT.toLong(), EDGE_RIGHT.toLong(), EDGE_ALL.toLong())
-    @Retention(RetentionPolicy.SOURCE)
+    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class EdgeOrientation
 
     /**
@@ -411,8 +404,7 @@ class SwipeBackLayout constructor(private var context1: Context, attrs: Attribut
             val top = 0
             if (mCurrentSwipeOrientation and EDGE_LEFT != 0) {
                 left = if (xvel > 0 || xvel == 0f && mScrollPercent > mScrollFinishThreshold)
-                    childWidth
-                            + mShadowLeft!!.intrinsicWidth + OVERSCROLL_DISTANCE
+                    childWidth + mShadowLeft!!.intrinsicWidth + OVERSCROLL_DISTANCE
                 else
                     0
             } else if (mCurrentSwipeOrientation and EDGE_RIGHT != 0) {
@@ -459,37 +451,37 @@ class SwipeBackLayout constructor(private var context1: Context, attrs: Attribut
         /**
          * Edge flag indicating that the left edge should be affected.
          */
-        val EDGE_LEFT = ViewDragHelper.EDGE_LEFT
+        const val EDGE_LEFT = ViewDragHelper.EDGE_LEFT
 
         /**
          * Edge flag indicating that the right edge should be affected.
          */
-        val EDGE_RIGHT = ViewDragHelper.EDGE_RIGHT
+        const val EDGE_RIGHT = ViewDragHelper.EDGE_RIGHT
 
-        val EDGE_ALL = EDGE_LEFT or EDGE_RIGHT
+        const val EDGE_ALL = EDGE_LEFT or EDGE_RIGHT
 
 
         /**
          * A view is not currently being dragged or animating as a result of a
          * fling/snap.
          */
-        val STATE_IDLE = ViewDragHelper.STATE_IDLE
+        const val STATE_IDLE = ViewDragHelper.STATE_IDLE
 
         /**
          * A view is currently being dragged. The position is currently changing as
          * a result of user input or simulated user input.
          */
-        val STATE_DRAGGING = ViewDragHelper.STATE_DRAGGING
+        const val STATE_DRAGGING = ViewDragHelper.STATE_DRAGGING
 
         /**
          * A view is currently settling into place as a result of a fling or
          * predefined non-interactive motion.
          */
-        val STATE_SETTLING = ViewDragHelper.STATE_SETTLING
+        const val STATE_SETTLING = ViewDragHelper.STATE_SETTLING
 
-        private val DEFAULT_SCRIM_COLOR = -0x67000000
-        private val FULL_ALPHA = 255
-        private val DEFAULT_SCROLL_THRESHOLD = 0.4f
-        private val OVERSCROLL_DISTANCE = 10
+        private const val DEFAULT_SCRIM_COLOR = -0x67000000
+        private const val FULL_ALPHA = 255
+        private const val DEFAULT_SCROLL_THRESHOLD = 0.4f
+        private const val OVERSCROLL_DISTANCE = 10
     }
 }

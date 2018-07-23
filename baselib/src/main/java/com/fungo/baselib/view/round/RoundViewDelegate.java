@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fungo.baseuilib.R;
+import com.fungo.baselib.R;
 
 
 /**

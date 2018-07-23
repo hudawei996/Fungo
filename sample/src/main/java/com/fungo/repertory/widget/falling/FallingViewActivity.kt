@@ -2,8 +2,8 @@ package com.fungo.repertory.widget.falling
 
 import android.support.v4.content.ContextCompat
 import com.fungo.baselib.base.basic.BaseActivity
-import com.fungo.baseuilib.view.falling.FallingEntity
-import com.fungo.baseuilib.view.falling.FallingView
+import com.fungo.baselib.view.falling.FallingEntity
+import com.fungo.baselib.view.falling.FallingView
 import com.fungo.repertory.R
 
 /**
@@ -16,8 +16,6 @@ class FallingViewActivity : BaseActivity() {
         get() = R.layout.activity_falling_view
 
     override fun initView() {
-        setToolBar(getString(R.string.widget_view_falling_snow), true)
-
         val fallingView = findViewById<FallingView>(R.id.falling_view)
 
         val builder = FallingEntity().Builder(ContextCompat.getDrawable(this, R.mipmap.ic_snow)!!)

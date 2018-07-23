@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.banner.transformer
+package com.fungo.baselib.view.banner.transformer
 
 import android.support.v4.view.ViewPager
 import android.view.View

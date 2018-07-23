@@ -33,7 +33,6 @@ class SocialActivity : BaseActivity() {
         get() = R.layout.activity_social
 
     override fun initView() {
-        setToolBar(getString(R.string.social), true)
         tvConsole.movementMethod = ScrollingMovementMethod.getInstance()
     }
 

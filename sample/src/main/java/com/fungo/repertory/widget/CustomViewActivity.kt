@@ -18,14 +18,7 @@ class CustomViewActivity : BaseActivity() {
         get() = R.layout.activity_custom_view
 
     override fun initView() {
-        setToolBar(getString(R.string.widget_custom), true)
     }
 
 
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.btn_falling -> startActivity(FallingViewActivity::class.java)
-            R.id.btn_banner -> startActivity(BannerViewActivity::class.java)
-        }
-    }
 }

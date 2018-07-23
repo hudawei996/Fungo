@@ -1,6 +1,5 @@
 package com.fungo.repertory.player
 
-import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.funplayer.controller.StandardPlayerController
 import com.fungo.imagego.loadImage
@@ -24,16 +23,10 @@ class PlayerMainActivity : BaseActivity() {
         get() = R.layout.activity_player_main
 
     override fun initView() {
-        setToolBar(getString(R.string.video_player), true)
         video_normal.performClick()
     }
 
-    override fun onClick(view: View) {
-        when (view) {
-            video_normal -> setNormalVideo()
-            video_live -> setLiveVideo()
-        }
-    }
+
 
     private fun setNormalVideo() {
         if (mCurrentPlayer == 0) return

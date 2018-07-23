@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.banner
+package com.fungo.baselib.view.banner
 
 import android.content.Context
 import android.content.res.Resources
@@ -20,11 +20,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Scroller
-import com.fungo.baseuilib.R
-import com.fungo.baseuilib.view.banner.holder.MZHolderCreator
-import com.fungo.baseuilib.view.banner.holder.MZViewHolder
-import com.fungo.baseuilib.view.banner.transformer.CoverModeTransformer
-import com.fungo.baseuilib.view.banner.transformer.ScaleYTransformer
+import com.fungo.baselib.R
+import com.fungo.baselib.view.banner.holder.MZHolderCreator
+import com.fungo.baselib.view.banner.holder.MZViewHolder
+import com.fungo.baselib.view.banner.transformer.CoverModeTransformer
+import com.fungo.baselib.view.banner.transformer.ScaleYTransformer
 import java.lang.reflect.Field
 import java.util.*
 

@@ -10,10 +10,10 @@ import com.fungo.baselib.base.basic.BaseActivity
 /**
  * @author Pinger
  * @since 18-7-20 下午6:23
- *
+ * 可以右滑返回的Activity
  */
 
-open class SwipeBackActivity(override val layoutResID: Int) : BaseActivity() {
+abstract class SwipeBackActivity : BaseActivity() {
 
     private var mSwipeBackLayout: SwipeBackLayout? = null
     private var mDefaultFragmentBackground = 0

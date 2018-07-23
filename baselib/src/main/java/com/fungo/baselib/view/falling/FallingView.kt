@@ -1,4 +1,4 @@
-package com.fungo.baseuilib.view.falling
+package com.fungo.baselib.view.falling
 
 import android.content.Context
 import android.graphics.Canvas

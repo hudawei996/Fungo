@@ -10,8 +10,9 @@ import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
-import com.fungo.baseuilib.R;
-import com.fungo.baseuilib.view.base.ImageWrapper;
+import com.fungo.baselib.R;
+import com.fungo.baselib.view.base.ImageWrapper;
+
 
 /**
  * @author Pinger

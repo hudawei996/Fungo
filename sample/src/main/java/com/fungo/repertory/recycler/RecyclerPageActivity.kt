@@ -1,8 +1,7 @@
 package com.fungo.repertory.recycler
 
-import android.view.View
-
-import com.fungo.baselib.base.basic.BaseActivity
+import com.fungo.baselib.base.page.BasePageActivity
+import com.fungo.baselib.base.page.swipeback.SwipeBackLayout
 import com.fungo.repertory.R
 
 /**
@@ -10,17 +9,12 @@ import com.fungo.repertory.R
  * @since 2018/1/13 0013 上午 11:09
  */
 
-class RecyclerPageActivity : BaseActivity() {
+class RecyclerPageActivity : BasePageActivity() {
     override val layoutResID: Int
         get() = R.layout.activity_recycler_page
 
-    override fun onClick(view: View) {
-        if (view.id == R.id.btn_recycler_view) {
-            startActivity(RecyclerViewActivity::class.java)
-        }
-    }
 
     override fun initView() {
-        setToolBar(getString(R.string.recycler_page), true)
+        setEdgeLevel(SwipeBackLayout.EdgeLevel.MED)
     }
 }
