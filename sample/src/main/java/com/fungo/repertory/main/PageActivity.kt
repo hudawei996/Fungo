@@ -1,23 +1,22 @@
-package com.fungo.baselib.base.page
+package com.fungo.repertory.main
 
 import android.view.View
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
-import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseActivity
-import kotlinx.android.synthetic.main.activity_page.*
+import com.fungo.repertory.R
+import kotlinx.android.synthetic.main.activity_page2.*
 
 /**
  * @author Pinger
- * @since 18-7-20 下午5:34
- * 页面的中转Activity的基类
+ * @since 18-7-24 上午11:54
+ *
  */
 
-abstract class BasePageActivity : BaseActivity() {
-
+class PageActivity : BaseActivity() {
 
     override val layoutResID: Int
-        get() = R.layout.activity_page
+        get() = R.layout.activity_page2
 
     override fun initAfter() {
         super.initAfter()
@@ -27,18 +26,13 @@ abstract class BasePageActivity : BaseActivity() {
         // 获取NavigationFragment
         val navHostFragment = fragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment?
                 ?: return
-        navHostFragment.setGraph(getGraphResId())
+//        navHostFragment.setGraph(getGraphResId())
     }
 
 
     override fun getStatusBarView(): View {
         return statusBarView
     }
-
-    /**
-     * 获取Fragment导航的布局id
-     */
-    abstract fun getGraphResId(): Int
 
 
     /**
@@ -47,6 +41,5 @@ abstract class BasePageActivity : BaseActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return Navigation.findNavController(this, R.id.navHostFragment).navigateUp()
     }
-
 
 }

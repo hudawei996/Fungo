@@ -34,16 +34,18 @@ abstract class BaseActivity : AppCompatActivity() {
         initData()
     }
 
-    protected open fun initAfter() {}
     protected open fun initView() {}
     protected open fun initEvent() {}
     protected open fun initData() {}
 
 
     protected open fun initPre() {
-        if (isTranslate()) {
-            StatusBarUtils.setStatusBarTranslucent(this)
-        }
+        if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
+        StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
+    }
+
+    protected open fun initAfter() {
+        if (isStatusBarTranslate()) StatusBarUtils.setStatusBarHeight(getStatusBarView())
     }
 
 
@@ -90,12 +92,17 @@ abstract class BaseActivity : AppCompatActivity() {
         return true
     }
 
+
+    /**
+     * 获取状态栏View
+     */
+    protected open fun getStatusBarView(): View? = null
+
+
     /**
      * 获取菜单项资源ID
      */
-    protected open fun getMenuResID(): Int {
-        return 0
-    }
+    protected open fun getMenuResID(): Int = 0
 
     /**
      * 菜单项点击
@@ -106,9 +113,12 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 状态栏是否沉浸
      */
-    protected open fun isTranslate(): Boolean {
-        return true
-    }
+    protected open fun isStatusBarTranslate(): Boolean = true
+
+    /**
+     * 状态栏前景色是否是黑色
+     */
+    protected open fun isStatusBarForegroundBlack(): Boolean = true
 
 
 }

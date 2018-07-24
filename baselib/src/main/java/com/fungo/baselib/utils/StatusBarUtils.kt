@@ -24,7 +24,7 @@ object StatusBarUtils {
     const val FLYME = 2
     const val ANDROID_M = 3
 
-    @IntDef(OTHER.toLong(), MIUI.toLong(), FLYME.toLong(), ANDROID_M.toLong())
+    @IntDef(OTHER, MIUI, FLYME, ANDROID_M)
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class SystemType
 

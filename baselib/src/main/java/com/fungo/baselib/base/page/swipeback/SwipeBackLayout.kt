@@ -133,7 +133,7 @@ class SwipeBackLayout constructor(context: Context, attrs: AttributeSet? = null,
 
     }
 
-    @IntDef(EDGE_LEFT.toLong(), EDGE_RIGHT.toLong(), EDGE_ALL.toLong())
+    @IntDef(EDGE_LEFT, EDGE_RIGHT, EDGE_ALL)
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class EdgeOrientation
 
