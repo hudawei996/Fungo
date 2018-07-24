@@ -1,4 +1,4 @@
-package com.fungo.baselib.base.page.recycler
+package com.fungo.baselib.base.recycler
 
 import android.content.Context
 import android.graphics.Bitmap

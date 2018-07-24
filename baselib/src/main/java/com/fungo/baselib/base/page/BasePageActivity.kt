@@ -15,4 +15,9 @@ abstract class BasePageActivity : BaseActivity() {
         get() = R.layout.activity_page
 
 
+    override fun initView() {
+        loadRootFragment(R.id.pageContainer, getRootFragment())
+    }
+
+    abstract fun getRootFragment(): BasePageFragment
 }

@@ -2,12 +2,15 @@ package com.fungo.baselib.base.basic
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.NonNull
 import android.support.annotation.StringRes
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,7 +20,32 @@ import com.fungo.baselib.base.page.IView
  * @author pinger
  * @since 2018/1/13 23:52
  */
-open class BaseFragment : SupportFragment(), IView {
+abstract class BaseFragment : SupportFragment(), IView {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(getLayoutResId(), container, false)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initView()
+        initEvent()
+    }
+
+    override fun onLazyInitView(savedInstanceState: Bundle?) {
+        initData()
+    }
+
+    protected open fun initView() {}
+    protected open fun initEvent() {}
+    protected open fun initData() {}
+
+
+    /**
+     * 获取资源ID
+     */
+    abstract fun getLayoutResId(): Int
+
 
     override fun <T : View> findView(id: Int): T {
         return View(activity) as T

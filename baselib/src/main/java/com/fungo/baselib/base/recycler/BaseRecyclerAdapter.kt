@@ -1,4 +1,4 @@
-package com.fungo.baselib.base.page.recycler
+package com.fungo.baselib.base.recycler
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
