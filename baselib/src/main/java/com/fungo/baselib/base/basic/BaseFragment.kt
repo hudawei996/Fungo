@@ -2,16 +2,12 @@ package com.fungo.baselib.base.basic
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.IdRes
 import android.support.annotation.NonNull
 import android.support.annotation.StringRes
-import android.support.v4.app.Fragment
 import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -21,31 +17,11 @@ import com.fungo.baselib.base.page.IView
  * @author pinger
  * @since 2018/1/13 23:52
  */
-open class BaseFragment : Fragment(), IView {
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
+open class BaseFragment : SupportFragment(), IView {
 
     override fun <T : View> findView(id: Int): T {
         return View(activity) as T
     }
-
 
     override fun setOnClick(view: View?) {
         view?.setOnClickListener(this)
@@ -141,8 +117,11 @@ open class BaseFragment : Fragment(), IView {
         showLongToast(getString(resId))
     }
 
-    // 子类自己实现点击事件
+    /**
+     * 子类自己实现点击事件
+     */
     override fun onClick(@NonNull view: View) {}
+
     override fun onClick(id: Int) {}
 
 }

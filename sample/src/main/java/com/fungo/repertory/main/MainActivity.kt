@@ -20,8 +20,4 @@ class MainActivity : BaseActivity() {
     fun onHost(view: View) {
         startActivity(PageActivity::class.java)
     }
-
-    override fun getStatusBarView(): View? {
-        return statusBar
-    }
 }

@@ -3,7 +3,6 @@ package com.fungo.baselib.base.basic
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,19 +15,18 @@ import com.fungo.baselib.utils.StatusBarUtils
  * Activity基类，封装常用属性和方法
  */
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : SupportActivity() {
 
     /**
      * 获取控件ID
      */
-    protected abstract val layoutResID: Int
+    abstract val layoutResID: Int
     private var mProgressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initPre()
         setContentView(layoutResID)
-        initAfter()
         initView()
         initEvent()
         initData()
@@ -38,14 +36,9 @@ abstract class BaseActivity : AppCompatActivity() {
     protected open fun initEvent() {}
     protected open fun initData() {}
 
-
     protected open fun initPre() {
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
         StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
-    }
-
-    protected open fun initAfter() {
-        if (isStatusBarTranslate()) StatusBarUtils.setStatusBarHeight(getStatusBarView())
     }
 
 
@@ -91,12 +84,6 @@ abstract class BaseActivity : AppCompatActivity() {
         onMenuItemSelected(item.itemId)
         return true
     }
-
-
-    /**
-     * 获取状态栏View
-     */
-    protected open fun getStatusBarView(): View? = null
 
 
     /**

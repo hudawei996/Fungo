@@ -1,11 +1,11 @@
 package com.fungo.repertory.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.fungo.baselib.base.basic.BaseFragment
+import androidx.navigation.Navigation
+import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.repertory.R
+import kotlinx.android.synthetic.main.fragment_main.*
 
 /**
  * @author Pinger
@@ -13,18 +13,16 @@ import com.fungo.repertory.R
  *
  */
 
-class MainFragment : BaseFragment() {
+class MainFragment : BasePageFragment() {
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_main,container,false)
-        return rootView
+    override fun getLayoutResId(): Int {
+        return R.layout.fragment_main
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        button.setOnClickListener {
+            Navigation.findNavController(getView()!!).navigate(R.id.fragment_next)
+        }
     }
-
 
 }

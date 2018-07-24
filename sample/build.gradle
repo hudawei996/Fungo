@@ -43,9 +43,4 @@ dependencies {
 
     implementation rootProject.ext.dependencies.constraintlayout
     implementation rootProject.ext.dependencies.kotlin
-
-    kapt 'com.google.dagger:dagger-compiler:2.9'
-
-    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha04"
-    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha04"
 }
