@@ -116,16 +116,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         mNotifyOnChange = notifyOnChange
     }
 
-
-    /**
-     * about API with data operation
-     */
-    override fun registerAdapterDataObserver(observer: RecyclerView.AdapterDataObserver) {
-        if (observer is RecyclerDataObserver) mObserver = observer
-        else super.registerAdapterDataObserver(observer)
-    }
-
-
     /**
      * Adds the specified object at the end of the array.
      *

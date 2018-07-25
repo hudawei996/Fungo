@@ -16,21 +16,14 @@
         <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".widget.CustomViewActivity" />
-        <activity android:name=".widget.falling.FallingViewActivity" />
-        <activity android:name=".widget.banner.BannerViewActivity" />
-        <activity android:name=".recycler.RecyclerViewActivity" />
-        <activity android:name=".recycler.RecyclerPageActivity" />
         <activity
-            android:name=".player.PlayerMainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
-        <activity android:name=".image.ImageMainActivity" />
-        <activity android:name=".social.SocialActivity" />
-
+            android:name=".main.PageActivity"
+            android:theme="@style/BaseAppTheme.NoActionBar.SwipeBack" />
     </application>
 
 </manifest>
