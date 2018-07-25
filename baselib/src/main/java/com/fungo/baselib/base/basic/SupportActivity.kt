@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import me.yokeyword.fragmentation.*
+import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
+import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
 
@@ -96,7 +98,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity {
      * @return FragmentAnimator对象
      */
     override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return mDelegate.onCreateFragmentAnimator()
+        return DefaultHorizontalAnimator()
     }
 
     /**

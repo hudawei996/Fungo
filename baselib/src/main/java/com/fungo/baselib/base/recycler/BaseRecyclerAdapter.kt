@@ -20,7 +20,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context The current mContext.
      */
     constructor(context: Context) {
         init(context, ArrayList())
@@ -29,7 +29,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context The current mContext.
      * @param datas The objects to represent in the ListView.
      */
     constructor(context: Context, datas: Array<T>) {
@@ -40,7 +40,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context The current mContext.
      * @param datas The objects to represent in the ListView.
      */
     constructor(context: Context, datas: List<T>) {
@@ -85,7 +85,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
 
 
     /**
-     * Returns the context associated with this array adapter. The context is used
+     * Returns the mContext associated with this array adapter. The mContext is used
      * to create views from the resource passed to the constructor.
      *
      * @return The Context associated with this adapter.

@@ -44,7 +44,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import com.fungo.baselib.R;
-import com.fungo.baselib.view.base.ImageWrapper;
+import com.fungo.baselib.view.wrapper.ImageWrapper;
 
 
 /**

@@ -16,7 +16,9 @@ abstract class BasePageActivity : BaseActivity() {
 
 
     override fun initView() {
-        loadRootFragment(R.id.pageContainer, getRootFragment())
+        val fragment = getRootFragment()
+        fragment.arguments = intent.extras
+        loadRootFragment(R.id.pageContainer, fragment)
     }
 
     abstract fun getRootFragment(): BasePageFragment

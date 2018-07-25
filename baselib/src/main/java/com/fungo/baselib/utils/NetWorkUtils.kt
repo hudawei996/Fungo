@@ -57,7 +57,7 @@ object NetWorkUtils {
     /**
      * Get network type
      *
-     * @param context context
+     * @param context mContext
      * @return 网络状态
      */
     fun getNetworkType(context: Context): Int {
@@ -71,7 +71,7 @@ object NetWorkUtils {
     /**
      * Get network type name
      *
-     * @param context context
+     * @param context mContext
      * @return NetworkTypeName
      */
     fun getNetworkTypeName(context: Context): String {
@@ -106,7 +106,7 @@ object NetWorkUtils {
     /**
      * Whether is fast mobile network
      *
-     * @param context context
+     * @param context mContext
      * @return FastMobileNetwork
      */
     private fun isFastMobileNetwork(context: Context): Boolean {

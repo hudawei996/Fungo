@@ -28,7 +28,8 @@ abstract class BaseFragment : SupportFragment(), IView {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
+        initViewPre()
+        initView(view)
         initEvent()
     }
 
@@ -36,7 +37,8 @@ abstract class BaseFragment : SupportFragment(), IView {
         initData()
     }
 
-    protected open fun initView() {}
+    protected open fun initViewPre() {}
+    protected open fun initView(view: View) {}
     protected open fun initEvent() {}
     protected open fun initData() {}
 

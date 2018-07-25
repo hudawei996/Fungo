@@ -9,9 +9,15 @@ import com.fungo.repertory.R
  *
  */
 
-class NextFragment:BasePageFragment() {
-    override fun getLayoutResId(): Int {
+class NextFragment : BasePageFragment() {
+
+
+    override fun getContentResId(): Int {
         return R.layout.fragment_next
     }
 
+
+    override fun getPageTitle(): String {
+        return "我就是下一个Fragment"
+    }
 }

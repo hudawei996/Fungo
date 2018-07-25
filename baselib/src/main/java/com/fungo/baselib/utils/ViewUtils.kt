@@ -16,7 +16,6 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
-import java.util.*
 
 /**
  * @author Pinger
@@ -108,6 +107,19 @@ object ViewUtils {
     fun isVisible(view: View?): Boolean {
         return view != null && view.visibility == View.VISIBLE
     }
+
+
+    /**
+     * set view visible or gone
+     */
+    fun setIsVisible(view: View?, isVisible: Boolean) {
+        if (isVisible) {
+            setVisible(view)
+        } else {
+            setGone(view)
+        }
+    }
+
 
     /**
      * set TextView content with CharSequence.
