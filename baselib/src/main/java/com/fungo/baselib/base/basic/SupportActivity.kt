@@ -38,11 +38,13 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mDelegate.onCreate(savedInstanceState)
+        mSwipeBackDelegate.onCreate(savedInstanceState)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         mDelegate.onPostCreate(savedInstanceState)
+        mSwipeBackDelegate.onPostCreate(savedInstanceState)
     }
 
     override fun onDestroy() {

@@ -37,11 +37,7 @@ abstract class BasePageFragment : BaseFragment() {
             if (isBackEnable()) {
                 baseIvBack.setOnClickListener {
                     // 如果栈内只有一个Fragment，则退出Activity
-                    if (fragmentManager?.backStackEntryCount == 1) {
-                        activity?.finish()
-                    } else {
-                        pop()
-                    }
+                    getPageActivity()?.onBackPressed()
                 }
             }
 
@@ -60,6 +56,18 @@ abstract class BasePageFragment : BaseFragment() {
         }
         LayoutInflater.from(context).inflate(getContentResId(), container)
     }
+
+
+    /**
+     * 获取页面的Activity
+     */
+    open fun getPageActivity(): BasePageActivity? {
+        if (context !is BasePageActivity) {
+            throw IllegalStateException("使用BasePageFragment的Activity必须继承BasePageActivity")
+        }
+        return context as BasePageActivity
+    }
+
 
     /**
      * 展示加载中的占位图

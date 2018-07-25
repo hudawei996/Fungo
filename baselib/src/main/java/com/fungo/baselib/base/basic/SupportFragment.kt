@@ -3,7 +3,6 @@ package com.fungo.baselib.base.basic
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.view.animation.Animation
 import me.yokeyword.fragmentation.*
@@ -22,7 +21,6 @@ open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
 
     private val mDelegate = SupportFragmentDelegate(this)
     private val mSwipeBackDelegate = SwipeBackFragmentDelegate(this)
-    private var mActivity: FragmentActivity? = null
 
     override fun getSupportDelegate(): SupportFragmentDelegate {
         return mDelegate
@@ -40,16 +38,21 @@ open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
     override fun onAttach(activity: Activity?) {
         super.onAttach(activity)
         mDelegate.onAttach(activity!!)
-        mActivity = mDelegate.activity
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mDelegate.onCreate(savedInstanceState)
+        mSwipeBackDelegate.onCreate(savedInstanceState)
     }
 
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation {
         return mDelegate.onCreateAnimation(transit, enter, nextAnim)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mSwipeBackDelegate.onViewCreated(view, savedInstanceState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -74,6 +77,7 @@ open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
 
     override fun onDestroyView() {
         mDelegate.onDestroyView()
+        mSwipeBackDelegate.onDestroyView()
         super.onDestroyView()
     }
 
@@ -85,6 +89,7 @@ open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         mDelegate.onHiddenChanged(hidden)
+        mSwipeBackDelegate.onHiddenChanged(hidden)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

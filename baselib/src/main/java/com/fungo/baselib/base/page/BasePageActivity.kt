@@ -3,6 +3,7 @@ package com.fungo.baselib.base.page
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseActivity
 
+
 /**
  * @author Pinger
  * @since 18-7-20 下午5:34
@@ -21,5 +22,22 @@ abstract class BasePageActivity : BaseActivity() {
         loadRootFragment(R.id.pageContainer, fragment)
     }
 
+
+    /**
+     * 获取跟节点的Fragment
+     */
     abstract fun getRootFragment(): BasePageFragment
+
+
+    /**
+     * 返回的话先对Activity中的Fragment做弹栈处理
+     * 如果只有一个就直接关闭页面
+     */
+    override fun onBackPressedSupport() {
+        if (supportFragmentManager.backStackEntryCount > 1) {
+            pop()
+        } else {
+            finish()
+        }
+    }
 }

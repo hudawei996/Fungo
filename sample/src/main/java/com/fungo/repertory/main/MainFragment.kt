@@ -25,7 +25,7 @@ class MainFragment : BasePageFragment() {
     }
 
 
-    override fun initView(view: View) {
+    override fun initView() {
         button.setOnClickListener {
             WebActivity.start(context!!, "https://baidu.com","百度一下")
         }

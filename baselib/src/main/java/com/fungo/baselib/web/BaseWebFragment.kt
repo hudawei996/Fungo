@@ -63,7 +63,7 @@ abstract class BaseWebFragment : BasePageFragment() {
         return intent
     }
 
-    override fun initView(view: View) {
+    override fun initView() {
         initWebView()
     }
 
