@@ -6,11 +6,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.view.animation.Animation
-import me.yokeyword.fragmentation.ExtraTransaction
-import me.yokeyword.fragmentation.ISupportFragment
-import me.yokeyword.fragmentation.SupportFragmentDelegate
-import me.yokeyword.fragmentation.SupportHelper
+import me.yokeyword.fragmentation.*
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import me.yokeyword.fragmentation_swipeback.core.ISwipeBackFragment
+import me.yokeyword.fragmentation_swipeback.core.SwipeBackFragmentDelegate
 
 
 /**
@@ -19,9 +18,10 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator
  *
  */
 
-open class SupportFragment : Fragment(), ISupportFragment {
+open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
 
     private val mDelegate = SupportFragmentDelegate(this)
+    private val mSwipeBackDelegate = SwipeBackFragmentDelegate(this)
     private var mActivity: FragmentActivity? = null
 
     override fun getSupportDelegate(): SupportFragmentDelegate {
@@ -337,6 +337,34 @@ open class SupportFragment : Fragment(), ISupportFragment {
      */
     fun <T : ISupportFragment> findChildFragment(fragmentClass: Class<T>): T {
         return SupportHelper.findFragment(childFragmentManager, fragmentClass)
+    }
+
+
+    //    ------------- 滑动返回的API ----------
+    //    ------------- 滑动返回的API ----------
+    //    ------------- 滑动返回的API ----------
+    override fun getSwipeBackLayout(): SwipeBackLayout {
+        return mSwipeBackDelegate.swipeBackLayout
+    }
+
+    override fun attachToSwipeBack(view: View?): View {
+        return mSwipeBackDelegate.attachToSwipeBack(view)
+    }
+
+    override fun setEdgeLevel(edgeLevel: SwipeBackLayout.EdgeLevel?) {
+        mSwipeBackDelegate.setEdgeLevel(edgeLevel)
+    }
+
+    override fun setEdgeLevel(widthPixel: Int) {
+        mSwipeBackDelegate.setEdgeLevel(widthPixel)
+    }
+
+    override fun setParallaxOffset(offset: Float) {
+        mSwipeBackDelegate.setParallaxOffset(offset)
+    }
+
+    override fun setSwipeBackEnable(enable: Boolean) {
+        mSwipeBackDelegate.setSwipeBackEnable(enable)
     }
 
 }

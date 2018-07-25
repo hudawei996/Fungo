@@ -41,11 +41,11 @@ class WebFragment : BaseWebFragment() {
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-        showLoading()
+        showPageLoading()
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
-        showContent()
+        showPageContent()
     }
 
     @SuppressLint("AddJavascriptInterface")

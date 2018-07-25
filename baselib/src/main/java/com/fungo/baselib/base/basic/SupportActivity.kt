@@ -5,8 +5,9 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import me.yokeyword.fragmentation.*
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
-import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
+import me.yokeyword.fragmentation_swipeback.core.ISwipeBackActivity
+import me.yokeyword.fragmentation_swipeback.core.SwipeBackActivityDelegate
 
 
 /**
@@ -16,9 +17,10 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator
  * 主动实现Fragmentation常用的方法，不需要强制
  */
 
-abstract class SupportActivity : AppCompatActivity(), ISupportActivity {
+abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBackActivity {
 
     private val mDelegate = SupportActivityDelegate(this)
+    private val mSwipeBackDelegate = SwipeBackActivityDelegate(this)
 
     override fun getSupportDelegate(): SupportActivityDelegate {
         return mDelegate
@@ -182,4 +184,39 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity {
         return SupportHelper.findFragment(supportFragmentManager, fragmentClass)
     }
 
+
+    //    ------------- 滑动返回的API ----------
+    //    ------------- 滑动返回的API ----------
+    //    ------------- 滑动返回的API ----------
+    override fun getSwipeBackLayout(): SwipeBackLayout {
+        return mSwipeBackDelegate.swipeBackLayout
+    }
+
+    /**
+     * 滑动模式
+     */
+    override fun setEdgeLevel(edgeLevel: SwipeBackLayout.EdgeLevel?) {
+        mSwipeBackDelegate.setEdgeLevel(edgeLevel)
+    }
+
+    /**
+     * 滑动边缘像素
+     */
+    override fun setEdgeLevel(widthPixel: Int) {
+        mSwipeBackDelegate.setEdgeLevel(widthPixel)
+    }
+
+    /**
+     * 滑动优先级
+     */
+    override fun swipeBackPriority(): Boolean {
+        return mSwipeBackDelegate.swipeBackPriority()
+    }
+
+    /**
+     * 设置是否可以滑动返回
+     */
+    override fun setSwipeBackEnable(enable: Boolean) {
+        mSwipeBackDelegate.setSwipeBackEnable(enable)
+    }
 }

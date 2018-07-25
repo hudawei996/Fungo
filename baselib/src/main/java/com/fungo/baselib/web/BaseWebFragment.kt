@@ -69,7 +69,7 @@ abstract class BaseWebFragment : BasePageFragment() {
 
     override fun initData() {
         if (TextUtils.isEmpty(mWebUrl)) {
-            showEmpty()
+            showPageEmpty()
             return
         }
         loadUrl(mWebUrl)

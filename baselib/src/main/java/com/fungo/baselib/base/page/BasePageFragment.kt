@@ -20,7 +20,7 @@ abstract class BasePageFragment : BaseFragment() {
         return R.layout.fragment_page
     }
 
-    override fun initViewPre() {
+    override fun initPageView() {
         // 设置状态栏高度
         if (isSetStatusBarHeight()) {
             StatusBarUtils.setStatusBarHeight(statusView)
@@ -64,28 +64,28 @@ abstract class BasePageFragment : BaseFragment() {
     /**
      * 展示加载中的占位图
      */
-    protected open fun showLoading() {
+    protected open fun showPageLoading() {
         placeholder?.showLoading()
     }
 
     /**
      * 展示空数据的占位图
      */
-    protected open fun showEmpty() {
+    protected open fun showPageEmpty() {
         placeholder?.showEmpty()
     }
 
     /**
      * 展示加载错误的占位图
      */
-    protected open fun showError() {
+    protected open fun showPageError() {
         placeholder?.showError()
     }
 
     /**
      * 展示加载完成，要显示的内容
      */
-    protected open fun showContent() {
+    protected open fun showPageContent() {
         placeholder?.showContent()
     }
 

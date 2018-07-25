@@ -22,14 +22,19 @@ import com.fungo.baselib.base.page.IView
  */
 abstract class BaseFragment : SupportFragment(), IView {
 
+    private var mRootView: View? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayoutResId(), container, false)
+        if (mRootView == null) mRootView = inflater.inflate(getLayoutResId(), container, false)
+        val parent = mRootView!!.parent as ViewGroup
+        parent.removeView(mRootView)
+        return mRootView
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initViewPre()
-        initView(view)
+        initPageView()
+        initView()
         initEvent()
     }
 
@@ -37,11 +42,10 @@ abstract class BaseFragment : SupportFragment(), IView {
         initData()
     }
 
-    protected open fun initViewPre() {}
-    protected open fun initView(view: View) {}
+    protected open fun initPageView() {}
+    protected open fun initView() {}
     protected open fun initEvent() {}
     protected open fun initData() {}
-
 
     /**
      * 获取资源ID
