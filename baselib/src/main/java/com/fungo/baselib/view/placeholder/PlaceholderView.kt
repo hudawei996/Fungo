@@ -27,7 +27,7 @@ class PlaceholderView : FrameLayout {
 
     init {
         visibility = View.GONE
-        LayoutInflater.from(context).inflate(R.layout.layout_place_holder, null)
+        LayoutInflater.from(context).inflate(R.layout.layout_place_holder, this)
     }
 
 

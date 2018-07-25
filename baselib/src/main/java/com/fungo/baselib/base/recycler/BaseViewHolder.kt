@@ -40,10 +40,10 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
 
     private fun initHolder() {
         onInitHolder()
-        itemView.setOnClickListener({
+        itemView.setOnClickListener {
             if (getData() != null)
                 onItemClick(getData()!!)
-        })
+        }
     }
 
     open fun onInitHolder() {}
