@@ -2,6 +2,7 @@ package com.fungo.baselib.base.recycler
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import java.util.*
 
 /**
@@ -12,7 +13,6 @@ import java.util.*
 abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> {
 
     private lateinit var mDatas: ArrayList<T>
-    private lateinit var mObserver: RecyclerView.AdapterDataObserver
     private lateinit var mContext: Context
     private var mNotifyOnChange = true
     private val mLock = Any()
@@ -49,7 +49,7 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
 
     private fun init(context: Context, datas: List<T>) {
         mContext = context
-        mDatas = ArrayList<T>(datas)
+        mDatas = ArrayList(datas)
     }
 
     fun getCount(): Int {
@@ -60,6 +60,20 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
     override fun getItemCount(): Int {
         return mDatas.size
     }
+
+
+    /**
+     * 只在建立对象的时候会调用一次，后面只有视图没销毁掉就不会调用
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T> {
+        return onCreateHolder(parent, viewType)
+    }
+
+    abstract fun onCreateHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<T>
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
         holder.onBindData(getItemData(position))
@@ -127,7 +141,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
                 mDatas.add(data)
             }
         }
-        mObserver.onItemRangeInserted(getCount(), 1)
         if (mNotifyOnChange) notifyItemInserted(getCount())
     }
 
@@ -178,7 +191,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
             }
         }
         val dataCount = collection?.size ?: 0
-        mObserver.onItemRangeInserted(0, dataCount)
         if (mNotifyOnChange) notifyItemRangeInserted(0, dataCount)
     }
 
@@ -191,7 +203,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         synchronized(mLock) {
             mDatas.add(index, datas)
         }
-        mObserver.onItemRangeInserted(index, 1)
         if (mNotifyOnChange) notifyItemInserted(index)
     }
 
@@ -204,7 +215,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
             mDatas.addAll(index, datas?.toList()!!)
         }
         val dataCount = datas?.size ?: 0
-        mObserver.onItemRangeInserted(index, dataCount)
         if (mNotifyOnChange) notifyItemRangeInserted(index, dataCount)
     }
 
@@ -214,7 +224,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
             mDatas.addAll(index, datas!!)
         }
         val dataCount = datas?.size ?: 0
-        mObserver.onItemRangeInserted(index, dataCount)
         if (mNotifyOnChange) notifyItemRangeInserted(index, dataCount)
     }
 
@@ -222,7 +231,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         synchronized(mLock) {
             mDatas.set(pos, datas)
         }
-        mObserver.onItemRangeChanged(pos, 1)
         if (mNotifyOnChange) notifyItemChanged(pos)
     }
 
@@ -233,7 +241,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         val position = mDatas.indexOf(datas)
         synchronized(mLock) {
             if (mDatas.remove(datas)) {
-                mObserver.onItemRangeRemoved(position, 1)
                 if (mNotifyOnChange) notifyItemRemoved(position)
             }
         }
@@ -246,7 +253,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         synchronized(mLock) {
             mDatas.removeAt(position)
         }
-        mObserver.onItemRangeRemoved(position, 1)
         if (mNotifyOnChange) notifyItemRemoved(position)
     }
 
@@ -261,7 +267,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         synchronized(mLock) {
             mDatas.clear()
         }
-        mObserver.onItemRangeRemoved(0, count)
         if (mNotifyOnChange) notifyItemRangeRemoved(0, count)
     }
 
@@ -270,7 +275,6 @@ abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> 
         synchronized(mLock) {
             mDatas.clear()
         }
-        mObserver.onChanged()
         if (mNotifyOnChange) notifyDataSetChanged()
     }
 

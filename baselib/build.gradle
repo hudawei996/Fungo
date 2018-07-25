@@ -23,13 +23,15 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api rootProject.ext.dependencies.appcompat_v7
     api rootProject.ext.dependencies.kotlin
     api rootProject.ext.dependencies.design
     implementation rootProject.ext.dependencies.constraintlayout
 
-
+    implementation rootProject.ext.dependencies.SmartRefreshLayout
+    implementation rootProject.ext.dependencies.SmartRefreshHeader
 
     api 'me.yokeyword:fragmentation-core:1.3.5'
     api 'me.yokeyword:fragmentation-swipeback:1.3.5'
