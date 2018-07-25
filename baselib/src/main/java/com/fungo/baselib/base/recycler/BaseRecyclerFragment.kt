@@ -15,10 +15,10 @@ import kotlinx.android.synthetic.main.fragment_recycler.*
  * 列表页面布局，封装SmartRefreshLayout，方便替换
  */
 
-abstract class BaseRecyclerFragment<in T, out V : MultiTypeAdapter> : BasePageFragment(), BaseRecyclerContract.View<T> {
+abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContract.View<T> {
 
-    protected lateinit var mPresenter: BaseRecyclerContract.Presenter
-    protected lateinit var mAdapter: MultiTypeAdapter
+    private lateinit var mPresenter: BaseRecyclerContract.Presenter
+    private lateinit var mAdapter: MultiTypeAdapter
 
     private var mPage = 0
 
@@ -111,5 +111,7 @@ abstract class BaseRecyclerFragment<in T, out V : MultiTypeAdapter> : BasePageFr
     /**
      * 获取子类适配器对象
      */
-    protected abstract fun getAdapter(): V
+    private fun getAdapter(): MultiTypeAdapter {
+        return MultiTypeAdapter(context)
+    }
 }

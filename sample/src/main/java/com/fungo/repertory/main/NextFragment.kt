@@ -1,6 +1,7 @@
 package com.fungo.repertory.main
 
-import com.fungo.baselib.base.page.BasePageFragment
+import com.fungo.baselib.base.recycler.BaseRecyclerContract
+import com.fungo.baselib.base.recycler.BaseRecyclerFragment
 import com.fungo.repertory.R
 
 /**
@@ -9,8 +10,11 @@ import com.fungo.repertory.R
  *
  */
 
-class NextFragment : BasePageFragment() {
+class NextFragment : BaseRecyclerFragment<TestBean>() {
 
+    override fun getPresenter(): BaseRecyclerContract.Presenter {
+        return TestPresenter(this)
+    }
 
     override fun getContentResId(): Int {
         return R.layout.fragment_next

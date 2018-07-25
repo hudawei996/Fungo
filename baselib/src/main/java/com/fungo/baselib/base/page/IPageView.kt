@@ -9,11 +9,11 @@ package com.fungo.baselib.base.page
  */
 interface IPageView : IView {
 
-    fun onPageLoading()
+    fun showPageLoading()
 
 
-    fun onPageEmpty()
+    fun showPageEmpty()
 
 
-    fun onPageError()
+    fun showPageError()
 }

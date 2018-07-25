@@ -72,28 +72,28 @@ abstract class BasePageFragment : BaseFragment() {
     /**
      * 展示加载中的占位图
      */
-    protected open fun showPageLoading() {
+    open fun showPageLoading() {
         placeholder?.showLoading()
     }
 
     /**
      * 展示空数据的占位图
      */
-    protected open fun showPageEmpty() {
+    open fun showPageEmpty() {
         placeholder?.showEmpty()
     }
 
     /**
      * 展示加载错误的占位图
      */
-    protected open fun showPageError() {
+    open fun showPageError() {
         placeholder?.showError()
     }
 
     /**
      * 展示加载完成，要显示的内容
      */
-    protected open fun showPageContent() {
+    open fun showPageContent() {
         placeholder?.showContent()
     }
 
