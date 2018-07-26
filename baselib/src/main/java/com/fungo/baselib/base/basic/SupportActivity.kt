@@ -1,6 +1,7 @@
 package com.fungo.baselib.base.basic
 
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import com.fungo.baselib.base.page.anim.DefaultActivityHorizontalAnimator
@@ -63,7 +64,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
      * 不建议复写该方法,请使用 [.onBackPressedSupport] 代替
      */
     override fun onBackPressed() {
-        mDelegate.onBackPressed()
+
     }
 
     /**
@@ -104,6 +105,16 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
     override fun onCreateFragmentAnimator(): FragmentAnimator {
         return DefaultActivityHorizontalAnimator()
     }
+
+    /**
+     * 当Fragment根布局 没有 设定background属性时,
+     * Fragmentation默认使用Theme的android:windowbackground作为Fragment的背景,
+     * 可以通过该方法改变Fragment背景。
+     */
+    protected open fun setDefaultFragmentBackground(@DrawableRes backgroundRes: Int) {
+        mDelegate.defaultFragmentBackground = backgroundRes
+    }
+
 
     /**
      * Causes the Runnable r to be added to the action queue.

@@ -17,11 +17,14 @@ abstract class BasePageActivity : BaseActivity() {
 
 
     override fun initView() {
+        // 设置Fragment的默认背景颜色
+        setDefaultFragmentBackground(R.color.grey_f7)
         val fragment = getRootFragment()
+        // 转移Activity的extras给Fragment
         fragment.arguments = intent.extras
+        // 填充Fragment
         loadRootFragment(R.id.pageContainer, fragment)
     }
-
 
     /**
      * 获取跟节点的Fragment
