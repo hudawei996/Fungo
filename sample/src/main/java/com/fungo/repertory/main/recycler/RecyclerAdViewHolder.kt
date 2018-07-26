@@ -1,4 +1,4 @@
-package com.fungo.repertory.main
+package com.fungo.repertory.main.recycler
 
 import android.view.ViewGroup
 import com.fungo.baselib.base.recycler.BaseViewHolder
@@ -10,23 +10,22 @@ import com.fungo.repertory.R
 /**
  * @author Pinger
  * @since 18-7-26 上午11:35
- *
  */
 
-class AdViewHolder : MultiTypeViewHolder<AdBean, AdViewHolder.ViewHolder>() {
+class RecyclerAdViewHolder : MultiTypeViewHolder<RecyclerAdBean, RecyclerAdViewHolder.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         return ViewHolder(parent)
     }
 
 
-    inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<AdBean>(parent, R.layout.holder_ad) {
-        override fun onBindData(data: AdBean) {
+    inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<RecyclerAdBean>(parent, R.layout.holder_recycler_ad) {
+        override fun onBindData(data: RecyclerAdBean) {
             setText(R.id.adTitle, data.title)
             loadImage(data.img, findView(R.id.adView))
         }
 
-        override fun onItemClick(data: AdBean) {
+        override fun onItemClick(data: RecyclerAdBean) {
             ToastUtils.showToast("我是吐司条目$dataPosition")
         }
     }

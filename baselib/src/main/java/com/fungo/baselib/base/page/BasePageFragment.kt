@@ -19,7 +19,7 @@ import com.fungo.baselib.view.placeholder.PlaceholderView
 abstract class BasePageFragment : BaseFragment() {
 
     override fun getLayoutResId(): Int {
-        return R.layout.fragment_page
+        return R.layout.base_fragment_page
     }
 
     override fun initPageView() {

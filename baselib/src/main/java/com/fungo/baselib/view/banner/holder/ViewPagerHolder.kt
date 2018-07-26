@@ -7,7 +7,7 @@ import android.view.View
  * Created by zhouwei on 17/5/26.
  */
 
-interface MZViewHolder<in T> {
+interface ViewPagerHolder<in T> {
     /**
      * 创建View
      * @param context
@@ -21,5 +21,5 @@ interface MZViewHolder<in T> {
      * @param position
      * @param data
      */
-    fun onBind(context: Context, position: Int, data: T)
+    fun onBindData(context: Context, position: Int, data: T)
 }

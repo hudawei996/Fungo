@@ -1,4 +1,4 @@
-package com.fungo.repertory.main
+package com.fungo.repertory.main.recycler
 
 import android.view.ViewGroup
 import com.fungo.baselib.base.recycler.BaseViewHolder
@@ -11,18 +11,16 @@ import com.fungo.repertory.R
  *
  */
 
-class TestViewHolder : MultiTypeViewHolder<TestBean, TestViewHolder.ViewHolder>() {
+class RecyclerTextViewHolder : MultiTypeViewHolder<RecyclerTextBean, RecyclerTextViewHolder.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         return ViewHolder(parent)
     }
 
-
-    inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<TestBean>(parent, R.layout.holder_test) {
-        override fun onBindData(data: TestBean) {
+    inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<RecyclerTextBean>(parent, R.layout.holder_recycler_text) {
+        override fun onBindData(data: RecyclerTextBean) {
             setText(R.id.tvText, data.title)
         }
-
     }
 
 

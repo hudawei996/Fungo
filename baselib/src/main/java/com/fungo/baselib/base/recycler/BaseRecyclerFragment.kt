@@ -9,7 +9,7 @@ import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
 import com.scwang.smartrefresh.header.BezierCircleHeader
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
-import kotlinx.android.synthetic.main.fragment_recycler.*
+import kotlinx.android.synthetic.main.base_fragment_recycler.*
 
 /**
  * @author Pinger
@@ -30,7 +30,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     }
 
     override fun getContentResId(): Int {
-        return R.layout.fragment_recycler
+        return R.layout.base_fragment_recycler
     }
 
     override fun initView() {

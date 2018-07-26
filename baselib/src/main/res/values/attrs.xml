@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-    <declare-styleable name="CircleImageView">
-        <attr name="civ_border_width" format="dimension" />
-        <attr name="civ_border_color" format="color" />
-        <attr name="civ_border_overlay" format="boolean" />
-        <attr name="civ_fill_color" format="color" />
-        <attr name="civ_circle_background_color" format="color" />
-    </declare-styleable>
-
-    <declare-styleable name="RoundImageView">
-        <attr name="riv_radius" format="dimension" />
-    </declare-styleable>
-
-    <declare-styleable name="MZBannerView">
-        <attr name="open_mz_mode" format="boolean" />
-        <attr name="canLoop" format="boolean" />
+    <!--BannerView-->
+    <declare-styleable name="BannerView">
+        <attr name="bannerCanLoop" format="boolean" />
+        <attr name="bannerPageCover" format="boolean" />
         <attr name="indicatorPaddingLeft" format="dimension" />
         <attr name="indicatorPaddingRight" format="dimension" />
         <attr name="indicatorPaddingTop" format="dimension" />
@@ -26,7 +14,6 @@
             <enum name="center" value="1" />
             <enum name="right" value="2" />
         </attr>
-        <attr name="middle_page_cover" format="boolean" />
     </declare-styleable>
 
 
