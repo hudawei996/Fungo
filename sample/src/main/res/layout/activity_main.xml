@@ -24,6 +24,13 @@
         android:layout_height="wrap_content" />
 
 
+    <Button
+        android:onClick="onTest"
+        android:layout_width="match_parent"
+        android:text="测试页面"
+        android:layout_height="wrap_content" />
+
+
 
 
 </LinearLayout>

@@ -39,7 +39,7 @@ abstract class BasePageFragment : BaseFragment() {
             if (isBackEnable()) {
                 findView<ImageView>(R.id.baseIvBack).setOnClickListener {
                     // 如果栈内只有一个Fragment，则退出Activity
-                    getPageActivity()?.onBackPressed()
+                    getPageActivity()?.onBackPressedSupport()
                 }
             }
 

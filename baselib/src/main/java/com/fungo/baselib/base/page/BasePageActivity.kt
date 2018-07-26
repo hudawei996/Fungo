@@ -28,16 +28,4 @@ abstract class BasePageActivity : BaseActivity() {
      */
     abstract fun getRootFragment(): BasePageFragment
 
-
-    /**
-     * 返回的话先对Activity中的Fragment做弹栈处理
-     * 如果只有一个就直接关闭页面
-     */
-    override fun onBackPressedSupport() {
-        if (supportFragmentManager.backStackEntryCount > 1) {
-            pop()
-        } else {
-            finish()
-        }
-    }
 }

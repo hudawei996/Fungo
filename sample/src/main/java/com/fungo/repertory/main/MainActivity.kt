@@ -25,4 +25,8 @@ class MainActivity : BaseActivity() {
     fun onWeb(view: View) {
         startActivity(WebActivity::class.java)
     }
+
+    fun onTest(view: View) {
+        startActivity(TestActivity::class.java)
+    }
 }
