@@ -1,7 +1,7 @@
 package com.fungo.repertory.main
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.repertory.R
 
 /**
@@ -10,11 +10,13 @@ import com.fungo.repertory.R
  *
  */
 
-class TestActivity:AppCompatActivity() {
+class TestActivity(override val layoutResID: Int = R.layout.activity_test) : BaseActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test)
+        setSwipeBackEnable(false)
     }
+
+
 }

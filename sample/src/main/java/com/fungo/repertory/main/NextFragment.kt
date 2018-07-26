@@ -9,7 +9,7 @@ import com.fungo.baselib.base.recycler.BaseRecyclerFragment
  *
  */
 
-class NextFragment : BaseRecyclerFragment<TestBean>() {
+class NextFragment : BaseRecyclerFragment() {
 
     override fun getPresenter(): BaseRecyclerContract.Presenter {
         return TestPresenter(this)
@@ -24,5 +24,6 @@ class NextFragment : BaseRecyclerFragment<TestBean>() {
 
         // 注册holder
         register(TestBean::class.java, TestViewHolder())
+        register(AdBean::class.java, AdViewHolder())
     }
 }

@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_recycler.*
  * 列表页面布局，封装SmartRefreshLayout，方便替换
  */
 
-abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContract.View<T> {
+abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.View {
 
     private lateinit var mPresenter: BaseRecyclerContract.Presenter
     private lateinit var mAdapter: MultiTypeAdapter
@@ -79,7 +79,7 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
     /**
      * 展示所有数据
      */
-    override fun showContent(page: Int, datas: List<T>) {
+    override fun <T> showContent(page: Int, datas: List<T>) {
         finishLoading(page)
         if (page == 0) {
             mAdapter.clear()
@@ -91,9 +91,26 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
     /**
      * 更新某一条数据
      */
-    override fun updateItem(data: T, position: Int) {
+    override fun <T> updateItem(data: T, position: Int) {
         if (mAdapter.itemCount > 0 && position < mAdapter.itemCount) {
             mAdapter.update(data, position)
+        }
+    }
+
+    /**
+     * 添加一条数据
+     */
+    override fun <T> addItem(data: T) {
+        mAdapter.add(data)
+    }
+
+
+    /**
+     * 插入一条数据
+     */
+    override fun <T> insertItem(position: Int, data: T) {
+        if (position < mAdapter.itemCount) {
+            mAdapter.insert(data, position)
         }
     }
 

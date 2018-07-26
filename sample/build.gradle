@@ -42,4 +42,6 @@ dependencies {
 
     implementation rootProject.ext.dependencies.constraintlayout
     implementation rootProject.ext.dependencies.kotlin
+
+    implementation 'com.github.PingerOne:ImageGo:2.0.1'
 }

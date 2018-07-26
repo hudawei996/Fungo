@@ -371,5 +371,4 @@ open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
     override fun setSwipeBackEnable(enable: Boolean) {
         mSwipeBackDelegate.setSwipeBackEnable(enable)
     }
-
 }

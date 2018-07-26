@@ -1,5 +1,6 @@
 package com.fungo.repertory.main
 
+import android.os.Bundle
 import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
 import com.fungo.baselib.web.WebActivity
@@ -13,6 +14,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setSwipeBackEnable(false)
+    }
 
     override val layoutResID: Int
         get() = R.layout.activity_main
