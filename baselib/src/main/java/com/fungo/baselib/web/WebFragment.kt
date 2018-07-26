@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import android.webkit.ValueCallback
 import android.webkit.WebView
+import android.widget.ProgressBar
 import com.fungo.baselib.R
 import com.fungo.baselib.web.interact.DemoInteract
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_web.*
 /**
  * @author Pinger
  * @since 18-7-25 下午2:19
- * h5页面
+ * h5页面,支持两种进度加载展示，支持滑动返回，支持h5内部返回
  */
 
 class WebFragment : BaseWebFragment() {
@@ -40,12 +40,8 @@ class WebFragment : BaseWebFragment() {
         return webView
     }
 
-    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-        showPageLoading()
-    }
-
-    override fun onPageFinished(view: WebView?, url: String?) {
-        showPageContent()
+    override fun getProgressBar(): ProgressBar? {
+        return progressBar
     }
 
     @SuppressLint("AddJavascriptInterface")
@@ -109,7 +105,6 @@ class WebFragment : BaseWebFragment() {
             return false
         }
         // 返回值是true的时候控制去WebView打开，为false调用系统浏览器或第三方浏览器
-
         if (url!!.startsWith("weixin://wap/pay?")) {  // 微信支付
             val intent = Intent()
             intent.action = Intent.ACTION_VIEW

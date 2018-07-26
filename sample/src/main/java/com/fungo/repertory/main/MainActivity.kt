@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun onWeb(view: View) {
-        startActivity(WebActivity::class.java)
+        WebActivity.start(this,"https://juejin.im/post/5b5959a15188257f0b582c7e?utm_source=gold_browser_extension")
     }
 
     fun onTest(view: View) {

@@ -38,8 +38,7 @@ abstract class BasePageFragment : BaseFragment() {
             ViewUtils.setIsVisible(findView(R.id.baseIvBack), isBackEnable())
             if (isBackEnable()) {
                 findView<ImageView>(R.id.baseIvBack).setOnClickListener {
-                    // 如果栈内只有一个Fragment，则退出Activity
-                    getPageActivity()?.onBackPressedSupport()
+                    doBackAction()
                 }
             }
 
@@ -58,6 +57,16 @@ abstract class BasePageFragment : BaseFragment() {
             container.removeAllViews()
         }
         LayoutInflater.from(context).inflate(getContentResId(), container)
+    }
+
+
+    /**
+     * 执行返回操作
+     * 默认是Fragment弹栈，然后退出Activity
+     * 如果栈内只有一个Fragment，则退出Activity
+     */
+    protected open fun doBackAction() {
+        getPageActivity()?.onBackPressedSupport()
     }
 
 

@@ -10,8 +10,10 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
+import android.widget.ProgressBar
 import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.constant.IntentConstant
+import com.fungo.baselib.utils.ViewUtils
 import com.fungo.baselib.web.sonic.SonicRuntimeImpl
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
 import com.tencent.sonic.sdk.SonicConfig
@@ -23,6 +25,7 @@ import com.tencent.sonic.sdk.SonicSessionConfig
  * @author Pinger
  * @since 18-7-25 下午2:19
  * 加载网页的Fragment基类
+ * 提供两种加载展示方法，默认使用进度条的方法
  */
 
 abstract class BaseWebFragment : BasePageFragment() {
@@ -143,10 +146,7 @@ abstract class BaseWebFragment : BasePageFragment() {
                     }
                 } else super.shouldInterceptRequest(view, url)
             }
-
-
         }
-
 
         // Android　4.0版本没有　WebChromeClient.FileChooserParams　这个类，所有要单独处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -158,6 +158,20 @@ abstract class BaseWebFragment : BasePageFragment() {
                         // 如果传入的标题为null，截取网页的标题
                         this@BaseWebFragment.setWebTitle(title)
 
+                    }
+                }
+
+
+                /**
+                 *　加载进度发生改变
+                 */
+                override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                    if (isProgressBarLoading) {
+                        val progressBar = getProgressBar() ?: return
+                        progressBar.progress = newProgress
+                        if (newProgress >= 100) {
+                            ViewUtils.setGone(progressBar)
+                        }
                     }
                 }
 
@@ -257,15 +271,39 @@ abstract class BaseWebFragment : BasePageFragment() {
         }
     }
 
-
     /**
      * 返回按键的处理
      */
-    protected fun onBack() {
+    override fun doBackAction() {
         if (mWebView?.canGoBack() == true && !isOriginalUrl && canBack()) {
             mWebView?.goBack()
         } else {
-            activity?.finish()
+            getPageActivity()?.onBackPressedSupport()
+        }
+    }
+
+    /**
+     * on loading start
+     *
+     * @param view
+     * @param url
+     * @param favicon
+     */
+    protected open fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        if (!isProgressBarLoading) {
+            showPageLoading()
+        }
+    }
+
+    /**
+     * on loading finish
+     *
+     * @param view
+     * @param url
+     */
+    protected open fun onPageFinished(view: WebView?, url: String?) {
+        if (!isProgressBarLoading) {
+            showPageContent()
         }
     }
 
@@ -306,23 +344,6 @@ abstract class BaseWebFragment : BasePageFragment() {
      * @param webView
      */
     open fun addWebJsInteract(sonicSessionClient: SonicSessionClientImpl?, intent: Intent?, webView: WebView?) {}
-
-    /**
-     * on loading start
-     *
-     * @param view
-     * @param url
-     * @param favicon
-     */
-    protected open fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {}
-
-    /**
-     * on loading finish
-     *
-     * @param view
-     * @param url
-     */
-    protected open fun onPageFinished(view: WebView?, url: String?) {}
 
     /**
      * override url
@@ -374,6 +395,11 @@ abstract class BaseWebFragment : BasePageFragment() {
      */
     protected abstract fun getWebView(): WebView
 
+    /**
+     * get progressbar
+     */
+    protected open fun getProgressBar(): ProgressBar? = null
+
 
     /**
      * is clean sonic cache
@@ -386,6 +412,13 @@ abstract class BaseWebFragment : BasePageFragment() {
      * 是否使用sonic加载h5
      */
     protected open val isSonicLoad: Boolean = true
+
+
+    /**
+     * 是否使用进度条来呈现加载中占位图
+     * 默认使用进度天
+     */
+    protected open val isProgressBarLoading: Boolean = true
 
 
     override fun onDetach() {

@@ -43,11 +43,11 @@ class WebActivity : BasePageActivity() {
         }
 
         fun start(context: Context, url: String, title: String) {
-            start(context, url, title, false)
+            start(context, url, title, true)
         }
 
         fun start(context: Context, url: String) {
-            start(context, url, "", false)
+            start(context, url, "", true)
         }
     }
 
