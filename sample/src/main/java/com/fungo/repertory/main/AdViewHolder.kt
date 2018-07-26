@@ -21,6 +21,7 @@ class AdViewHolder : MultiTypeViewHolder<AdBean, AdViewHolder.ViewHolder>() {
 
 
     inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<AdBean>(parent, R.layout.holder_ad) {
+
         override fun onBindData(data: AdBean) {
             setText(R.id.adTitle, data.title)
             loadImage(data.img, findView(R.id.adView))

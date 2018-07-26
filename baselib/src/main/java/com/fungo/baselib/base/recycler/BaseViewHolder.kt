@@ -58,7 +58,7 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
     open fun getData(): T? {
         val adapter = getOwnerAdapter<RecyclerView.Adapter<*>>()
         return if (adapter != null && adapter is BaseRecyclerAdapter<*>) {
-            adapter.getItemData(getDataCount() - 1) as T
+            adapter.getItemData(dataPosition) as T
         } else null
     }
 
