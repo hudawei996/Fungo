@@ -1,12 +1,14 @@
 package com.fungo.baselib.base.page
 
 import android.view.LayoutInflater
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseFragment
 import com.fungo.baselib.utils.StatusBarUtils
 import com.fungo.baselib.utils.ViewUtils
-import kotlinx.android.synthetic.main.fragment_page.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
+import com.fungo.baselib.view.placeholder.PlaceholderView
 
 /**
  * @author Pinger
@@ -23,35 +25,36 @@ abstract class BasePageFragment : BaseFragment() {
     override fun initPageView() {
         // 设置状态栏高度
         if (isSetStatusBarHeight()) {
-            StatusBarUtils.setStatusBarHeight(statusView)
+            StatusBarUtils.setStatusBarHeight(findView(R.id.statusView))
         }
 
-        ViewUtils.setIsVisible(toolBarContainer, isShowToolBar())
+        ViewUtils.setIsVisible(findView(R.id.toolBarContainer), isShowToolBar())
 
         // 设置导航栏文字等
         if (isShowToolBar()) {
-            baseTvTitle.text = getPageTitle()
+            findView<TextView>(R.id.baseTvTitle).text = getPageTitle()
 
             // 返回按钮
-            ViewUtils.setIsVisible(baseIvBack, isBackEnable())
+            ViewUtils.setIsVisible(findView(R.id.baseIvBack), isBackEnable())
             if (isBackEnable()) {
-                baseIvBack.setOnClickListener {
+                findView<ImageView>(R.id.baseIvBack).setOnClickListener {
                     // 如果栈内只有一个Fragment，则退出Activity
                     getPageActivity()?.onBackPressed()
                 }
             }
 
             // 分享按钮
-            ViewUtils.setIsVisible(baseIvShare, isShareEnable())
+            ViewUtils.setIsVisible(findView(R.id.baseIvShare), isShareEnable())
             if (isShareEnable()) {
-                baseIvShare.setOnClickListener {
+                findView<ImageView>(R.id.baseIvShare).setOnClickListener {
                     doShareAction()
                 }
             }
         }
 
         // 设置填充容器
-        if (container?.childCount ?: 0 > 0) {
+        val container = findView<FrameLayout>(R.id.container)
+        if (container.childCount > 0) {
             container.removeAllViews()
         }
         LayoutInflater.from(context).inflate(getContentResId(), container)
@@ -73,28 +76,28 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示加载中的占位图
      */
     open fun showPageLoading() {
-        placeholder?.showLoading()
+        findView<PlaceholderView>(R.id.placeholder).showLoading()
     }
 
     /**
      * 展示空数据的占位图
      */
     open fun showPageEmpty() {
-        placeholder?.showEmpty()
+        findView<PlaceholderView>(R.id.placeholder).showEmpty()
     }
 
     /**
      * 展示加载错误的占位图
      */
     open fun showPageError() {
-        placeholder?.showError()
+        findView<PlaceholderView>(R.id.placeholder).showError()
     }
 
     /**
      * 展示加载完成，要显示的内容
      */
     open fun showPageContent() {
-        placeholder?.showContent()
+        findView<PlaceholderView>(R.id.placeholder).showContent()
     }
 
 
@@ -102,7 +105,7 @@ abstract class BasePageFragment : BaseFragment() {
      * 主动设置页面标题，给子类调用设置标题
      */
     protected open fun setPageTitle(title: String?) {
-        baseTvTitle?.text = title
+        findView<TextView>(R.id.baseTvTitle).text = title
     }
 
     /**

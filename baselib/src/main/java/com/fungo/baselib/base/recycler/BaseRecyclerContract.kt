@@ -24,14 +24,6 @@ class BaseRecyclerContract {
          * 更新某一条数据
          */
         fun updateItem(data: T, position: Int)
-
-
-        /**
-         * 结束加载状态
-         * @param isRefresh 是否是下拉刷新操作
-         */
-        fun finishLoading(isRefresh: Boolean)
-
     }
 
 
