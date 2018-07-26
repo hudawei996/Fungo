@@ -11,6 +11,8 @@ import com.fungo.baselib.base.recycler.BaseRecyclerContract
 class TestPresenter(var view: BaseRecyclerContract.View<TestBean>) : BaseRecyclerContract.Presenter {
 
 
+
+
     override fun loadData(page: Int) {
 
         val data= ArrayList<TestBean>()
@@ -23,6 +25,7 @@ class TestPresenter(var view: BaseRecyclerContract.View<TestBean>) : BaseRecycle
     }
 
     override fun onStart() {
+        loadData(0)
     }
 
     override fun onStop() {

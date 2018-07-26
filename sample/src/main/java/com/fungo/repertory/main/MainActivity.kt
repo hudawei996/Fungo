@@ -2,6 +2,7 @@ package com.fungo.repertory.main
 
 import android.view.View
 import com.fungo.baselib.base.basic.BaseActivity
+import com.fungo.baselib.web.WebActivity
 import com.fungo.repertory.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,5 +20,9 @@ class MainActivity : BaseActivity() {
 
     fun onHost(view: View) {
         startActivity(PageActivity::class.java)
+    }
+
+    fun onWeb(view: View) {
+        startActivity(WebActivity::class.java)
     }
 }

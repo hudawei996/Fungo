@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".main.PageActivity"
-            android:theme="@style/BaseAppTheme.NoActionBar.SwipeBack" />
+            android:theme="@style/BaseAppTheme.SwipeBack" />
     </application>
 
 </manifest>

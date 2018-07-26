@@ -3,8 +3,8 @@ package com.fungo.baselib.base.basic
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
+import com.fungo.baselib.base.page.anim.DefaultActivityHorizontalAnimator
 import me.yokeyword.fragmentation.*
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 import me.yokeyword.fragmentation_swipeback.core.ISwipeBackActivity
 import me.yokeyword.fragmentation_swipeback.core.SwipeBackActivityDelegate
@@ -102,7 +102,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
      * @return FragmentAnimator对象
      */
     override fun onCreateFragmentAnimator(): FragmentAnimator {
-        return DefaultHorizontalAnimator()
+        return DefaultActivityHorizontalAnimator()
     }
 
     /**

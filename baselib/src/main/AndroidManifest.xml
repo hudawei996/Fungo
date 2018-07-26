@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application>
-        <activity android:name=".web.WebActivity" />
+        <activity
+            android:name=".web.WebActivity"
+            android:theme="@style/BaseAppTheme.SwipeBack" />
     </application>
 </manifest>

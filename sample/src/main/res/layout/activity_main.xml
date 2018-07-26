@@ -13,7 +13,14 @@
     <Button
         android:onClick="onHost"
         android:layout_width="match_parent"
-        android:text="Fragment主页"
+        android:text="Recycler主页"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:onClick="onWeb"
+        android:layout_width="match_parent"
+        android:text="Web主页"
         android:layout_height="wrap_content" />
 
 

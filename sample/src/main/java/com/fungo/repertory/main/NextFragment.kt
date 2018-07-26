@@ -2,7 +2,6 @@ package com.fungo.repertory.main
 
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
-import com.fungo.repertory.R
 
 /**
  * @author Pinger
@@ -16,12 +15,14 @@ class NextFragment : BaseRecyclerFragment<TestBean>() {
         return TestPresenter(this)
     }
 
-    override fun getContentResId(): Int {
-        return R.layout.fragment_next
-    }
-
-
     override fun getPageTitle(): String {
         return "我就是下一个Fragment"
+    }
+
+    override fun initView() {
+        super.initView()
+
+        // 注册holder
+        register(TestBean::class.java, TestViewHolder())
     }
 }

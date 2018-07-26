@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager
 import com.fungo.baselib.R
 import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
+import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
+import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
 import com.scwang.smartrefresh.header.BezierCircleHeader
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import kotlinx.android.synthetic.main.fragment_recycler.*
@@ -27,16 +29,18 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
         mPresenter = getPresenter()
     }
 
-
     override fun getContentResId(): Int {
         return R.layout.fragment_recycler
     }
 
-
     override fun initView() {
         initRefreshLayout()
         initRecyclerView()
+    }
 
+    override fun initData() {
+        mPage = 0
+        mPresenter.loadData(mPage)
     }
 
     private fun initRefreshLayout() {
@@ -56,16 +60,27 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
 
     private fun initRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
-        recyclerView?.layoutManager = layoutManager
+        recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
         recyclerView.adapter = mAdapter
     }
 
 
+    override fun onStart() {
+        super.onStart()
+        mPresenter.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mPresenter.onStop()
+    }
+
     /**
      * 展示所有数据
      */
     override fun showContent(page: Int, datas: List<T>) {
+        finishLoading(page)
         if (page == 0) {
             mAdapter.clear()
         }
@@ -86,11 +101,11 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
     /**
      * 结束刷新
      */
-    override fun finishLoading(isRefresh: Boolean) {
-        if (isRefresh) {
-            smartRefreshLayout.finishRefresh()
+    private fun finishLoading(page: Int) {
+        if (page == 0) {
+            smartRefreshLayout?.finishRefresh()
         } else {
-            smartRefreshLayout.finishLoadmore()
+            smartRefreshLayout?.finishLoadmore()
         }
     }
 
@@ -100,6 +115,18 @@ abstract class BaseRecyclerFragment<T> : BasePageFragment(), BaseRecyclerContrac
      */
     override fun isActive(): Boolean {
         return isAdded
+    }
+
+    /**
+     * 注册展示的Holder
+     */
+    fun <T> register(clazz: Class<out T>, holder: MultiTypeViewHolder<T, *>) {
+        mAdapter.register(clazz, holder)
+    }
+
+
+    fun <T> register(clazz: Class<out T>): OneToManyFlow<T> {
+        return mAdapter.register(clazz)
     }
 
 
