@@ -8,12 +8,10 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/text_orange"
         android:gravity="center"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:text="我就是普通的Activity，不支持状态栏设置，没有滑动返回等"
-        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
