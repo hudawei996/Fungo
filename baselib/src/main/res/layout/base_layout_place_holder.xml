@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!--错误视图容器-->
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/errorContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_delete" />
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:text="加载发生错误"
             android:textColor="@color/text_black" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 
     <!--空图容器-->
@@ -40,22 +51,32 @@
 
 
     <!--加载视图容器-->
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/loadingContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
+
+
+        <ProgressBar
+            android:layout_width="42dp"
+            android:layout_height="42dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:text="正在加载中"
-            android:textColor="@color/text_black" />
+            android:textColor="@color/text_grey_dark"
+            android:textSize="16sp" />
 
 
-    </FrameLayout>
+    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

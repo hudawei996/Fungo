@@ -1,5 +1,6 @@
 package com.fungo.baselib.base.page
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -17,6 +18,10 @@ import com.fungo.baselib.view.placeholder.PlaceholderView
  */
 
 abstract class BasePageFragment : BaseFragment() {
+
+
+    private var mLoadingDialog: AlertDialog? = null
+
 
     override fun getLayoutResId(): Int {
         return R.layout.base_fragment_page
@@ -78,6 +83,36 @@ abstract class BasePageFragment : BaseFragment() {
             throw IllegalStateException("使用BasePageFragment的Activity必须继承BasePageActivity")
         }
         return context as BasePageActivity
+    }
+
+    /**
+     * 展示加载对话框
+     * 适用于页面UI已经绘制了，需要再加载数据更新的情况
+     */
+    open fun showPageLoadingDialog(message: String) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = AlertDialog.Builder(context).create()
+            mLoadingDialog!!.setCanceledOnTouchOutside(false)
+        }
+
+        if (isAdded && !mLoadingDialog!!.isShowing) {
+            mLoadingDialog!!.show()
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.base_layout_progress, null)
+            mLoadingDialog!!.setContentView(dialogView)
+            dialogView.findViewById<TextView>(R.id.tvLoadingMessage).text = message
+        }
+    }
+
+    open fun showPageLoadingDialog() {
+        showPageLoadingDialog(getString(R.string.base_loading))
+    }
+
+
+    /**
+     * 隐藏加载对话框
+     */
+    open fun hidePageLoadingDialog() {
+        mLoadingDialog?.dismiss()
     }
 
 

@@ -1,5 +1,6 @@
 package com.fungo.repertory.main.recycler
 
+import android.os.Handler
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
 import com.fungo.repertory.main.FragmentFactory
@@ -22,8 +23,15 @@ class RecyclerFragment : BaseRecyclerFragment() {
     override fun initView() {
         super.initView()
 
+        showPageLoadingDialog()
         // 注册holder
         register(RecyclerTextBean::class.java, RecyclerTextViewHolder())
         register(RecyclerAdBean::class.java, RecyclerAdViewHolder())
+    }
+
+    override fun initData() {
+        Handler().postDelayed({
+            hidePageLoadingDialog()
+        }, 20000)
     }
 }
