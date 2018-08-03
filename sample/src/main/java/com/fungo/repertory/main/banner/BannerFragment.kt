@@ -49,12 +49,6 @@ class BannerFragment : BasePageFragment() {
                 return BannerHolder()
             }
         })
-
-        bannerView.mScrollDuration = 3000
-//        bannerView.isUseDefaultScrollDuration = true
-
-
-
         bannerView.start()
 
     }

@@ -21,10 +21,9 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Scroller
 import com.fungo.baselib.R
-import com.fungo.baselib.view.banner.holder.ViewPagerHolderCreator
 import com.fungo.baselib.view.banner.holder.ViewPagerHolder
+import com.fungo.baselib.view.banner.holder.ViewPagerHolderCreator
 import com.fungo.baselib.view.banner.transformer.CoverModeTransformer
-import com.fungo.baselib.view.banner.transformer.ScaleYTransformer
 import java.lang.reflect.Field
 import java.util.*
 
@@ -39,21 +38,14 @@ class BannerView<T> : RelativeLayout {
 
     /**
      * Banner自动滑动时的滑动时长
-     * 系统默认的时间太短，这里默认1秒
+     * 系统默认的时间太短，这里默认1200毫秒
      */
-    var mScrollDuration = 1000
+    var mScrollDuration = 1200
 
     /**
-     * 是否是否系统默认的滑动时长
-     * 默认使用自定义的滑动时长
+     * 第一次手动触摸Banner的时候
      */
-    var isUseDefaultScrollDuration = false
-
-
-    /**
-     * 是否是用户在主动滑动
-     */
-    var isUserDragScroll = false
+    private var mFirstTouchTime = 0L
 
     private val mViewPager: CustomViewPager by lazy {
         findViewById<CustomViewPager>(R.id.viewPager)
@@ -71,7 +63,7 @@ class BannerView<T> : RelativeLayout {
     private var mIsAutoPlay = true // 是否自动播放
     private var mCurrentItem = 0   //当前位置
     private val mHandler = Handler()
-    private var mDelayedTime = 3000// Banner 切换时间间隔
+    private var mDelayedTime = 4000// Banner 切换时间间隔
     private var mIsCanLoop = true// 是否轮播图片
     private val mIndicators = ArrayList<ImageView>()
     // mIndicatorRes[0] 为为选中，mIndicatorRes[1]为选中
@@ -239,17 +231,13 @@ class BannerView<T> : RelativeLayout {
         when (ev.action) {
         // 按住Banner的时候，停止自动轮播
             MotionEvent.ACTION_MOVE, MotionEvent.ACTION_OUTSIDE, MotionEvent.ACTION_DOWN -> {
-                val paddingLeft = mViewPager.left
-                val touchX = ev.rawX
-                // 去除两边的区域
-                if (touchX >= paddingLeft && touchX < getScreenWidth(context) - paddingLeft) {
-                    mIsAutoPlay = false
-                }
-                isUserDragScroll = true
+                mFirstTouchTime = System.currentTimeMillis()
+                // 按下或者移动的时候，暂停轮播
+                pause()
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                mIsAutoPlay = true
-                isUserDragScroll = false
+                mFirstTouchTime = System.currentTimeMillis()
+                start()
             }
         }
         return super.dispatchTouchEvent(ev)
@@ -545,7 +533,8 @@ class BannerView<T> : RelativeLayout {
 
         override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
             var durationX = duration
-            if (!isUseDefaultScrollDuration && !isUserDragScroll) {
+            // 如果是自动轮播，就使用动画模式，如果不是就还是用原来的模式
+            if (System.currentTimeMillis() - mFirstTouchTime >= mDelayedTime) {
                 durationX = mScrollDuration
             }
             super.startScroll(startX, startY, dx, dy, durationX)
