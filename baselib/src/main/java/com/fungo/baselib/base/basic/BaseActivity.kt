@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.fungo.baselib.R
 import com.fungo.baselib.utils.StatusBarUtils
+import com.fungo.baselib.utils.ThemeUtils
+import com.fungo.baselib.view.theme.AppTheme
 
 
 /**
@@ -37,10 +40,13 @@ abstract class BaseActivity : SupportActivity() {
     protected open fun initData() {}
 
     protected open fun initPre() {
+        // 主题
+        initTheme()
+        // 沉浸式
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
+        // 设置状态栏背景颜色
         StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
     }
-
 
     protected fun <T : View> findView(id: Int): T {
         return findViewById(id)
@@ -107,5 +113,29 @@ abstract class BaseActivity : SupportActivity() {
      */
     protected open fun isStatusBarForegroundBlack(): Boolean = true
 
+
+    /**
+     * 设置系统的主题
+     */
+    private fun initTheme() {
+        when (ThemeUtils.getCurrentTheme()) {
+            AppTheme.Blue -> setTheme(R.style.BlueTheme)
+            AppTheme.Red -> setTheme(R.style.RedTheme)
+            AppTheme.Brown -> setTheme(R.style.BrownTheme)
+            AppTheme.Green -> setTheme(R.style.GreenTheme)
+            AppTheme.Purple -> setTheme(R.style.PurpleTheme)
+            AppTheme.Teal -> setTheme(R.style.TealTheme)
+            AppTheme.Pink -> setTheme(R.style.PinkTheme)
+            AppTheme.DeepPurple -> setTheme(R.style.DeepPurpleTheme)
+            AppTheme.Orange -> setTheme(R.style.OrangeTheme)
+            AppTheme.Indigo -> setTheme(R.style.IndigoTheme)
+            AppTheme.LightGreen -> setTheme(R.style.LightGreenTheme)
+            AppTheme.Lime -> setTheme(R.style.LimeTheme)
+            AppTheme.DeepOrange -> setTheme(R.style.DeepOrangeTheme)
+            AppTheme.Cyan -> setTheme(R.style.CyanTheme)
+            AppTheme.BlueGrey -> setTheme(R.style.BlueGreyTheme)
+            else -> setTheme(R.style.BlueTheme)
+        }
+    }
 
 }

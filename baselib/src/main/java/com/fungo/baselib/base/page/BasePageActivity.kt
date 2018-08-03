@@ -21,7 +21,11 @@ abstract class BasePageActivity : BaseActivity() {
         setDefaultFragmentBackground(R.color.grey_f7)
         val fragment = getRootFragment()
         // 转移Activity的extras给Fragment
-        fragment.arguments = intent.extras
+        if (fragment.arguments == null && intent.extras != null) {
+            fragment.arguments = intent.extras
+        } else if (fragment.arguments != null && intent.extras != null) {
+            fragment.arguments!!.putAll(intent.extras)
+        }
         // 填充Fragment
         loadRootFragment(R.id.pageContainer, fragment)
     }

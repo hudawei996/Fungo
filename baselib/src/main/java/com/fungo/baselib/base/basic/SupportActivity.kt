@@ -64,7 +64,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
      * 不建议复写该方法,请使用 [.onBackPressedSupport] 代替
      */
     override fun onBackPressed() {
-
+        onBackPressedSupport()
     }
 
     /**

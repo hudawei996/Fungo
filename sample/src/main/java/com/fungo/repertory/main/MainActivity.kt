@@ -20,6 +20,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setSwipeBackEnable(false)
         StatusBarUtils.setStatusBarHeight(statusBar)
+
+        setSupportActionBar(toolbar)
     }
 
     override val layoutResID: Int

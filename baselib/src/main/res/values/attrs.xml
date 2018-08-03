@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--系统的主题设置-->
+
+
     <!--BannerView-->
     <declare-styleable name="BannerView">
         <attr name="bannerCanLoop" format="boolean" />

@@ -37,16 +37,15 @@ object SpUtils {
         sp.edit().putString(key, value).apply()
     }
 
-    @JvmOverloads
-    fun getString(key: String, defValue: String = ""): String? {
+    fun getString(key: String, defValue: String = ""): String {
         return sp.getString(key, defValue)
     }
 
-    fun getStringSet(key: String, defValue: Set<String>?): Set<String>? {
+    fun getStringSet(key: String, defValue: Set<String>): Set<String> {
         return sp.getStringSet(key, defValue)
     }
 
-    fun setStringSet(key: String, values: Set<String>?) {
+    fun setStringSet(key: String, values: Set<String>) {
         sp.edit().putStringSet(key, values).apply()
     }
 
@@ -56,7 +55,6 @@ object SpUtils {
         sp.edit().putInt(key, value).apply()
     }
 
-    @JvmOverloads
     fun getInt(key: String, defValue: Int = 0): Int {
         return sp.getInt(key, defValue)
     }
@@ -66,7 +64,6 @@ object SpUtils {
         sp.edit().putLong(key, value).apply()
     }
 
-    @JvmOverloads
     fun getLong(key: String, defValue: Long = 0): Long {
         return sp.getLong(key, defValue)
     }
@@ -77,7 +74,6 @@ object SpUtils {
         sp.edit().putFloat(key, value).apply()
     }
 
-    @JvmOverloads
     fun getFloat(key: String, defValue: Float = 0f): Float {
         return sp.getFloat(key, defValue)
     }
