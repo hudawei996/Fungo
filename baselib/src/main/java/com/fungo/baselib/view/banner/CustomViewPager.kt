@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.util.SparseArray
+import android.util.SparseIntArray
 import android.view.View
 import java.util.*
 
@@ -13,7 +14,7 @@ import java.util.*
 
 class CustomViewPager : ViewPager {
     private val childCenterXAbs = ArrayList<Int>()
-    private val childIndex = SparseArray<Int>()
+    private val childIndex = SparseIntArray()
 
     constructor(context: Context) : super(context) {
         init()
@@ -42,9 +43,7 @@ class CustomViewPager : ViewPager {
             for (i in 0 until childCount) {
                 var indexAbs = Math.abs(viewCenterX - getViewCenterX(getChildAt(i)))
                 //两个距离相同，后来的那个做自增，从而保持abs不同
-                if (childIndex.get(indexAbs) != null) {
-                    ++indexAbs
-                }
+                ++indexAbs
                 childCenterXAbs.add(indexAbs)
                 childIndex.append(indexAbs, i)
             }

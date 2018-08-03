@@ -13,7 +13,7 @@ import com.fungo.baselib.base.basic.BaseActivity
 abstract class BasePageActivity : BaseActivity() {
 
     override val layoutResID: Int
-        get() = R.layout.activity_page
+        get() = R.layout.base_activity_page
 
 
     override fun initView() {

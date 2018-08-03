@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <View
         android:id="@+id/statusBar"
         android:layout_width="match_parent"
-        android:layout_height="25dp"/>
-
+        android:layout_height="25dp" />
 
     <Button
-        android:onClick="onHost"
         android:layout_width="match_parent"
-        android:text="Recycler主页"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="onNormal"
+        android:text="普通页面" />
+
 
 
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onRecycler"
+        android:text="列表页面" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="onWeb"
-        android:layout_width="match_parent"
-        android:text="Web主页"
-        android:layout_height="wrap_content" />
-
+        android:text="Web页面" />
 
     <Button
-        android:onClick="onTest"
         android:layout_width="match_parent"
-        android:text="测试页面"
-        android:layout_height="wrap_content" />
-
-
+        android:layout_height="wrap_content"
+        android:onClick="onBanner"
+        android:text="Banner页面" />
 
 
 </LinearLayout>

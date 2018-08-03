@@ -21,8 +21,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Scroller
 import com.fungo.baselib.R
-import com.fungo.baselib.view.banner.holder.MZHolderCreator
-import com.fungo.baselib.view.banner.holder.MZViewHolder
+import com.fungo.baselib.view.banner.holder.ViewPagerHolderCreator
+import com.fungo.baselib.view.banner.holder.ViewPagerHolder
 import com.fungo.baselib.view.banner.transformer.CoverModeTransformer
 import com.fungo.baselib.view.banner.transformer.ScaleYTransformer
 import java.lang.reflect.Field
@@ -30,34 +30,65 @@ import java.util.*
 
 /**
  * Created by zhouwei on 17/5/26.
+ * 参考：https://github.com/pinguo-zhouwei/MZBannerView
+ *
+ * TODO 手动滑动时使用系统的滑动机制
  */
 
-class MZBannerView<T> : RelativeLayout {
+class BannerView<T> : RelativeLayout {
 
-    private val mViewPager: CustomViewPager by lazy { findViewById<CustomViewPager>(R.id.mzbanner_vp) }
-    private val mIndicatorContainer: LinearLayout  by lazy { findViewById<LinearLayout>(R.id.banner_indicator_container) }
-    private lateinit var mViewPagerScroller: ViewPagerScroller //控制ViewPager滑动速度的Scroller
-    private lateinit var mAdapter: MZPagerAdapter<T>
+    /**
+     * Banner自动滑动时的滑动时长
+     * 系统默认的时间太短，这里默认1秒
+     */
+    var mScrollDuration = 1000
+
+    /**
+     * 是否是否系统默认的滑动时长
+     * 默认使用自定义的滑动时长
+     */
+    var isUseDefaultScrollDuration = false
+
+
+    /**
+     * 是否是用户在主动滑动
+     */
+    var isUserDragScroll = false
+
+    private val mViewPager: CustomViewPager by lazy {
+        findViewById<CustomViewPager>(R.id.viewPager)
+    }
+
+    private val mIndicatorContainer: LinearLayout  by lazy {
+        findViewById<LinearLayout>(R.id.indicatorContainer)
+    }
+
+    //控制ViewPager滑动速度的Scroller
+    private lateinit var mViewPagerScroller: ViewPagerScroller
+    private lateinit var mAdapter: BannerPagerAdapter<T>
 
     private var mDatas: List<T>? = null
     private var mIsAutoPlay = true // 是否自动播放
     private var mCurrentItem = 0   //当前位置
     private val mHandler = Handler()
     private var mDelayedTime = 3000// Banner 切换时间间隔
-    private var mIsOpenMZEffect = true// 开启魅族Banner效果
     private var mIsCanLoop = true// 是否轮播图片
     private val mIndicators = ArrayList<ImageView>()
-    //mIndicatorRes[0] 为为选中，mIndicatorRes[1]为选中
+    // mIndicatorRes[0] 为为选中，mIndicatorRes[1]为选中
     private val mIndicatorRes = intArrayOf(R.drawable.banner_indicator_normal, R.drawable.banner_indicator_selected)
+
     private var mIndicatorPaddingLeft = 0// indicator 距离左边的距离
     private var mIndicatorPaddingRight = 0//indicator 距离右边的距离
     private var mIndicatorPaddingTop = 0//indicator 距离上边的距离
     private var mIndicatorPaddingBottom = 0//indicator 距离下边的距离
-    private var mMZModePadding = 0//在仿魅族模式下，由于前后显示了上下一个页面的部分，因此需要计算这部分padding
+
+    // Banner的Holder的左右边距
+    private var mBannerPadding = 0
+
     private var mIndicatorAlign = 1
+
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
-    private var mBannerPageClickListener: BannerPageClickListener? = null
-    private var mIsMiddlePageCover = false  // 中间Page是否覆盖两边，默认不覆盖
+    private var mBannerPageClickListener: BannerPageClickListener<T>? = null
 
 
     private val mLoopRunnable = object : Runnable {
@@ -81,27 +112,9 @@ class MZBannerView<T> : RelativeLayout {
 
     /**
      * 返回ViewPager
-     *
-     * @return [ViewPager]
      */
     val viewPager: ViewPager?
         get() = mViewPager
-
-    /**
-     * 获取Banner页面切换动画时间
-     *
-     * @return
-     */
-    /**
-     * 设置ViewPager切换的速度
-     *
-     * @param duration 切换动画时间
-     */
-    var duration: Int
-        get() = mViewPagerScroller.scrollDuration
-        set(duration) {
-            mViewPagerScroller.duration = duration
-        }
 
     enum class IndicatorAlign {
         LEFT, //做对齐
@@ -109,48 +122,33 @@ class MZBannerView<T> : RelativeLayout {
         RIGHT //右对齐
     }
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        readAttrs(context, attrs)
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
-    constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        readAttrs(context, attrs)
-        init()
-    }
+    constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0)
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet?, @AttrRes defStyleAttr: Int, @StyleRes defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         readAttrs(context, attrs)
-        init()
     }
 
     private fun readAttrs(context: Context, attrs: AttributeSet?) {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MZBannerView)
-        mIsOpenMZEffect = typedArray.getBoolean(R.styleable.MZBannerView_open_mz_mode, true)
-        mIsMiddlePageCover = typedArray.getBoolean(R.styleable.MZBannerView_middle_page_cover, true)
-        mIsCanLoop = typedArray.getBoolean(R.styleable.MZBannerView_canLoop, true)
-        mIndicatorAlign = typedArray.getInt(R.styleable.MZBannerView_indicatorAlign, 1)
-        mIndicatorPaddingLeft = typedArray.getDimensionPixelSize(R.styleable.MZBannerView_indicatorPaddingLeft, 0)
-        mIndicatorPaddingRight = typedArray.getDimensionPixelSize(R.styleable.MZBannerView_indicatorPaddingRight, 0)
-        mIndicatorPaddingTop = typedArray.getDimensionPixelSize(R.styleable.MZBannerView_indicatorPaddingTop, 0)
-        mIndicatorPaddingBottom = typedArray.getDimensionPixelSize(R.styleable.MZBannerView_indicatorPaddingBottom, 0)
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BannerView)
+        mIsCanLoop = typedArray.getBoolean(R.styleable.BannerView_bannerCanLoop, true)
+        mIndicatorAlign = typedArray.getInt(R.styleable.BannerView_indicatorAlign, 1)
+        mIndicatorPaddingLeft = typedArray.getDimensionPixelSize(R.styleable.BannerView_indicatorPaddingLeft, 0)
+        mIndicatorPaddingRight = typedArray.getDimensionPixelSize(R.styleable.BannerView_indicatorPaddingRight, 0)
+        mIndicatorPaddingTop = typedArray.getDimensionPixelSize(R.styleable.BannerView_indicatorPaddingTop, 0)
+        mIndicatorPaddingBottom = typedArray.getDimensionPixelSize(R.styleable.BannerView_indicatorPaddingBottom, 0)
         typedArray.recycle()
     }
 
 
-    private fun init() {
-        if (mIsOpenMZEffect) {
-            LayoutInflater.from(context).inflate(R.layout.mz_banner_effect_layout, this, true)
-        } else {
-            LayoutInflater.from(context).inflate(R.layout.mz_banner_normal_layout, this, true)
-        }
+    init {
+        LayoutInflater.from(context).inflate(R.layout.base_layout_banner, this, true)
         mViewPager.offscreenPageLimit = 4
-        mMZModePadding = dpToPx(30)
+        mBannerPadding = dpToPx(30)
         // 初始化Scroller
         initViewPagerScroll()
 
@@ -159,25 +157,19 @@ class MZBannerView<T> : RelativeLayout {
             1 -> setIndicatorAlign(IndicatorAlign.CENTER)
             else -> setIndicatorAlign(IndicatorAlign.RIGHT)
         }
-
-
     }
 
     /**
-     * 是否开启魅族模式
+     * 设置页面滑动动画
      */
-    private fun setOpenMZEffect() {
-        // 魅族模式
-        if (mIsOpenMZEffect) {
-            if (mIsMiddlePageCover) {
-                // 中间页面覆盖两边，和魅族APP 的banner 效果一样。
-                mViewPager.setPageTransformer(true, CoverModeTransformer(mViewPager))
-            } else {
-                // 中间页面不覆盖，页面并排，只是Y轴缩小
-                mViewPager.setPageTransformer(false, ScaleYTransformer())
-            }
-
-        }
+    private fun setPageTransformer() {
+        mViewPager.setPageTransformer(true, CoverModeTransformer(mViewPager))
+        /*if (mIsMiddlePageCover) {
+            // 中间页面覆盖两边
+        } else {
+            // 中间页面不覆盖，页面并排，只是Y轴缩小
+            mViewPager.setPageTransformer(false, ScaleYTransformer())
+        }*/
     }
 
     /**
@@ -211,7 +203,7 @@ class MZBannerView<T> : RelativeLayout {
             val imageView = ImageView(context)
             if (mIndicatorAlign == IndicatorAlign.LEFT.ordinal) {
                 if (i == 0) {
-                    val paddingLeft = if (mIsOpenMZEffect) mIndicatorPaddingLeft + mMZModePadding else mIndicatorPaddingLeft
+                    val paddingLeft = mIndicatorPaddingLeft + mBannerPadding
                     imageView.setPadding(paddingLeft + 6, 0, 6, 0)
                 } else {
                     imageView.setPadding(6, 0, 6, 0)
@@ -219,7 +211,7 @@ class MZBannerView<T> : RelativeLayout {
 
             } else if (mIndicatorAlign == IndicatorAlign.RIGHT.ordinal) {
                 if (i == mDatas!!.size - 1) {
-                    val paddingRight = if (mIsOpenMZEffect) mMZModePadding + mIndicatorPaddingRight else mIndicatorPaddingRight
+                    val paddingRight = mBannerPadding + mIndicatorPaddingRight
                     imageView.setPadding(6, 0, 6 + paddingRight, 0)
                 } else {
                     imageView.setPadding(6, 0, 6, 0)
@@ -246,26 +238,27 @@ class MZBannerView<T> : RelativeLayout {
         }
         when (ev.action) {
         // 按住Banner的时候，停止自动轮播
-            MotionEvent.ACTION_MOVE, MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_OUTSIDE, MotionEvent.ACTION_DOWN -> {
+            MotionEvent.ACTION_MOVE, MotionEvent.ACTION_OUTSIDE, MotionEvent.ACTION_DOWN -> {
                 val paddingLeft = mViewPager.left
                 val touchX = ev.rawX
-                // 如果是魅族模式，去除两边的区域
+                // 去除两边的区域
                 if (touchX >= paddingLeft && touchX < getScreenWidth(context) - paddingLeft) {
                     mIsAutoPlay = false
                 }
+                isUserDragScroll = true
             }
-            MotionEvent.ACTION_UP -> mIsAutoPlay = true
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                mIsAutoPlay = true
+                isUserDragScroll = false
+            }
         }
         return super.dispatchTouchEvent(ev)
     }
 
-    /** */
-    /**                             对外API                                                                */
-    /** */
+
     /**
      * 开始轮播
-     *
-     * 应该确保在调用用了[{][.setPages] 之后调用这个方法开始轮播
+     * 应该确保在调用用了[setPages] 之后调用这个方法开始轮播
      */
     fun start() {
         // 如果Adapter为null, 说明还没有设置数据，这个时候不应该轮播Banner
@@ -285,8 +278,6 @@ class MZBannerView<T> : RelativeLayout {
 
     /**
      * 设置BannerView 的切换时间间隔
-     *
-     * @param delayedTime
      */
     fun setDelayedTime(delayedTime: Int) {
         mDelayedTime = delayedTime
@@ -298,73 +289,65 @@ class MZBannerView<T> : RelativeLayout {
 
     /**
      * 添加Page点击事件
-     *
-     * @param bannerPageClickListener [BannerPageClickListener]
      */
-    fun setBannerPageClickListener(bannerPageClickListener: BannerPageClickListener) {
+    fun setBannerPageClickListener(bannerPageClickListener: BannerPageClickListener<T>) {
         mBannerPageClickListener = bannerPageClickListener
     }
 
     /**
      * 是否显示Indicator
-     *
-     * @param visible true 显示Indicator，否则不显示
      */
     fun setIndicatorVisible(visible: Boolean) {
         if (visible) {
-            mIndicatorContainer!!.visibility = View.VISIBLE
+            mIndicatorContainer.visibility = View.VISIBLE
         } else {
-            mIndicatorContainer!!.visibility = View.GONE
+            mIndicatorContainer.visibility = View.GONE
         }
     }
 
     /**
      * 设置indicator 图片资源
      *
-     * @param unSelectRes 未选中状态资源图片
      * @param selectRes   选中状态资源图片
+     * @param unSelectRes 未选中状态资源图片
      */
-    fun setIndicatorRes(@DrawableRes unSelectRes: Int, @DrawableRes selectRes: Int) {
+    fun setIndicatorRes(@DrawableRes selectRes: Int, @DrawableRes unSelectRes: Int) {
         mIndicatorRes[0] = unSelectRes
         mIndicatorRes[1] = selectRes
     }
 
     /**
-     * 设置数据，这是最重要的一个方法。
-     *
+     * 设置数据，这是最重要的一个方法
      * 其他的配置应该在这个方法之前调用
      *
-     * @param datas           Banner 展示的数据集合
-     * @param mzHolderCreator ViewHolder生成器 [MZHolderCreator] And [MZViewHolder]
+     * @param datas  Banner展示的数据集合
+     * @param holderCreator ViewHolder生成器 [ViewPagerHolderCreator] And [ViewPagerHolder]
      */
-    fun setPages(datas: List<T>?, mzHolderCreator: MZHolderCreator<*>) {
+    fun setPages(datas: List<T>?, holderCreator: ViewPagerHolderCreator<*>) {
         if (datas == null) {
             return
         }
         mDatas = datas
-        //如果在播放，就先让播放停止
+        // 如果在播放，就先让播放停止
         pause()
 
-        //增加一个逻辑：由于魅族模式会在一个页面展示前后页面的部分，因此，数据集合的长度至少为3,否则，自动为普通Banner模式
-        //不管配置的:open_mz_mode 属性的值是否为true
-
+        // 如果Banner数据不够，就去处特效
         if (datas.size < 3) {
-            mIsOpenMZEffect = false
             val layoutParams = mViewPager.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.setMargins(0, 0, 0, 0)
             mViewPager.layoutParams = layoutParams
             clipChildren = true
             mViewPager.clipChildren = true
         }
-        setOpenMZEffect()
-        // 2017.7.20 fix：将Indicator初始化放在Adapter的初始化之前，解决更新数据变化更新时crush.
+
+        setPageTransformer()
+
         //初始化Indicator
         initIndicator()
 
-        mAdapter = MZPagerAdapter(datas, mzHolderCreator, mIsCanLoop)
-        mAdapter.setUpViewViewPager(mViewPager)
+        mAdapter = BannerPagerAdapter(datas, holderCreator, mIsCanLoop)
+        mAdapter.setUpViewPager(mViewPager)
         mAdapter.setPageClickListener(mBannerPageClickListener)
-
 
         mViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -410,8 +393,10 @@ class MZBannerView<T> : RelativeLayout {
 
     /**
      * 设置Indicator 的对齐方式
-     *
-     * @param indicatorAlign [IndicatorAlign.CENTER][IndicatorAlign.LEFT][IndicatorAlign.RIGHT]
+     * @param indicatorAlign 包括三个方向
+     * 中间：[IndicatorAlign.CENTER]
+     * 左边：[IndicatorAlign.LEFT]
+     * 右边：[IndicatorAlign.RIGHT]
      */
     fun setIndicatorAlign(indicatorAlign: IndicatorAlign) {
         mIndicatorAlign = indicatorAlign.ordinal
@@ -422,32 +407,29 @@ class MZBannerView<T> : RelativeLayout {
             else -> layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
         }
 
-        // 2017.8.27 添加：增加设置Indicator 的上下边距。
+        /**
+         * 增加设置Indicator 的上下边距
+         */
         layoutParams.setMargins(0, mIndicatorPaddingTop, 0, mIndicatorPaddingBottom)
         mIndicatorContainer.layoutParams = layoutParams
-
-    }
-
-    /**
-     * 设置是否使用ViewPager默认是的切换速度
-     *
-     * @param useDefaultDuration 切换动画时间
-     */
-    fun setUseDefaultDuration(useDefaultDuration: Boolean) {
-        mViewPagerScroller.isUseDefaultDuration = useDefaultDuration
     }
 
 
-    class MZPagerAdapter<T>(datas: List<T>, private val mMZHolderCreator: MZHolderCreator<*>, private val canLoop: Boolean) : PagerAdapter() {
-        private var mDatas: MutableList<T>? = null
+    class BannerPagerAdapter<T>(
+            private val datas: List<T>,
+            private val holderCreator: ViewPagerHolderCreator<*>,
+            private val canLoop: Boolean) : PagerAdapter() {
+
         private var mViewPager: ViewPager? = null
-        private var mPageClickListener: BannerPageClickListener? = null
+        private var mPageClickListener: BannerPageClickListener<T>? = null
         private val mLooperCountFactor = 500
 
-        private// 我们设置当前选中的位置为Integer.MAX_VALUE / 2,这样开始就能往左滑动
-        // 但是要保证这个值与getRealPosition 的 余数为0，因为要从第一页开始显示
-        // 直到找到从0开始的位置
-        val startSelectItem: Int
+        /**
+         * 我们设置当前选中的位置为Integer.MAX_VALUE / 2,这样开始就能往左滑动
+         * 但是要保证这个值与getRealPosition 的 余数为0，因为要从第一页开始显示
+         * 直到找到从0开始的位置
+         */
+        private val startSelectItem: Int
             get() {
                 var currentItem = realCount * mLooperCountFactor / 2
                 if (currentItem % realCount == 0) {
@@ -461,52 +443,36 @@ class MZBannerView<T> : RelativeLayout {
 
         /**
          * 获取真实的Count
-         *
-         * @return
          */
         private val realCount: Int
-            get() = if (mDatas == null) 0 else mDatas!!.size
+            get() = datas.size
 
-        init {
-            if (mDatas == null) {
-                mDatas = ArrayList()
-            }
-            //mDatas.add(datas.get(datas.size()-1));// 加入最后一个
-            for (t in datas) {
-                mDatas!!.add(t)
-            }
-        }// mDatas.add(datas.get(0));//在最后加入最前面一个
-
-        fun setPageClickListener(pageClickListener: BannerPageClickListener?) {
+        fun setPageClickListener(pageClickListener: BannerPageClickListener<T>?) {
             mPageClickListener = pageClickListener
         }
 
         /**
          * 初始化Adapter和设置当前选中的Item
-         *
-         * @param viewPager
          */
-        fun setUpViewViewPager(viewPager: ViewPager) {
+        fun setUpViewPager(viewPager: ViewPager) {
             mViewPager = viewPager
             mViewPager!!.adapter = this
             mViewPager!!.adapter!!.notifyDataSetChanged()
             val currentItem = if (canLoop) startSelectItem else 0
-            //设置当前选中的Item
+            // 设置当前选中的Item
             mViewPager!!.currentItem = currentItem
         }
 
-        fun setDatas(datas: MutableList<T>) {
-            mDatas = datas
-        }
-
+        /**
+         * 如果getCount 的返回值为Integer.MAX_VALUE 的话，
+         * 那么在setCurrentItem的时候会ANR(除了在onCreate 调用之外)
+         */
         override fun getCount(): Int {
-            // 2017.6.10 bug fix
-            // 如果getCount 的返回值为Integer.MAX_VALUE 的话，那么在setCurrentItem的时候会ANR(除了在onCreate 调用之外)
-            return if (canLoop) realCount * mLooperCountFactor else realCount//ViewPager返回int 最大值
+            return if (canLoop) realCount * mLooperCountFactor else realCount
         }
 
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object`
+        override fun isViewFromObject(view: View, any: Any): Boolean {
+            return view === any
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
@@ -515,8 +481,8 @@ class MZBannerView<T> : RelativeLayout {
             return view
         }
 
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            container.removeView(`object` as View)
+        override fun destroyItem(container: ViewGroup, position: Int, any: Any) {
+            container.removeView(any as View)
         }
 
         override fun finishUpdate(container: ViewGroup) {
@@ -533,7 +499,7 @@ class MZBannerView<T> : RelativeLayout {
 
         private fun setCurrentItem(position: Int) {
             try {
-                mViewPager!!.setCurrentItem(position, false)
+                mViewPager?.setCurrentItem(position, false)
             } catch (e: IllegalStateException) {
                 e.printStackTrace()
             }
@@ -548,64 +514,53 @@ class MZBannerView<T> : RelativeLayout {
         private fun getView(position: Int, container: ViewGroup): View {
 
             val realPosition = position % realCount
-            val holder: MZViewHolder<T> = mMZHolderCreator.createViewHolder() as MZViewHolder<T>
+            val holder: ViewPagerHolder<T> = holderCreator.createViewPagerHolder() as ViewPagerHolder<T>
 
             // create View
             val view = holder.createView(container.context)
 
-            if (mDatas != null && mDatas!!.size > 0) {
-                holder.onBind(container.context, realPosition, mDatas!![realPosition])
+            // bind data
+            if (datas.isNotEmpty()) {
+                holder.onBindData(container.context, realPosition, datas[realPosition])
             }
 
-            // 添加点击事件
+            // add listener
             view.setOnClickListener { v ->
-                if (mPageClickListener != null) {
-                    mPageClickListener!!.onPageClick(v, realPosition)
-                }
+                mPageClickListener?.onPageClick(v, realPosition, datas[realPosition])
             }
-
             return view
         }
-
-
     }
 
     /**
-     * ＊由于ViewPager 默认的切换速度有点快，因此用一个Scroller 来控制切换的速度
-     *
+     * 由于ViewPager 默认的切换速度有点快，因此用一个Scroller 来控制切换的速度
      * 而实际上ViewPager 切换本来就是用的Scroller来做的，因此我们可以通过反射来
-     *
      * 获取取到ViewPager 的 mScroller 属性，然后替换成我们自己的Scroller
      */
-    class ViewPagerScroller(context: Context) : Scroller(context) {
-        var scrollDuration = 800
-            private set// ViewPager默认的最大Duration 为600,我们默认稍微大一点。值越大越慢。
-        var isUseDefaultDuration = false
+    inner class ViewPagerScroller(context: Context) : Scroller(context) {
 
         override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int) {
-            super.startScroll(startX, startY, dx, dy, scrollDuration)
+            super.startScroll(startX, startY, dx, dy, mScrollDuration)
         }
 
         override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
-            super.startScroll(startX, startY, dx, dy, if (isUseDefaultDuration) duration else scrollDuration)
-        }
-
-        fun setDuration(duration: Int) {
-            scrollDuration = duration
+            var durationX = duration
+            if (!isUseDefaultScrollDuration && !isUserDragScroll) {
+                durationX = mScrollDuration
+            }
+            super.startScroll(startX, startY, dx, dy, durationX)
         }
     }
 
     /**
-     * Banner page 点击回调
+     * Banner的Holder点击回调
      */
-    interface BannerPageClickListener {
-        fun onPageClick(view: View, position: Int)
+    interface BannerPageClickListener<T> {
+        fun onPageClick(view: View, position: Int, data: T)
     }
 
     private fun getScreenWidth(context: Context): Int {
-        val resources = context.resources
-        val dm = resources.displayMetrics
-        return dm.widthPixels
+        return context.resources.displayMetrics.widthPixels
     }
 
     private fun dpToPx(dp: Int): Int {

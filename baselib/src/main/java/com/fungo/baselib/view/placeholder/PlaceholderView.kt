@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.FrameLayout
 import com.fungo.baselib.R
 import com.fungo.baselib.utils.ViewUtils
-import kotlinx.android.synthetic.main.layout_place_holder.view.*
+import kotlinx.android.synthetic.main.base_layout_place_holder.view.*
 
 /**
  * @author Pinger
@@ -27,7 +27,7 @@ class PlaceholderView : FrameLayout {
 
     init {
         visibility = View.GONE
-        LayoutInflater.from(context).inflate(R.layout.layout_place_holder, this)
+        LayoutInflater.from(context).inflate(R.layout.base_layout_place_holder, this)
     }
 
 

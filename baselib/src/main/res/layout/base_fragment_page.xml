@@ -23,7 +23,7 @@
             android:layout_height="@dimen/dp_25" />
 
         <!--ToolBar-->
-        <include layout="@layout/layout_toolbar" />
+        <include layout="@layout/base_layout_toolbar" />
 
     </LinearLayout>
 

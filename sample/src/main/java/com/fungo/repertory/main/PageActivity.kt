@@ -1,8 +1,9 @@
 package com.fungo.repertory.main
 
+import android.content.Context
+import android.content.Intent
 import com.fungo.baselib.base.page.BasePageActivity
 import com.fungo.baselib.base.page.BasePageFragment
-import com.fungo.repertory.R
 
 /**
  * @author Pinger
@@ -13,8 +14,15 @@ import com.fungo.repertory.R
 class PageActivity : BasePageActivity() {
 
     override fun getRootFragment(): BasePageFragment {
-        return MainFragment()
+        return FragmentFactory.getInstance().create(intent.getStringExtra(FragmentFactory.FRAGMENT_KEY))
     }
 
-
+    companion object {
+        fun start(context: Context, key: String, title: String) {
+            val intent = Intent(context, PageActivity::class.java)
+            intent.putExtra(FragmentFactory.FRAGMENT_KEY, key)
+            intent.putExtra(FragmentFactory.FRAGMENT_KEY_TITLE, title)
+            context.startActivity(intent)
+        }
+    }
 }

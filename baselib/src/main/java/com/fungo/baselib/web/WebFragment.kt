@@ -13,7 +13,7 @@ import android.widget.ProgressBar
 import com.fungo.baselib.R
 import com.fungo.baselib.web.interact.DemoInteract
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
-import kotlinx.android.synthetic.main.fragment_web.*
+import kotlinx.android.synthetic.main.base_fragment_web.*
 
 /**
  * @author Pinger
@@ -33,7 +33,7 @@ class WebFragment : BaseWebFragment() {
     }
 
     override fun getContentResId(): Int {
-        return R.layout.fragment_web
+        return R.layout.base_fragment_web
     }
 
     override fun getWebView(): WebView {
