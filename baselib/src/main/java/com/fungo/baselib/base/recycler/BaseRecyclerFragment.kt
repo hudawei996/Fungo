@@ -56,6 +56,15 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
             mPage += 1
             mPresenter.loadData(mPage)
         }
+
+        // 设置相关属性
+        smartRefreshLayout.isEnableAutoLoadmore = isEnableAutoLoadmore()
+        smartRefreshLayout.isEnableLoadmore = isEnableLoadmore()
+        smartRefreshLayout.isEnableRefresh = isEnableRefresh()
+        smartRefreshLayout.isEnablePureScrollMode = isEnablePureScrollMode()
+        smartRefreshLayout.isEnableOverScrollBounce = isEnableOverScrollBounce()
+
+
     }
 
     private fun initRecyclerView() {
@@ -158,4 +167,32 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     private fun getAdapter(): MultiTypeAdapter {
         return MultiTypeAdapter(context)
     }
+
+
+    /**
+     * 是否可以自动加载更多，默认可以
+     */
+    protected fun isEnableAutoLoadmore() = true
+
+
+    /**
+     * 是否可以加载更多，默认可以
+     */
+    protected fun isEnableLoadmore() = true
+
+    /**
+     * 是否可以刷新，默认可以
+     */
+    protected fun isEnableRefresh() = true
+
+    /**
+     * 是否是纯净模式，不展示刷新头和底部，默认false
+     */
+    protected fun isEnablePureScrollMode() = false
+
+    /**
+     * 刷新时是否可以越界回弹
+     */
+    protected fun isEnableOverScrollBounce() = false
+
 }
