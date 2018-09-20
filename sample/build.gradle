@@ -40,8 +40,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
 
-    implementation rootProject.ext.dependencies.constraintlayout
-    implementation rootProject.ext.dependencies.kotlin
-
     implementation 'com.github.PingerOne:ImageGo:2.0.1'
 }

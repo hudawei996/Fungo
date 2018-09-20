@@ -28,13 +28,14 @@ dependencies {
     api rootProject.ext.dependencies.appcompat_v7
     api rootProject.ext.dependencies.kotlin
     api rootProject.ext.dependencies.design
-    implementation rootProject.ext.dependencies.constraintlayout
+    api rootProject.ext.dependencies.recyclerview
+    api rootProject.ext.dependencies.constraintlayout
+
+    api rootProject.ext.dependencies.fragmentation_core
+    api rootProject.ext.dependencies.fragmentation_swipeback
 
     implementation rootProject.ext.dependencies.SmartRefreshLayout
     implementation rootProject.ext.dependencies.SmartRefreshHeader
 
-    api 'me.yokeyword:fragmentation-core:1.3.5'
-    api 'me.yokeyword:fragmentation-swipeback:1.3.5'
-
-    api 'com.tencent.sonic:sdk:3.0.0'
+    implementation rootProject.ext.dependencies.sonic
 }
