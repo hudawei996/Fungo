@@ -21,7 +21,7 @@ class WebActivity : BasePageActivity() {
         window?.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
     }
 
-    override fun getRootFragment(): BasePageFragment {
+    override fun getPageFragment(): BasePageFragment {
         return WebFragment()
     }
 

@@ -28,17 +28,12 @@ abstract class BaseFragment : SupportFragment(), IView {
         if (mRootView == null) mRootView = inflater.inflate(getLayoutResId(), container, false)
         val parent = mRootView!!.parent as? ViewGroup?
         parent?.removeView(mRootView)
-        initPageView()
         return if (isSwipeBackEnable()) attachToSwipeBack(mRootView) else mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         initEvent()
     }
 
@@ -46,7 +41,6 @@ abstract class BaseFragment : SupportFragment(), IView {
         initData()
     }
 
-    protected open fun initPageView() {}
     protected open fun initView() {}
     protected open fun initEvent() {}
     protected open fun initData() {}
@@ -55,7 +49,6 @@ abstract class BaseFragment : SupportFragment(), IView {
      * 获取资源ID
      */
     abstract fun getLayoutResId(): Int
-
 
     override fun <T : View> findView(id: Int): T {
         checkNotNull(mRootView)

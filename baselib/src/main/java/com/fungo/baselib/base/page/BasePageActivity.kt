@@ -1,5 +1,6 @@
 package com.fungo.baselib.base.page
 
+import android.os.Bundle
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseActivity
 
@@ -16,10 +17,10 @@ abstract class BasePageActivity : BaseActivity() {
         get() = R.layout.base_activity_page
 
 
-    override fun initView() {
+    final override fun initView() {
         // 设置Fragment的默认背景颜色
         setDefaultFragmentBackground(R.color.grey_f7)
-        val fragment = getRootFragment()
+        val fragment = getPageFragment()
         // 转移Activity的extras给Fragment
         if (fragment.arguments == null && intent.extras != null) {
             fragment.arguments = intent.extras
@@ -31,8 +32,15 @@ abstract class BasePageActivity : BaseActivity() {
     }
 
     /**
+     * 给子类初始化页面View
+     */
+    protected open fun initPageView() {
+
+    }
+
+    /**
      * 获取跟节点的Fragment
      */
-    abstract fun getRootFragment(): BasePageFragment
+    abstract fun getPageFragment(): BasePageFragment
 
 }

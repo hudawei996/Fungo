@@ -13,7 +13,7 @@ import com.fungo.baselib.base.page.BasePageFragment
 
 class PageActivity : BasePageActivity() {
 
-    override fun getRootFragment(): BasePageFragment {
+    override fun getPageFragment(): BasePageFragment {
         return FragmentFactory.getInstance().create(intent.getStringExtra(FragmentFactory.FRAGMENT_KEY))
     }
 

@@ -39,7 +39,7 @@ abstract class BaseActivity : SupportActivity() {
     protected open fun initEvent() {}
     protected open fun initData() {}
 
-    protected open fun initPre() {
+    private fun initPre() {
         // 主题
         initTheme()
         // 沉浸式
@@ -120,7 +120,7 @@ abstract class BaseActivity : SupportActivity() {
     /**
      * 是否可以滑动返回，默认可以
      */
-    protected fun isSwipeBackEnable(): Boolean = true
+    protected open fun isSwipeBackEnable(): Boolean = true
 
 
     /**

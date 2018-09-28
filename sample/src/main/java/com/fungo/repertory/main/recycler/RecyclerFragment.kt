@@ -20,9 +20,7 @@ class RecyclerFragment : BaseRecyclerFragment() {
         return arguments?.getString(FragmentFactory.FRAGMENT_KEY_TITLE)
     }
 
-    override fun initView() {
-        super.initView()
-
+    override fun initRecyclerView() {
         showPageLoadingDialog()
         // 注册holder
         register(RecyclerTextBean::class.java, RecyclerTextViewHolder())

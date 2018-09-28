@@ -34,22 +34,11 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         return R.layout.base_fragment_recycler
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initRefreshLayout()
-        initRecyclerView()
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun initData() {
-        mPage = 0
-        mPresenter.loadData(mPage)
-    }
-
-    private fun initRefreshLayout() {
+    override fun initPageView() {
         smartRefreshLayout.refreshHeader = BezierCircleHeader(context)
         smartRefreshLayout.refreshFooter = ClassicsFooter(context)
         smartRefreshLayout.setDragRate(1f)
-        smartRefreshLayout.setHeaderMaxDragRate(1.2f)
+        smartRefreshLayout.setHeaderMaxDragRate(1.5f)
         smartRefreshLayout.setOnRefreshListener {
             mPage = 0
             mPresenter.loadData(mPage)
@@ -65,15 +54,20 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         smartRefreshLayout.isEnableRefresh = isEnableRefresh()
         smartRefreshLayout.isEnablePureScrollMode = isEnablePureScrollMode()
         smartRefreshLayout.isEnableOverScrollBounce = isEnableOverScrollBounce()
-    }
 
-    private fun initRecyclerView() {
+
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
         recyclerView.adapter = mAdapter
+
+        initRecyclerView()
     }
 
+    override fun initData() {
+        mPage = 0
+        mPresenter.loadData(mPage)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -195,4 +189,9 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      */
     protected fun isEnableOverScrollBounce() = false
 
+
+    /**
+     * 让子类重写，初始化页面
+     */
+    protected open fun initRecyclerView() {}
 }

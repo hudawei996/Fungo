@@ -1,6 +1,7 @@
 package com.fungo.baselib.base.page
 
 import android.app.AlertDialog
+import android.support.annotation.ColorInt
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -27,7 +28,7 @@ abstract class BasePageFragment : BaseFragment() {
         return R.layout.base_fragment_page
     }
 
-    override fun initPageView() {
+    final override fun initView() {
         // 设置状态栏高度
         if (isSetStatusBarHeight()) {
             StatusBarUtils.setStatusBarHeight(findView(R.id.statusView))
@@ -62,6 +63,8 @@ abstract class BasePageFragment : BaseFragment() {
             container.removeAllViews()
         }
         LayoutInflater.from(context).inflate(getContentResId(), container)
+
+        initPageView()
     }
 
 
@@ -153,6 +156,21 @@ abstract class BasePageFragment : BaseFragment() {
     }
 
     /**
+     * 设置标题字体的颜色
+     */
+    protected open fun setPageTitleColor(@ColorInt color: Int) {
+        findView<TextView>(R.id.baseTvTitle).setTextColor(color)
+    }
+
+    /**
+     * 设置标题字体的大小
+     */
+    protected open fun setPageTitleSize(size: Float) {
+        findView<TextView>(R.id.baseTvTitle).textSize = size
+    }
+
+
+    /**
      * 获取页面标题，进入页面后会调用该方法获取标题，设置给ToolBar
      * 标题默认为空
      */
@@ -190,6 +208,11 @@ abstract class BasePageFragment : BaseFragment() {
      * 执行分享动作
      */
     protected open fun doShareAction() {}
+
+    /**
+     * 给子类初始化页面
+     */
+    protected open fun initPageView() {}
 
 
     /**
