@@ -44,6 +44,17 @@ class BaseRecyclerContract {
          * 加载数据
          */
         fun loadData(page: Int)
+
+        /**
+         * 接口里重载
+         */
+        override fun onStart() {
+
+        }
+
+        override fun onStop() {
+
+        }
     }
 
 }

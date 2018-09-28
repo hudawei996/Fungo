@@ -29,11 +29,16 @@ abstract class BaseFragment : SupportFragment(), IView {
         val parent = mRootView!!.parent as? ViewGroup?
         parent?.removeView(mRootView)
         initPageView()
-        return if (isSwipeBack()) attachToSwipeBack(mRootView) else mRootView
+        return if (isSwipeBackEnable()) attachToSwipeBack(mRootView) else mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initEvent()
     }
 
@@ -162,6 +167,6 @@ abstract class BaseFragment : SupportFragment(), IView {
      * 是否支持侧滑返回
      * 默认是可以侧滑返回的
      */
-    protected open fun isSwipeBack() = true
+    protected open fun isSwipeBackEnable() = true
 
 }

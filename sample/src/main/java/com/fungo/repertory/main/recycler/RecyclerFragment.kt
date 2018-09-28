@@ -32,6 +32,6 @@ class RecyclerFragment : BaseRecyclerFragment() {
     override fun initData() {
         Handler().postDelayed({
             hidePageLoadingDialog()
-        }, 5000)
+        }, 2000)
     }
 }

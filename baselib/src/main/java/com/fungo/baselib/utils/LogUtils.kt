@@ -13,4 +13,8 @@ object LogUtils {
     fun e(tag: String, msg: String) {
         println("$tag：$msg")
     }
+
+    fun e(e: Exception) {
+        println(e.message)
+    }
 }

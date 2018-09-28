@@ -2,6 +2,7 @@ package com.fungo.baselib.base.recycler
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.fungo.baselib.R
 import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
@@ -33,9 +34,10 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         return R.layout.base_fragment_recycler
     }
 
-    override fun initView() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initRefreshLayout()
         initRecyclerView()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun initData() {
@@ -63,8 +65,6 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         smartRefreshLayout.isEnableRefresh = isEnableRefresh()
         smartRefreshLayout.isEnablePureScrollMode = isEnablePureScrollMode()
         smartRefreshLayout.isEnableOverScrollBounce = isEnableOverScrollBounce()
-
-
     }
 
     private fun initRecyclerView() {

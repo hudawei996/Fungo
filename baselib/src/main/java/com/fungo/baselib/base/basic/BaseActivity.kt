@@ -46,7 +46,11 @@ abstract class BaseActivity : SupportActivity() {
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
         // 设置状态栏背景颜色
         StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
+
+        // 设置是否可以滑动返回，默认可以
+        setSwipeBackEnable(isSwipeBackEnable())
     }
+
 
     protected fun <T : View> findView(id: Int): T {
         return findViewById(id)
@@ -112,6 +116,11 @@ abstract class BaseActivity : SupportActivity() {
      * 状态栏前景色是否是黑色
      */
     protected open fun isStatusBarForegroundBlack(): Boolean = true
+
+    /**
+     * 是否可以滑动返回，默认可以
+     */
+    protected fun isSwipeBackEnable(): Boolean = true
 
 
     /**
