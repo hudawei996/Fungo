@@ -21,15 +21,10 @@ class RecyclerFragment : BaseRecyclerFragment() {
     }
 
     override fun initRecyclerView() {
-        showPageLoadingDialog()
         // 注册holder
         register(RecyclerTextBean::class.java, RecyclerTextViewHolder())
         register(RecyclerAdBean::class.java, RecyclerAdViewHolder())
     }
 
-    override fun initData() {
-        Handler().postDelayed({
-            hidePageLoadingDialog()
-        }, 2000)
-    }
+
 }

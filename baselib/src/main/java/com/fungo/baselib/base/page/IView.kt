@@ -1,5 +1,6 @@
 package com.fungo.baselib.base.page
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.support.annotation.DrawableRes
@@ -16,6 +17,8 @@ import android.widget.TextView
  *
  */
 interface IView : View.OnClickListener {
+
+    fun getContext(): Context?
 
     fun <T : View> findView(@IdRes id: Int): T
 
@@ -67,5 +70,4 @@ interface IView : View.OnClickListener {
     fun showToast(@StringRes resId: Int)
     fun showLongToast(content: String?)
     fun showLongToast(@StringRes resId: Int)
-
 }

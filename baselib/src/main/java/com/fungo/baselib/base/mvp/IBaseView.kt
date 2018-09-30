@@ -15,5 +15,4 @@ interface IBaseView : IPageView {
      * View是否激活
      */
     fun isActive(): Boolean
-
 }

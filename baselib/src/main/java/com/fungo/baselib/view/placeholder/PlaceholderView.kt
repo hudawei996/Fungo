@@ -50,6 +50,10 @@ class PlaceholderView : FrameLayout {
         visibility = View.GONE
     }
 
+    fun hideLoading() {
+        ViewUtils.setGone(loadingContainer)
+    }
+
 
     /**
      * 统一处理各种状态

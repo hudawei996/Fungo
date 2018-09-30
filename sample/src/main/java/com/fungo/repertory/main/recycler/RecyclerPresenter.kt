@@ -1,6 +1,8 @@
 package com.fungo.repertory.main.recycler
 
+import android.os.SystemClock
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
+import com.fungo.baselib.manager.ThreadManager
 import java.util.*
 
 /**
@@ -14,24 +16,25 @@ class RecyclerPresenter(var view: BaseRecyclerContract.View) : BaseRecyclerContr
 
     override fun loadData(page: Int) {
 
-        val data = ArrayList<Any>()
-        for (i in 0..20) {
-            data.add(RecyclerTextBean("我是数据$i"))
+        ThreadManager.runOnSubThread(Runnable {
 
-            if (i == 0 || i == 10) {
-                data.add(RecyclerAdBean("我是广告大额", "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
-            }
+            SystemClock.sleep(2000)
+            ThreadManager.runOnUIThread(Runnable {
 
-        }
-        view.showContent(page, data)
+                val data = ArrayList<Any>()
+                for (i in 0..20) {
+                    data.add(RecyclerTextBean("我是数据$i"))
+
+                    if (i == 0 || i == 10) {
+                        data.add(RecyclerAdBean("我是广告大额", "http://img.zcool.cn/community/0117e2571b8b246ac72538120dd8a4.jpg@1280w_1l_2o_100sh.jpg"))
+                    }
+
+                }
+                view.showContent(page, data)
+            })
 
 
-    }
+        })
 
-    override fun onStart() {
-        loadData(0)
-    }
-
-    override fun onStop() {
     }
 }

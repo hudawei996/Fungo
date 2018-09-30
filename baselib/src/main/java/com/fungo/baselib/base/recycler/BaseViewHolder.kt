@@ -24,8 +24,9 @@ import com.fungo.baselib.base.page.IView
  */
 abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
 
-    protected val context: Context
-        get() = itemView.context
+    override fun getContext(): Context? {
+        return itemView.context
+    }
 
     protected val dataPosition: Int
         get() = adapterPosition
@@ -119,7 +120,7 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
     }
 
     override fun setText(textView: TextView?, @StringRes resId: Int) {
-        setText(textView, context.getString(resId))
+        setText(textView, getContext()?.getString(resId))
     }
 
     override fun setText(textView: TextView?, text: CharSequence?) {
@@ -151,20 +152,20 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
 
     override fun showToast(content: String?) {
         if (!TextUtils.isEmpty(content))
-            Toast.makeText(context, content, Toast.LENGTH_SHORT).show()
+            Toast.makeText(getContext(), content, Toast.LENGTH_SHORT).show()
     }
 
     override fun showToast(@StringRes resId: Int) {
-        showToast(context.getString(resId))
+        showToast(getContext()?.getString(resId))
     }
 
     override fun showLongToast(content: String?) {
         if (!TextUtils.isEmpty(content))
-            Toast.makeText(context, content, Toast.LENGTH_LONG).show()
+            Toast.makeText(getContext(), content, Toast.LENGTH_LONG).show()
     }
 
     override fun showLongToast(@StringRes resId: Int) {
-        showLongToast(context.getString(resId))
+        showLongToast(getContext()?.getString(resId))
     }
 
     private fun <T : RecyclerView.Adapter<*>> getOwnerAdapter(): T? {

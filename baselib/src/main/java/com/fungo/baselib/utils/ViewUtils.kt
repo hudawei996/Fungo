@@ -112,7 +112,7 @@ object ViewUtils {
     /**
      * set view visible or gone
      */
-    fun setIsVisible(view: View?, isVisible: Boolean) {
+    fun setVisible(view: View?, isVisible: Boolean) {
         if (isVisible) {
             setVisible(view)
         } else {

@@ -23,6 +23,9 @@ abstract class BasePageFragment : BaseFragment() {
 
     private var mLoadingDialog: AlertDialog? = null
 
+    protected var isLoadingShowing = false
+    protected var isLoadingDialogShowing = false
+
 
     override fun getLayoutResId(): Int {
         return R.layout.base_fragment_page
@@ -34,14 +37,14 @@ abstract class BasePageFragment : BaseFragment() {
             StatusBarUtils.setStatusBarHeight(findView(R.id.statusView))
         }
 
-        ViewUtils.setIsVisible(findView(R.id.toolBarContainer), isShowToolBar())
+        ViewUtils.setVisible(findView(R.id.toolBarContainer), isShowToolBar())
 
         // 设置导航栏文字等
         if (isShowToolBar()) {
             findView<TextView>(R.id.baseTvTitle).text = getPageTitle()
 
             // 返回按钮
-            ViewUtils.setIsVisible(findView(R.id.baseIvBack), isBackEnable())
+            ViewUtils.setVisible(findView(R.id.baseIvBack), isBackEnable())
             if (isBackEnable()) {
                 findView<ImageView>(R.id.baseIvBack).setOnClickListener {
                     doBackAction()
@@ -49,7 +52,7 @@ abstract class BasePageFragment : BaseFragment() {
             }
 
             // 分享按钮
-            ViewUtils.setIsVisible(findView(R.id.baseIvShare), isShareEnable())
+            ViewUtils.setVisible(findView(R.id.baseIvShare), isShareEnable())
             if (isShareEnable()) {
                 findView<ImageView>(R.id.baseIvShare).setOnClickListener {
                     doShareAction()
@@ -92,7 +95,7 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示加载对话框
      * 适用于页面UI已经绘制了，需要再加载数据更新的情况
      */
-    open fun showPageLoadingDialog(message: String) {
+    open fun showPageLoadingDialog(msg: String) {
         if (mLoadingDialog == null) {
             mLoadingDialog = AlertDialog.Builder(context).create()
             mLoadingDialog!!.setCanceledOnTouchOutside(false)
@@ -102,7 +105,8 @@ abstract class BasePageFragment : BaseFragment() {
             mLoadingDialog!!.show()
             val dialogView = LayoutInflater.from(context).inflate(R.layout.base_layout_progress, null)
             mLoadingDialog!!.setContentView(dialogView)
-            dialogView.findViewById<TextView>(R.id.tvLoadingMessage).text = message
+            dialogView.findViewById<TextView>(R.id.tvLoadingMessage).text = msg
+            isLoadingDialogShowing = true
         }
     }
 
@@ -110,20 +114,25 @@ abstract class BasePageFragment : BaseFragment() {
         showPageLoadingDialog(getString(R.string.base_loading))
     }
 
-
     /**
      * 隐藏加载对话框
      */
     open fun hidePageLoadingDialog() {
         mLoadingDialog?.dismiss()
+        isLoadingDialogShowing = false
     }
-
 
     /**
      * 展示加载中的占位图
      */
     open fun showPageLoading() {
         findView<PlaceholderView>(R.id.placeholder).showLoading()
+        isLoadingShowing = true
+    }
+
+    open fun hidePageLoading() {
+        findView<PlaceholderView>(R.id.placeholder).hideLoading()
+        isLoadingShowing = false
     }
 
     /**
@@ -145,6 +154,7 @@ abstract class BasePageFragment : BaseFragment() {
      */
     open fun showPageContent() {
         findView<PlaceholderView>(R.id.placeholder).showContent()
+        isLoadingShowing = false
     }
 
 

@@ -55,7 +55,6 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         smartRefreshLayout.isEnablePureScrollMode = isEnablePureScrollMode()
         smartRefreshLayout.isEnableOverScrollBounce = isEnableOverScrollBounce()
 
-
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
@@ -66,6 +65,15 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
 
     override fun initData() {
         mPage = 0
+
+        if (isShowLoadingPage()) {
+            showPageLoading()
+        }
+
+        if (isShowLoadingDialog()) {
+            showPageLoadingDialog()
+        }
+
         mPresenter.loadData(mPage)
     }
 
@@ -79,15 +87,32 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mPresenter.onStop()
     }
 
+
     /**
      * 展示所有数据
      */
     override fun <T> showContent(page: Int, datas: List<T>) {
         finishLoading(page)
+
+        if (isLoadingShowing) {
+            hidePageLoading()
+        }
+
+        if (isLoadingDialogShowing) {
+            hidePageLoadingDialog()
+        }
+
+        // 处理空数据的情况
         if (page == 0) {
             mAdapter.clear()
+            if (datas.isEmpty())
+                showPageEmpty()
+            else mAdapter.addAll(datas)
+        } else {
+            if (datas.isEmpty()) {
+                showToast("暂无更多数据")
+            } else mAdapter.addAll(datas)
         }
-        mAdapter.addAll(datas)
     }
 
 
@@ -162,33 +187,41 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         return MultiTypeAdapter(context)
     }
 
-
     /**
      * 是否可以自动加载更多，默认可以
      */
-    protected fun isEnableAutoLoadmore() = true
+    protected open fun isEnableAutoLoadmore() = true
 
 
     /**
-     * 是否可以加载更多，默认可以
+     * 是否可以加载更多，默认不可以
      */
-    protected fun isEnableLoadmore() = true
+    protected open fun isEnableLoadmore() = false
 
     /**
      * 是否可以刷新，默认可以
      */
-    protected fun isEnableRefresh() = true
+    protected open fun isEnableRefresh() = true
 
     /**
      * 是否是纯净模式，不展示刷新头和底部，默认false
      */
-    protected fun isEnablePureScrollMode() = false
+    protected open fun isEnablePureScrollMode() = false
 
     /**
      * 刷新时是否可以越界回弹
      */
-    protected fun isEnableOverScrollBounce() = false
+    protected open fun isEnableOverScrollBounce() = false
 
+    /**
+     * 默认展示加载页面
+     */
+    protected open fun isShowLoadingPage() = true
+
+    /**
+     * 是否展示加载对话框
+     */
+    protected open fun isShowLoadingDialog() = false
 
     /**
      * 让子类重写，初始化页面
