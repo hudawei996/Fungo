@@ -9,7 +9,10 @@ import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
 import com.scwang.smartrefresh.header.BezierCircleHeader
+import com.scwang.smartrefresh.header.WaveSwipeHeader
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
+import com.scwang.smartrefresh.layout.footer.FalsifyFooter
 import kotlinx.android.synthetic.main.base_fragment_recycler.*
 
 /**
@@ -35,8 +38,8 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     }
 
     override fun initPageView() {
-        smartRefreshLayout.refreshHeader = BezierCircleHeader(context)
-        smartRefreshLayout.refreshFooter = ClassicsFooter(context)
+        smartRefreshLayout.refreshHeader = WaveSwipeHeader(context)
+        smartRefreshLayout.refreshFooter = BallPulseFooter(context!!)
         smartRefreshLayout.setDragRate(1f)
         smartRefreshLayout.setHeaderMaxDragRate(1.5f)
         smartRefreshLayout.setOnRefreshListener {
@@ -196,7 +199,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 是否可以加载更多，默认不可以
      */
-    protected open fun isEnableLoadmore() = false
+    protected open fun isEnableLoadmore() = true
 
     /**
      * 是否可以刷新，默认可以
