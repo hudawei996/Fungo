@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Fungo</string>
+    <string name="widget_view_falling_snow">雪花飘落效果</string>
+    <string name="widget_custom">自定义控件</string>
+    <string name="widget_view_banner">Banner效果</string>
+    <string name="recycler_page">功能列表页</string>
+    <string name="recycler_view">RecyclerView</string>
+    <string name="video_player">视频播放器</string>
+    <string name="clear_disk">清除缓存</string>
+    <string name="image_loader">图片加载</string>
+    <string name="social">登录分享支付</string>
+
+    <string name="image_action_round">圆角</string>
+    <string name="image_action_circle">圆形</string>
+    <string name="image_action_blur">模糊</string>
+    <string name="image_action_save">保存</string>
+    <string name="image_action_progress">进度条</string>
+    <string name="image_action_linear">瀑布流</string>
+
+    <string name="share_text">
+         少年的时候，总是迫不及待地将自己的满腔爱意表达出来，而结果往往是陷入表演之中而不自知。所以两个人的记忆才会出现偏差，那些你觉得刻骨铭心的过去，对方往往没有同样的感觉，甚至茫然不知。
+    </string>
+
+    <string name="share_title">天下哪有不散的筵席，即使千里搭长棚</string>
+
+</resources>
