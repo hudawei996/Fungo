@@ -4,28 +4,17 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
-    }
-
-
-    signingConfigs {
-        config {
-            storeFile file(rootProject.ext.signingConfigs.STORE_FILE)
-            keyAlias rootProject.ext.signingConfigs.KEY_ALIAS
-            keyPassword rootProject.ext.signingConfigs.KEY_PASSWORD
-            storePassword rootProject.ext.signingConfigs.STORE_PASSWORD
-        }
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1000
+        versionName '1.0.3'
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
