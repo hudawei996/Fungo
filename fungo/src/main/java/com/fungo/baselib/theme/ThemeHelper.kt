@@ -1,8 +1,7 @@
-package com.fungo.baselib.utils
+package com.fungo.baselib.theme
 
 import android.content.Context
-import com.fungo.baselib.helper.SpHelper
-import com.fungo.baselib.view.theme.AppTheme
+import com.fungo.baselib.utils.SpUtils
 
 
 /**
@@ -11,14 +10,15 @@ import com.fungo.baselib.view.theme.AppTheme
  * 处理app中的主题
  */
 
-object ThemeUtils {
+object ThemeHelper {
 
+    private const val KEY_THEME = "KEY_THEME"
 
     /**
      * 获取当前的主题
      */
     fun getCurrentTheme(): AppTheme {
-        return AppTheme.valueOf(SpHelper.currentTheme)
+        return AppTheme.valueOf(SpUtils.getString(KEY_THEME, AppTheme.Blue.name))
     }
 
 
@@ -26,7 +26,7 @@ object ThemeUtils {
      * 设置当前的主题
      */
     fun setCurrentTheme(currentTheme: AppTheme) {
-        SpHelper.currentTheme = currentTheme.name
+        SpUtils.putString(KEY_THEME, currentTheme.name)
     }
 
 

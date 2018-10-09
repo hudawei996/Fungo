@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
-import com.fungo.baselib.constant.PermissionConstants
 import java.util.*
 
 /**
@@ -43,7 +42,7 @@ object PermissionUtils {
      * @return the permissions used in application
      */
     fun getPermissions(): List<String> {
-        return getPermissions(BaseUtils.getApp().packageName)
+        return getPermissions(AppUtils.getContext().packageName)
     }
 
     /**
@@ -53,7 +52,7 @@ object PermissionUtils {
      * @return the permissions used in application
      */
     fun getPermissions(packageName: String): List<String> {
-        val pm = BaseUtils.getApp().packageManager
+        val pm = AppUtils.getContext().packageManager
         return try {
             Arrays.asList(
                     *pm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
@@ -83,7 +82,7 @@ object PermissionUtils {
 
     private fun isGranted(permission: String): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-                PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(BaseUtils.getApp(),
+                PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(AppUtils.getContext(),
                 permission)
     }
 
@@ -92,8 +91,8 @@ object PermissionUtils {
      */
     fun launchAppDetailsSettings() {
         val intent = Intent("android.settings.APPLICATION_DETAILS_SETTINGS")
-        intent.data = Uri.parse("package:" + BaseUtils.getApp().packageName)
-        BaseUtils.getApp().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        intent.data = Uri.parse("package:" + AppUtils.getContext().packageName)
+        AppUtils.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     /**
@@ -192,7 +191,7 @@ object PermissionUtils {
     private fun startPermissionActivity() {
         mPermissionsDenied = ArrayList()
         mPermissionsDeniedForever = ArrayList()
-        PermissionActivity.start(BaseUtils.getApp())
+        PermissionActivity.start(AppUtils.getContext())
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

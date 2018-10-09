@@ -8,8 +8,8 @@ import android.view.MenuItem
 import android.view.View
 import com.fungo.baselib.R
 import com.fungo.baselib.utils.StatusBarUtils
-import com.fungo.baselib.utils.ThemeUtils
-import com.fungo.baselib.view.theme.AppTheme
+import com.fungo.baselib.theme.ThemeHelper
+import com.fungo.baselib.theme.AppTheme
 
 
 /**
@@ -127,7 +127,7 @@ abstract class BaseActivity : SupportActivity() {
      * 设置系统的主题
      */
     private fun initTheme() {
-        when (ThemeUtils.getCurrentTheme()) {
+        when (ThemeHelper.getCurrentTheme()) {
             AppTheme.Blue -> setTheme(R.style.BlueTheme)
             AppTheme.Red -> setTheme(R.style.RedTheme)
             AppTheme.Brown -> setTheme(R.style.BrownTheme)

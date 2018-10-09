@@ -20,7 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import com.fungo.baselib.constant.IntentConstant
+import com.fungo.baselib.web.WebConstant
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
 import org.json.JSONObject
 
@@ -39,12 +39,12 @@ abstract class BaseJavaScriptInterface {
     val performance: String
         @JavascriptInterface
         get() {
-            val clickTime = intent?.getLongExtra(IntentConstant.KEY_WEB_CLICK_TIME, -1)
-            val loadUrlTime = intent?.getLongExtra(IntentConstant.KEY_WEB_LOAD_URL_TIME, -1)
+            val clickTime = intent?.getLongExtra(WebConstant.KEY_WEB_CLICK_TIME, -1)
+            val loadUrlTime = intent?.getLongExtra(WebConstant.KEY_WEB_LOAD_URL_TIME, -1)
             try {
                 val result = JSONObject()
-                result.put(IntentConstant.KEY_WEB_CLICK_TIME, clickTime)
-                result.put(IntentConstant.KEY_WEB_LOAD_URL_TIME, loadUrlTime)
+                result.put(WebConstant.KEY_WEB_CLICK_TIME, clickTime)
+                result.put(WebConstant.KEY_WEB_LOAD_URL_TIME, loadUrlTime)
                 return result.toString()
             } catch (e: Exception) {
 

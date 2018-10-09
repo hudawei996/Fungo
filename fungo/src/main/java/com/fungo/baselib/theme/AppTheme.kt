@@ -1,4 +1,4 @@
-package com.fungo.baselib.view.theme
+package com.fungo.baselib.theme
 
 /**
  * @author Pinger

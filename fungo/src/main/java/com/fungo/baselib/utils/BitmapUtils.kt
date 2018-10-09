@@ -15,8 +15,10 @@ import java.io.IOException
 object BitmapUtils {
 
 
-    /** Bitmap保存为文件 */
-    fun saveBitmapFile(bitmap: Bitmap, path: String): File? {
+    /**
+     * Bitmap保存为文件
+     */
+    fun saveBitmapToFile(bitmap: Bitmap, path: String): File? {
         var out: FileOutputStream? = null
         try {
             out = FileOutputStream(path)
@@ -34,8 +36,10 @@ object BitmapUtils {
         return File(path)
     }
 
-    /** Bitmap 转 bytes */
-    fun bitmap2Bytes(bitmap: Bitmap?): ByteArray? {
+    /**
+     * Bitmap 转 bytes
+     */
+    fun bitmapToBytes(bitmap: Bitmap?): ByteArray? {
         var byteArrayOutputStream: ByteArrayOutputStream? = null
         if (bitmap != null && !bitmap.isRecycled) {
             try {
@@ -60,19 +64,20 @@ object BitmapUtils {
         }
     }
 
-    /** 在保证质量的情况下尽可能压缩 不保证压缩到指定字节 */
-    fun compressBitmap(datas: ByteArray?, byteCount: Int): ByteArray? {
+    /**
+     * 在保证质量的情况下尽可能压缩，不保证压缩到指定字节
+     */
+    fun compressBitmap(data: ByteArray?, byteCount: Int): ByteArray? {
         var isFinish = false
-        if (datas != null && datas.size > byteCount) {
+        if (data != null && data.size > byteCount) {
             val outputStream = ByteArrayOutputStream()
-            val tmpBitmap = BitmapFactory.decodeByteArray(datas, 0, datas.size)
+            val tmpBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
             var times = 1
-            var percentage = 1.0
-
+            var percentage: Double
             while (!isFinish && times <= 10) {
                 percentage = Math.pow(0.8, times.toDouble())
-                val compress_datas = (100.0 * percentage).toInt()
-                tmpBitmap.compress(Bitmap.CompressFormat.JPEG, compress_datas, outputStream)
+                val compressData = (100.0 * percentage).toInt()
+                tmpBitmap.compress(Bitmap.CompressFormat.JPEG, compressData, outputStream)
                 if (outputStream.size() < byteCount) {
                     isFinish = true
                 } else {
@@ -89,7 +94,7 @@ object BitmapUtils {
             }
             return outputStreamByte
         }
-        return datas
+        return data
     }
 
 }

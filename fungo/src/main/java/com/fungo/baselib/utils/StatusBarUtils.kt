@@ -97,9 +97,8 @@ object StatusBarUtils {
      * 根据资源ID获取响应的尺寸值
      */
     fun getStatusBarHeight(): Int {
-        val context = BaseUtils.getApp()
         var statusBarHeight = 0
-        val resources = context.resources
+        val resources = AppUtils.getContext().resources
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         if (resourceId > 0) {
             statusBarHeight = resources.getDimensionPixelSize(resourceId)

@@ -1,117 +1,188 @@
 package com.fungo.baselib.utils
 
 import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import java.io.File
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.*
 
 /**
  * @author Pinger
  * @since 3/26/18 10:03 PM
+ * App级别的工具类，提供系统的Context和常用的工具类
  */
 object AppUtils {
 
+    private lateinit var mHandler: Handler
+    private lateinit var mApplication: Application
+    private val mActivityList = LinkedList<Activity>()
+
 
     /**
-     * Install the app.
-     *
-     * Target APIs greater than 25 must hold
-     * `<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />`
-     *
-     * @param filePath  The path of file.
-     * @param authority Target APIs greater than 23 must hold the authority of a FileProvider
-     * defined in a `<provider>` element in your app's manifest.
+     * 初始化Application，获取引用，和注册全局Handle
+     */
+    fun init(application: Application) {
+        mApplication = application
+        mHandler = Handler()
+        //registerActivityCallback()
+    }
+
+    /**
+     * 获取全局的Application
+     * @return Application
+     */
+    fun getApp(): Application {
+        return mApplication
+    }
+
+    /**
+     * 获取全局的Context
+     * @return Context
+     */
+    fun getContext(): Context {
+        return mApplication.applicationContext
+    }
+
+    /**
+     * 设置栈顶Activity
+     */
+    fun setTopActivity(activity: Activity) {
+        if (activity.javaClass == PermissionUtils.PermissionActivity::class.java) return
+        if (mActivityList.contains(activity)) {
+            if (mActivityList.last != activity) {
+                mActivityList.remove(activity)
+                mActivityList.addLast(activity)
+            }
+        } else {
+            mActivityList.addLast(activity)
+        }
+    }
+
+    /**
+     * 获取所有启动过的Activity
+     */
+    fun getActivityList(): LinkedList<Activity> {
+        return mActivityList
+    }
+
+
+    /**
+     * Activity生命周期回调
+     */
+    private fun registerActivityCallback() {
+        mApplication.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, bundle: Bundle) {
+                setTopActivity(activity)
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+                setTopActivity(activity)
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+                setTopActivity(activity)
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                mActivityList.remove(activity)
+            }
+        })
+    }
+
+    /**
+     * Post一个Runnable
+     */
+    fun post(runnable: Runnable) {
+        mHandler.removeCallbacks(null)
+        mHandler.post(runnable)
+    }
+
+    /**
+     * 延时执行一个Runnable
+     */
+    fun postDelayed(runnable: Runnable, delayMillis: Long) {
+        mHandler.removeCallbacks(null)
+        mHandler.postDelayed(runnable, delayMillis)
+    }
+
+    /**
+     * 移除之前发起的Post
+     */
+    fun removeCallbacks() {
+        mHandler.removeCallbacks(null)
+    }
+
+
+    /**
+     * 启动手机的主页，让当前的app进入后台
+     */
+    fun moveTaskToBack() {
+        try {
+            val homeIntent = Intent(Intent.ACTION_MAIN)
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            ActivityUtils.startActivity(homeIntent)
+        } catch (e: Exception) {
+            LogUtils.e(e)
+        }
+    }
+
+    /**
+     * 启动手机主页，这个方法更加的保险
+     */
+    fun moveTaskToBack(activity: Activity) {
+        try {
+            activity.moveTaskToBack(false)
+
+            val homeIntent = Intent(Intent.ACTION_MAIN)
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            ActivityUtils.startActivity(homeIntent)
+        } catch (e: Exception) {
+            LogUtils.e(e)
+        }
+    }
+
+    /**
+     * 安装app
+     * 需要权限：<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
      */
     fun installApp(filePath: String, authority: String) {
         installApp(getFileByPath(filePath), authority)
     }
 
     /**
-     * Install the app.
-     *
-     * Target APIs greater than 25 must hold
-     * `<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />`
-     *
-     * @param file      The file.
-     * @param authority Target APIs greater than 23 must hold the authority of a FileProvider
-     * defined in a `<provider>` element in your app's manifest.
+     * 安装app
+     * 需要权限：<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
      */
     fun installApp(file: File?, authority: String) {
         if (!isFileExists(file)) return
-        BaseUtils.getApp().startActivity(IntentUtils.getInstallAppIntent(file, authority, true))
+        getContext().startActivity(IntentUtils.getInstallAppIntent(file, authority, true))
     }
 
 
     /**
-     * Install the app.
-     *
-     * Target APIs greater than 25 must hold
-     * `<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />`
-     *
-     * @param activity    The activity.
-     * @param filePath    The path of file.
-     * @param authority   Target APIs greater than 23 must hold the authority of a FileProvider
-     * defined in a `<provider>` element in your app's manifest.
-     * @param requestCode If &gt;= 0, this code will be returned in
-     * onActivityResult() when the activity exits.
-     */
-    fun installApp(activity: Activity,
-                   filePath: String,
-                   authority: String,
-                   requestCode: Int) {
-        installApp(activity, getFileByPath(filePath), authority, requestCode)
-    }
-
-    /**
-     * Install the app.
-     *
-     * Target APIs greater than 25 must hold
-     * `<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />`
-     *
-     * @param activity    The activity.
-     * @param file        The file.
-     * @param authority   Target APIs greater than 23 must hold the authority of a FileProvider
-     * defined in a `<provider>` element in your app's manifest.
-     * @param requestCode If &gt;= 0, this code will be returned in
-     * onActivityResult() when the activity exits.
-     */
-    fun installApp(activity: Activity,
-                   file: File?,
-                   authority: String,
-                   requestCode: Int) {
-        if (!isFileExists(file)) return
-        activity.startActivityForResult(IntentUtils.getInstallAppIntent(file!!, authority),
-                requestCode)
-    }
-
-    /**
-     * Install the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.INSTALL_PACKAGES" />`
-     *
-     * @param filePath The path of file.
-     * @return `true`: success<br></br>`false`: fail
-     */
-    fun installAppSilent(filePath: String): Boolean {
-        return installAppSilent(getFileByPath(filePath), null)
-    }
-
-    /**
-     * Install the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.INSTALL_PACKAGES" />`
-     *
-     * @param file The file.
-     * @return `true`: success<br></br>`false`: fail
+     * 静默安装app
+     * @param file apk文件
+     * 需要权限：<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
      */
     fun installAppSilent(file: File): Boolean {
         return installAppSilent(file, null)
@@ -119,28 +190,20 @@ object AppUtils {
 
 
     /**
-     * Install the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.INSTALL_PACKAGES" />`
-     *
-     * @param filePath The path of file.
-     * @param params   The params of installation.
-     * @return `true`: success<br></br>`false`: fail
+     * 静默安装app
+     * @param filePath apk文件的路径
+     * 需要权限：<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
      */
-    fun installAppSilent(filePath: String, params: String): Boolean {
+    fun installAppSilent(filePath: String): Boolean {
         return installAppSilent(getFileByPath(filePath), null)
     }
 
     /**
-     * Install the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.INSTALL_PACKAGES" />`
-     *
-     * @param file   The file.
-     * @param params The params of installation.
-     * @return `true`: success<br></br>`false`: fail
+     * 静默安装app
+     * 需要权限：<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+     * @param file apk文件
+     * @param params 安装携带的参数
+     * @return 是否安装成功
      */
     fun installAppSilent(file: File?, params: String?): Boolean {
         if (!isFileExists(file)) return false
@@ -160,55 +223,27 @@ object AppUtils {
     }
 
     /**
-     * Uninstall the app.
-     *
-     * @param packageName The name of the package.
+     * 卸载指定包名的app
+     * 需要权限：<uses-permission android:name="android.permission.DELETE_PACKAGES" />
      */
     fun uninstallApp(packageName: String) {
         if (isSpace(packageName)) return
-        BaseUtils.getApp().startActivity(IntentUtils.getUninstallAppIntent(packageName, true))
+        getContext().startActivity(IntentUtils.getUninstallAppIntent(packageName, true))
     }
 
-    /**
-     * Uninstall the app.
-     *
-     * @param activity    The activity.
-     * @param packageName The name of the package.
-     * @param requestCode If &gt;= 0, this code will be returned in
-     * onActivityResult() when the activity exits.
-     */
-    fun uninstallApp(activity: Activity,
-                     packageName: String,
-                     requestCode: Int) {
-        if (isSpace(packageName)) return
-        activity.startActivityForResult(
-                IntentUtils.getUninstallAppIntent(packageName),
-                requestCode
-        )
-    }
 
     /**
-     * Uninstall the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.DELETE_PACKAGES" />`
-     *
-     * @param packageName The name of the package.
-     * @return `true`: success<br></br>`false`: fail
+     * 静默卸载app，不保存数据
+     * 需要权限：<uses-permission android:name="android.permission.DELETE_PACKAGES" />
      */
     fun uninstallAppSilent(packageName: String): Boolean {
         return uninstallAppSilent(packageName, false)
     }
 
     /**
-     * Uninstall the app silently.
-     *
-     * Without root permission must hold
-     * `<uses-permission android:name="android.permission.DELETE_PACKAGES" />`
-     *
-     * @param packageName The name of the package.
-     * @param isKeepData  Is keep the data.
-     * @return `true`: success<br></br>`false`: fail
+     * 静默卸载指定包名app
+     * 需要权限：<uses-permission android:name="android.permission.DELETE_PACKAGES" />
+     * @param isKeepData 是否保存卸载app的数据
      */
     fun uninstallAppSilent(packageName: String, isKeepData: Boolean): Boolean {
         if (isSpace(packageName)) return false
@@ -217,36 +252,18 @@ object AppUtils {
                 + (if (isKeepData) "-k " else "")
                 + packageName)
         val commandResult = ShellUtils.execCmd(command, isRoot, true)
-        if (commandResult.successMsg != null && commandResult.successMsg?.toLowerCase()!!.contains("success")) {
-            return true
+        return if (commandResult.successMsg != null && commandResult.successMsg?.toLowerCase()!!.contains("success")) {
+            true
         } else {
             Log.e("AppUtils", "uninstallAppSilent successMsg: " + commandResult.successMsg +
                     ", errorMsg: " + commandResult.errorMsg)
-            return false
+            false
         }
     }
 
-    /**
-     * Return whether the app is installed.
-     *
-     * @param action   The Intent action, such as ACTION_VIEW.
-     * @param category The desired category.
-     * @return `true`: yes<br></br>`false`: no
-     */
-    fun isAppInstalled(action: String,
-                       category: String): Boolean {
-        val intent = Intent(action)
-        intent.addCategory(category)
-        val pm = BaseUtils.getApp().packageManager
-        val info = pm.resolveActivity(intent, 0)
-        return info != null
-    }
 
     /**
-     * Return whether the app is installed.
-     *
-     * @param packageName The name of the package.
-     * @return `true`: yes<br></br>`false`: no
+     * 指定包名的应用是否安装
      */
     fun isAppInstalled(packageName: String): Boolean {
         return !isSpace(packageName) && IntentUtils.getLaunchAppIntent(packageName) != null
@@ -254,43 +271,20 @@ object AppUtils {
 
 
     /**
-     * Return the application's information.
-     *
-     *  * name of package
-     *  * icon
-     *  * name
-     *  * path of package
-     *  * version name
-     *  * version code
-     *  * is system
-     *
-     *
-     * @return the application's information
+     * 获取当前应用的信息
      */
-    fun getAppInfo(): AppInfo? {
-        return getAppInfo(BaseUtils.getApp().packageName)
-    }
+    fun getAppInfo(): AppInfo? = getAppInfo(getContext().packageName)
+
 
     /**
-     * Return the application's information.
-     *
-     *  * name of package
-     *  * icon
-     *  * name
-     *  * path of package
-     *  * version name
-     *  * version code
-     *  * is system
-     *
-     *
-     * @param packageName The name of the package.
-     * @return 当前应用的 AppInfo
+     * 获取指定包名的应用信息
+     * @param packageName 包名
      */
     fun getAppInfo(packageName: String): AppInfo? {
         return try {
-            val pm = BaseUtils.getApp().packageManager
+            val pm = getContext().packageManager
             val pi = pm.getPackageInfo(packageName, 0)
-            getBean(pm, pi)
+            getAppInfo(pm, pi)
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
             null
@@ -299,22 +293,20 @@ object AppUtils {
     }
 
     /**
-     * Return the applications' information.
-     *
-     * @return the applications' information
+     * 获取所有的应用信息
      */
     fun getAppsInfo(): List<AppInfo> {
         val list = ArrayList<AppInfo>()
-        val pm = BaseUtils.getApp().packageManager
+        val pm = getContext().packageManager
         val installedPackages = pm.getInstalledPackages(0)
         for (pi in installedPackages) {
-            val ai = getBean(pm, pi) ?: continue
+            val ai = getAppInfo(pm, pi) ?: continue
             list.add(ai)
         }
         return list
     }
 
-    private fun getBean(pm: PackageManager?, pi: PackageInfo?): AppInfo? {
+    private fun getAppInfo(pm: PackageManager?, pi: PackageInfo?): AppInfo? {
         if (pm == null || pi == null) return null
         val ai = pi.applicationInfo
         val packageName = pi.packageName
@@ -357,41 +349,6 @@ object AppUtils {
             }
         }
         return false
-    }
-
-    private val HEX_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F')
-
-    private fun encryptSHA1ToString(data: ByteArray): String? {
-        return bytes2HexString(encryptSHA1(data))
-    }
-
-    private fun encryptSHA1(data: ByteArray?): ByteArray? {
-        if (data == null || data.isEmpty()) return null
-        try {
-            val md = MessageDigest.getInstance("SHA1")
-            md.update(data)
-            return md.digest()
-        } catch (e: NoSuchAlgorithmException) {
-            e.printStackTrace()
-            return null
-        }
-
-    }
-
-    private fun bytes2HexString(bytes: ByteArray?): String? {
-        if (bytes == null) return null
-        val len = bytes.size
-        if (len <= 0) return null
-        val ret = CharArray(len shl 1)
-        var i = 0
-        var j = 0
-        while (i < len) {
-            // TODO
-//            ret[j++] = HEX_DIGITS[bytes[i].ushr(4) and 0x0f]
-//            ret[j++] = HEX_DIGITS[bytes[i] and 0x0f]
-//            i++
-        }
-        return String(ret)
     }
 
     /**

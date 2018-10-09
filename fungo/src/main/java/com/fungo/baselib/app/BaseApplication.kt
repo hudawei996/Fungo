@@ -1,7 +1,7 @@
 package com.fungo.baselib.app
 
 import android.app.Application
-import com.fungo.baselib.utils.BaseUtils
+import com.fungo.baselib.utils.AppUtils
 import com.fungo.baselib.utils.LayoutUtils
 import com.fungo.baselib.utils.LogUtils
 import me.yokeyword.fragmentation.Fragmentation
@@ -50,7 +50,7 @@ open class BaseApplication : Application() {
      * 初始化工具类
      */
     private fun initUtils() {
-        BaseUtils.init(this)
+        AppUtils.init(this)
         LayoutUtils.initLayout(this)
     }
 

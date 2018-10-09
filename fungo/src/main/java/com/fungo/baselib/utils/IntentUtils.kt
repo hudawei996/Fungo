@@ -70,7 +70,7 @@ object IntentUtils {
             data = Uri.fromFile(file)
         } else {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            data = FileProvider.getUriForFile(BaseUtils.getApp(), authority, file)
+            data = FileProvider.getUriForFile(AppUtils.getContext(), authority, file)
         }
         intent.setDataAndType(data, type)
         return getIntent(intent, isNewTask)
@@ -117,7 +117,7 @@ object IntentUtils {
      * @return the intent of launch app
      */
     fun getLaunchAppIntent(packageName: String, isNewTask: Boolean): Intent? {
-        val intent = BaseUtils.getApp().getPackageManager().getLaunchIntentForPackage(packageName)
+        val intent = AppUtils.getContext().packageManager.getLaunchIntentForPackage(packageName)
                 ?: return null
         return getIntent(intent, isNewTask)
     }

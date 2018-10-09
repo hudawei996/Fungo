@@ -719,50 +719,6 @@ object FileUtils {
         }
     }
 
-    /**
-     * Return the number of lines of file.
-     *
-     * @param filePath The path of file.
-     * @return the number of lines of file
-     */
-    fun getFileLines(filePath: String): Int {
-        return getFileLines(getFileByPath(filePath))
-    }
-
-    /**
-     * Return the number of lines of file.
-     *
-     * @param file The file.
-     * @return the number of lines of file
-     */
-    fun getFileLines(file: File?): Int {
-        var count = 1
-        var stream: InputStream? = null
-        try {
-            stream = BufferedInputStream(FileInputStream(file!!))
-            val buffer = ByteArray(1024)
-            var readChars: Int
-            // TODO
-//            if (LINE_SEP.endsWith("\n")) {
-//                while ((readChars = stream.read(buffer, 0, 1024)) != -1) {
-//                    for (i in 0 until readChars) {
-//                        if (buffer[i] == '\n'.toByte()) ++count
-//                    }
-//                }
-//            } else {
-//                while ((readChars = stream.read(buffer, 0, 1024)) != -1) {
-//                    for (i in 0 until readChars) {
-//                        if (buffer[i] == '\r'.toByte()) ++count
-//                    }
-//                }
-//            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            CloseUtils.closeIO(stream)
-        }
-        return count
-    }
 
     /**
      * Return the size of directory.
@@ -1042,10 +998,8 @@ object FileUtils {
         var i = 0
         var j = 0
         while (i < len) {
-            // TODO
-//            ret[j++] = HEX_DIGITS[bytes[i].ushr(4) and 0x0f]
-//            ret[j++] = HEX_DIGITS[bytes[i] and 0x0f]
-//            i++
+            ret[j++] = HEX_DIGITS[bytes[i].toInt() and 0x0f]
+            i++
         }
         return String(ret)
     }

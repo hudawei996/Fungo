@@ -10,7 +10,6 @@ import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseFragment
 import com.fungo.baselib.utils.StatusBarUtils
 import com.fungo.baselib.utils.ViewUtils
-import com.fungo.baselib.view.placeholder.PlaceholderView
 
 /**
  * @author Pinger

@@ -180,7 +180,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否已经连接。false：尚未连接
      */
-    fun isConnectedByState(context: Context): Boolean {
+    fun isConnected(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.CONNECTED
     }
 
@@ -191,7 +191,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否正在连接
      */
-    fun isConnectingByState(context: Context): Boolean {
+    fun isConnecting(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.CONNECTING
     }
 
@@ -202,7 +202,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否已经断开
      */
-    fun isDisconnectedByState(context: Context): Boolean {
+    fun isDisconnected(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.DISCONNECTED
     }
 
@@ -213,7 +213,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否正在断开
      */
-    fun isDisconnectingByState(context: Context): Boolean {
+    fun isDisconnecting(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.DISCONNECTING
     }
 
@@ -224,7 +224,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否已经暂停
      */
-    fun isSuspendedByState(context: Context): Boolean {
+    fun isSuspended(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.SUSPENDED
     }
 
@@ -235,7 +235,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络是否处于未知状态中
      */
-    fun isUnknownByState(context: Context): Boolean {
+    fun isUnknown(context: Context): Boolean {
         return getCurrentNetworkState(context) == NetworkInfo.State.UNKNOWN
     }
 
@@ -247,7 +247,7 @@ object NetWorkUtils {
      * @return 当前网络的类型是否是蓝牙。false：当前没有网络连接或者网络类型不是蓝牙
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    fun isBluetoothByType(context: Context): Boolean {
+    fun isBluetooth(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
             false
         } else {
@@ -262,7 +262,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络的类型是否是移动网络。false：当前没有网络连接或者网络类型不是移动网络
      */
-    fun isMobileByType(context: Context): Boolean {
+    fun isMobile(context: Context): Boolean {
         return getCurrentNetworkType(context) == ConnectivityManager.TYPE_MOBILE
     }
 
@@ -272,7 +272,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return 当前网络的类型是否是Wifi。false：当前没有网络连接或者网络类型不是wifi
      */
-    fun isWifiByType(context: Context): Boolean {
+    fun isWifi(context: Context): Boolean {
         return getCurrentNetworkType(context) == ConnectivityManager.TYPE_WIFI
     }
 
@@ -282,7 +282,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return false：当前网络的具体类型是否是UNKNOWN。false：当前没有网络连接或者具体类型不是UNKNOWN
      */
-    fun isUNKNOWNBySubtype(context: Context): Boolean {
+    fun isUNKNOWN(context: Context): Boolean {
         return getCurrentNetworkSubtype(context) == TelephonyManager.NETWORK_TYPE_UNKNOWN
     }
 
@@ -320,7 +320,7 @@ object NetWorkUtils {
      * @param context 上下文
      * @return true：打开；false：关闭
      */
-    fun isMobileNetworkOpen(context: Context): Boolean {
+    fun isMobileOpen(context: Context): Boolean {
         return (context.getSystemService(
                 Context.CONNECTIVITY_SERVICE) as ConnectivityManager).getNetworkInfo(
                 ConnectivityManager.TYPE_MOBILE).isConnected

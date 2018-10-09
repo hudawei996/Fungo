@@ -1,4 +1,4 @@
-package com.fungo.baselib.constant
+package com.fungo.baselib.utils
 
 import android.Manifest
 import android.Manifest.permission

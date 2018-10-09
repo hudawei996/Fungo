@@ -2,12 +2,10 @@ package com.fungo.baselib.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.AnimRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.view.View
@@ -20,65 +18,35 @@ import java.lang.reflect.InvocationTargetException
 object ActivityUtils {
 
     /**
-     * Return whether the activity exists.
-     *
-     * @param pkg The name of the package.
-     * @param cls The name of the class.
-     * @return `true`: yes<br></br>`false`: no
+     * 某个app的某个activity是否存在
      */
     fun isActivityExists(pkg: String,
                          cls: String): Boolean {
         val intent = Intent()
         intent.setClassName(pkg, cls)
-        return !(BaseUtils.getApp().packageManager.resolveActivity(intent, 0) == null ||
-                intent.resolveActivity(BaseUtils.getApp().packageManager) == null ||
-                BaseUtils.getApp().packageManager.queryIntentActivities(intent, 0).size == 0)
+        return !(AppUtils.getContext().packageManager.resolveActivity(intent, 0) == null ||
+                intent.resolveActivity(AppUtils.getContext().packageManager) == null ||
+                AppUtils.getContext().packageManager.queryIntentActivities(intent, 0).size == 0)
     }
 
     /**
-     * Start the activity.
-     *
-     * @param intent The description of the activity to start.
+     * 启动一个Activity
      */
     fun startActivity(intent: Intent) {
         startActivity(intent, getActivityOrApp(), null)
     }
 
     /**
-     * Start the activity.
-     *
-     * @param intent  The description of the activity to start.
-     * @param options Additional options for how the Activity should be started.
+     * 启动一个Activity，携带数据
      */
     fun startActivity(intent: Intent,
                       options: Bundle) {
         startActivity(intent, getActivityOrApp(), options)
     }
 
-    /**
-     * Start the activity.
-     *
-     * @param intent    The description of the activity to start.
-     * @param enterAnim A resource ID of the animation resource to use for the
-     * incoming activity.
-     * @param exitAnim  A resource ID of the animation resource to use for the
-     * outgoing activity.
-     */
-    fun startActivity(intent: Intent,
-                      @AnimRes enterAnim: Int,
-                      @AnimRes exitAnim: Int) {
-        val context = getActivityOrApp()
-        startActivity(intent, context, getOptionsBundle(context, enterAnim, exitAnim))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN && context is Activity) {
-            (context as Activity).overridePendingTransition(enterAnim, exitAnim)
-        }
-    }
 
     /**
-     * Start the activity.
-     *
-     * @param activity The activity.
-     * @param intent   The description of the activity to start.
+     * 启动一个Activity，指定启动页面，携带数据
      */
     fun startActivity(activity: Activity,
                       intent: Intent) {
@@ -86,11 +54,7 @@ object ActivityUtils {
     }
 
     /**
-     * Start the activity.
-     *
-     * @param activity The activity.
-     * @param intent   The description of the activity to start.
-     * @param options  Additional options for how the Activity should be started.
+     * 启动一个Activity，指定启动页面，携带数据
      */
     fun startActivity(activity: Activity,
                       intent: Intent,
@@ -99,12 +63,7 @@ object ActivityUtils {
     }
 
     /**
-     * Start the activity.
-     *
-     * @param activity       The activity.
-     * @param intent         The description of the activity to start.
-     * @param sharedElements The names of the shared elements to transfer to the called
-     * Activity and their associated Views.
+     * 启动页面，带有共享参数
      */
     fun startActivity(activity: Activity,
                       intent: Intent,
@@ -112,70 +71,27 @@ object ActivityUtils {
         startActivity(intent, activity, getOptionsBundle(activity, sharedElements))
     }
 
-    /**
-     * Start the activity.
-     *
-     * @param activity  The activity.
-     * @param intent    The description of the activity to start.
-     * @param enterAnim A resource ID of the animation resource to use for the
-     * incoming activity.
-     * @param exitAnim  A resource ID of the animation resource to use for the
-     * outgoing activity.
-     */
-    fun startActivity(activity: Activity,
-                      intent: Intent,
-                      @AnimRes enterAnim: Int,
-                      @AnimRes exitAnim: Int) {
-        startActivity(intent, activity, getOptionsBundle(activity, enterAnim, exitAnim))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            activity.overridePendingTransition(enterAnim, exitAnim)
-        }
-    }
 
     /**
-     * Start activities.
-     *
-     * @param intents The descriptions of the activities to start.
+     * 启动多个Activity,集合中的Activity是反过来呈现的
+     * 不携带任何参数
      */
     fun startActivities(intents: Array<Intent>) {
         startActivities(intents, getActivityOrApp(), null)
     }
 
+
     /**
-     * Start activities.
-     *
-     * @param intents The descriptions of the activities to start.
-     * @param options Additional options for how the Activity should be started.
+     * 启动多个Activity,集合中的Activity是反过来呈现的
      */
     fun startActivities(intents: Array<Intent>,
                         options: Bundle?) {
         startActivities(intents, getActivityOrApp(), options)
     }
 
-    /**
-     * Start activities.
-     *
-     * @param intents   The descriptions of the activities to start.
-     * @param enterAnim A resource ID of the animation resource to use for the
-     * incoming activity.
-     * @param exitAnim  A resource ID of the animation resource to use for the
-     * outgoing activity.
-     */
-    fun startActivities(intents: Array<Intent>,
-                        @AnimRes enterAnim: Int,
-                        @AnimRes exitAnim: Int) {
-        val context = getActivityOrApp()
-        startActivities(intents, context, getOptionsBundle(context, enterAnim, exitAnim))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN && context is Activity) {
-            context.overridePendingTransition(enterAnim, exitAnim)
-        }
-    }
 
     /**
-     * Start activities.
-     *
-     * @param activity The activity.
-     * @param intents  The descriptions of the activities to start.
+     * 启动多个Activity,集合中的Activity是反过来呈现的
      */
     fun startActivities(activity: Activity,
                         intents: Array<Intent>) {
@@ -183,76 +99,28 @@ object ActivityUtils {
     }
 
     /**
-     * Start activities.
-     *
-     * @param activity The activity.
-     * @param intents  The descriptions of the activities to start.
-     * @param options  Additional options for how the Activity should be started.
-     */
-    fun startActivities(activity: Activity,
-                        intents: Array<Intent>,
-                        options: Bundle?) {
-        startActivities(intents, activity, options)
-    }
-
-    /**
-     * Start activities.
-     *
-     * @param activity  The activity.
-     * @param intents   The descriptions of the activities to start.
-     * @param enterAnim A resource ID of the animation resource to use for the
-     * incoming activity.
-     * @param exitAnim  A resource ID of the animation resource to use for the
-     * outgoing activity.
-     */
-    fun startActivities(activity: Activity,
-                        intents: Array<Intent>,
-                        @AnimRes enterAnim: Int,
-                        @AnimRes exitAnim: Int) {
-        startActivities(intents, activity, getOptionsBundle(activity, enterAnim, exitAnim))
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            activity.overridePendingTransition(enterAnim, exitAnim)
-        }
-    }
-
-    /**
-     * Start home activity.
-     */
-    fun startHomeActivity() {
-        val homeIntent = Intent(Intent.ACTION_MAIN)
-        homeIntent.addCategory(Intent.CATEGORY_HOME)
-        startActivity(homeIntent)
-    }
-
-    /**
-     * Return the list of activity.
-     *
-     * @return the list of activity
+     * 获取所有启动过的Activity集合
      */
     fun getActivityList(): List<Activity> {
-        return BaseUtils.getActivityList()
+        return AppUtils.getActivityList()
     }
 
+
     /**
-     * Return the name of launcher activity.
-     *
-     * @return the name of launcher activity
+     * 获取当前app中启动的activity
      */
     fun getLauncherActivity(): String {
-        return getLauncherActivity(BaseUtils.getApp().packageName)
+        return getLauncherActivity(AppUtils.getContext().packageName)
     }
 
     /**
-     * Return the name of launcher activity.
-     *
-     * @param pkg The name of the package.
-     * @return the name of launcher activity
+     * 获取指定app中启动的activity
      */
     fun getLauncherActivity(pkg: String): String {
         val intent = Intent(Intent.ACTION_MAIN, null)
         intent.addCategory(Intent.CATEGORY_LAUNCHER)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val pm = BaseUtils.getApp().packageManager
+        val pm = AppUtils.getContext().packageManager
         val info = pm.queryIntentActivities(intent, 0)
         for (aInfo in info) {
             if (aInfo.activityInfo.packageName == pkg) {
@@ -263,13 +131,11 @@ object ActivityUtils {
     }
 
     /**
-     * Return the top activity in activity's stack.
-     *
-     * @return the top activity in activity's stack
+     * 获取app内栈顶的Activity
      */
     @SuppressLint("PrivateApi")
     fun getTopActivity(): Activity? {
-        val topActivity = BaseUtils.getActivityList().last
+        val topActivity = AppUtils.getActivityList().last
         if (topActivity != null) {
             return topActivity
         }
@@ -289,7 +155,7 @@ object ActivityUtils {
                     val activityField = activityRecordClass.getDeclaredField("activity")
                     activityField.isAccessible = true
                     val activity = activityField.get(activityRecord) as Activity
-                    BaseUtils.setTopActivity(activity)
+                    AppUtils.setTopActivity(activity)
                     return activity
                 }
             }
@@ -310,19 +176,9 @@ object ActivityUtils {
 
     private fun getActivityOrApp(): Context {
         val topActivity = getTopActivity()
-        return topActivity ?: BaseUtils.getApp()
+        return topActivity ?: AppUtils.getContext()
     }
 
-    private fun startActivity(context: Context,
-                              extras: Bundle?,
-                              pkg: String,
-                              cls: String,
-                              options: Bundle?) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        if (extras != null) intent.putExtras(extras)
-        intent.component = ComponentName(pkg, cls)
-        startActivity(intent, context, options)
-    }
 
     private fun startActivity(intent: Intent,
                               context: Context,

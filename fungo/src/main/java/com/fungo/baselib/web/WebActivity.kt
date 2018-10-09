@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.fungo.baselib.base.page.BasePageActivity
 import com.fungo.baselib.base.page.BasePageFragment
-import com.fungo.baselib.constant.IntentConstant
 
 /**
  * @author Pinger
@@ -15,6 +14,7 @@ import com.fungo.baselib.constant.IntentConstant
  */
 
 class WebActivity : BasePageActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +32,9 @@ class WebActivity : BasePageActivity() {
     companion object {
         fun start(context: Context, url: String, title: String, canBack: Boolean) {
             val intent = Intent(context, WebActivity::class.java)
-            intent.putExtra(IntentConstant.KEY_WEB_URL, url)
-            intent.putExtra(IntentConstant.KEY_WEB_TITLE, title)
-            intent.putExtra(IntentConstant.KEY_WEB_BACK, canBack)
+            intent.putExtra(WebConstant.KEY_WEB_URL, url)
+            intent.putExtra(WebConstant.KEY_WEB_TITLE, title)
+            intent.putExtra(WebConstant.KEY_WEB_BACK, canBack)
             context.startActivity(intent)
         }
 

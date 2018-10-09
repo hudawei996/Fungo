@@ -12,7 +12,6 @@ import android.view.View
 import android.webkit.*
 import android.widget.ProgressBar
 import com.fungo.baselib.base.page.BasePageFragment
-import com.fungo.baselib.constant.IntentConstant
 import com.fungo.baselib.utils.ViewUtils
 import com.fungo.baselib.web.sonic.SonicRuntimeImpl
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
@@ -233,7 +232,7 @@ abstract class BaseWebFragment : BasePageFragment() {
         // WebView.html#addJavascriptInterface(java.lang.Object, java.lang.String)
         webSettings.javaScriptEnabled = true
         mWebView!!.removeJavascriptInterface("searchBoxJavaBridge_")
-        mIntent?.putExtra(IntentConstant.KEY_WEB_LOAD_URL_TIME, System.currentTimeMillis())
+        mIntent?.putExtra(WebConstant.KEY_WEB_LOAD_URL_TIME, System.currentTimeMillis())
 
         // add interface
         addWebJsInteract(mSonicSessionClient, mIntent, mWebView)
@@ -315,7 +314,7 @@ abstract class BaseWebFragment : BasePageFragment() {
      * @return
      */
     protected fun getWebTitle(intent: Intent?): String? {
-        return intent?.getStringExtra(IntentConstant.KEY_WEB_TITLE)
+        return intent?.getStringExtra(WebConstant.KEY_WEB_TITLE)
     }
 
     /**
@@ -325,7 +324,7 @@ abstract class BaseWebFragment : BasePageFragment() {
      * @return
      */
     protected fun getWebUrl(intent: Intent?): String? {
-        return intent?.getStringExtra(IntentConstant.KEY_WEB_URL)
+        return intent?.getStringExtra(WebConstant.KEY_WEB_URL)
     }
 
 
@@ -333,7 +332,7 @@ abstract class BaseWebFragment : BasePageFragment() {
      * H5内部是否可以返回，默认不可以返回
      */
     protected open fun canBack(): Boolean {
-        return mIntent?.getBooleanExtra(IntentConstant.KEY_WEB_BACK, false) ?: false
+        return mIntent?.getBooleanExtra(WebConstant.KEY_WEB_BACK, false) ?: false
     }
 
     /**
