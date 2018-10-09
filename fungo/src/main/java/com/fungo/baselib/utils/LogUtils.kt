@@ -3,6 +3,7 @@ package com.fungo.baselib.utils
 import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.Exception
 
 /**
  * @author Pinger
@@ -10,7 +11,7 @@ import org.json.JSONObject
  */
 object LogUtils {
 
-    private const val DEBUG = true
+    private var DEBUG = DebugUtils.isDebugModel()
     private const val TAG = "Fungo"
     private const val MIN_STACK_OFFSET = 3
     private const val METHOD_COUNT = 3
@@ -54,6 +55,13 @@ object LogUtils {
         if (throwable != null) {
             e(throwable.message)
             throwable.printStackTrace()
+        }
+    }
+
+    fun e(exception: Exception?) {
+        if (exception != null) {
+            e(exception.message)
+            exception.printStackTrace()
         }
     }
 

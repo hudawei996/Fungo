@@ -49,4 +49,16 @@ object ToastUtils {
         })
     }
 
+
+    /**
+     * 只在开发环境才会展示的吐司，用于开发调试使用
+     */
+    fun testToast(msg: String) {
+        if (DebugUtils.isDevModel()) {
+            ThreadManager.runOnUIThread(Runnable {
+                Toast.makeText(AppUtils.getContext(), msg, Toast.LENGTH_SHORT).show()
+            })
+        }
+    }
+
 }

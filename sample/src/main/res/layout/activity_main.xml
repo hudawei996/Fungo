@@ -38,11 +38,5 @@
         android:onClick="onWeb"
         android:text="Web页面" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onBanner"
-        android:text="Banner页面" />
-
 
 </LinearLayout>

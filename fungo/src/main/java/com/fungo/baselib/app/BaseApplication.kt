@@ -2,6 +2,7 @@ package com.fungo.baselib.app
 
 import android.app.Application
 import com.fungo.baselib.utils.AppUtils
+import com.fungo.baselib.utils.DebugUtils
 import com.fungo.baselib.utils.LayoutUtils
 import com.fungo.baselib.utils.LogUtils
 import me.yokeyword.fragmentation.Fragmentation
@@ -12,7 +13,8 @@ import me.yokeyword.fragmentation.Fragmentation
  * @since 18-3-31 下午5:40
  *
  */
-open class BaseApplication : Application() {
+abstract class BaseApplication : Application() {
+
 
     override fun onCreate() {
         super.onCreate()
@@ -20,19 +22,30 @@ open class BaseApplication : Application() {
         initSDK()
     }
 
-    open fun initSDK() {
-    }
 
     private fun init() {
         initUtils()
+        initEnv()
         initFragmentation()
     }
 
+    /**
+     * 初始化环境
+     */
+    private fun initEnv() {
+        DebugUtils.setInnerUseModel(isInnerUseModel())
+        DebugUtils.setCurrentEnvModel(getCurrentEnvModel())
+    }
+
     private fun initFragmentation() {
+        val stackViewMode = if (DebugUtils.isDevModel())
+            Fragmentation.SHAKE
+        else Fragmentation.NONE
+
         Fragmentation.builder()
                 // 设置 栈视图 模式为 （默认）悬浮球模式   SHAKE: 摇一摇唤出  NONE：隐藏， 仅在Debug环境生效
-                .stackViewMode(Fragmentation.SHAKE)
-                .debug(true)
+                .stackViewMode(stackViewMode)
+                .debug(DebugUtils.isDebugModel())
                 /**
                  * 可以获取到[me.yokeyword.fragmentation.exception.AfterSaveStateTransactionWarning]
                  * 在遇到After onSaveInstanceState时，不会抛出异常，会回调到下面的ExceptionHandler
@@ -54,4 +67,19 @@ open class BaseApplication : Application() {
         LayoutUtils.initLayout(this)
     }
 
+
+    /**
+     * 给子类初始化第三方的SDK
+     */
+    abstract fun initSDK()
+
+    /**
+     * 当前的环境是不是只提示给内部使用，由具体的application重写
+     */
+    abstract fun isInnerUseModel(): Boolean
+
+    /**
+     * 获取当前的开发环境模式
+     */
+    abstract fun getCurrentEnvModel(): Int
 }
