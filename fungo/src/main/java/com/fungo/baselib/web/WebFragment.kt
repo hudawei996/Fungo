@@ -11,7 +11,6 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.ProgressBar
 import com.fungo.baselib.R
-import com.fungo.baselib.web.interact.DemoInteract
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
 import kotlinx.android.synthetic.main.base_fragment_web.*
 
@@ -25,8 +24,6 @@ class WebFragment : BaseWebFragment() {
 
     private var uploadMessage: ValueCallback<Uri>? = null
     private var uploadMessageAboveL: ValueCallback<Array<Uri>>? = null
-
-    private var mDemoInteract: DemoInteract? = null
 
     companion object {
         private const val FILE_CHOOSER_RESULT_CODE = 1001
@@ -46,8 +43,6 @@ class WebFragment : BaseWebFragment() {
 
     @SuppressLint("AddJavascriptInterface")
     override fun addWebJsInteract(sonicSessionClient: SonicSessionClientImpl?, intent: Intent?, webView: WebView?) {
-        mDemoInteract = DemoInteract(sonicSessionClient, intent, context, webView)
-        getWebView().addJavascriptInterface(mDemoInteract!!, mDemoInteract!!.name)
     }
 
 
@@ -146,10 +141,5 @@ class WebFragment : BaseWebFragment() {
         }
         mWebTitle = title
         setPageTitle(title)
-    }
-
-    override fun onDestroy() {
-        mDemoInteract = null
-        super.onDestroy()
     }
 }

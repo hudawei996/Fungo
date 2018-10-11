@@ -3,6 +3,7 @@ package com.fungo.baselib.base.page
 import android.app.AlertDialog
 import android.support.annotation.ColorInt
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -129,6 +130,13 @@ abstract class BasePageFragment : BaseFragment() {
         isLoadingShowing = true
     }
 
+    open fun showPageLoading(msg: String) {
+        val placeholder = findView<PlaceholderView>(R.id.placeholder)
+        placeholder.showLoading()
+        placeholder.setPageLoadingText(msg)
+        isLoadingShowing = true
+    }
+
     open fun hidePageLoading() {
         findView<PlaceholderView>(R.id.placeholder).hideLoading()
         isLoadingShowing = false
@@ -146,6 +154,13 @@ abstract class BasePageFragment : BaseFragment() {
      */
     open fun showPageError() {
         findView<PlaceholderView>(R.id.placeholder).showError()
+    }
+
+    /**
+     * 设置页面加载错误重连的监听
+     */
+    open fun setPageErrorRetryListener(listener: View.OnClickListener) {
+        findView<PlaceholderView>(R.id.placeholder).setPageErrorRetryListener(listener)
     }
 
     /**

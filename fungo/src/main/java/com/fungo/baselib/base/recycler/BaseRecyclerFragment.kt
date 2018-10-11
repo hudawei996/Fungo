@@ -8,11 +8,8 @@ import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
-import com.scwang.smartrefresh.header.BezierCircleHeader
 import com.scwang.smartrefresh.header.WaveSwipeHeader
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter
-import com.scwang.smartrefresh.layout.footer.FalsifyFooter
 import kotlinx.android.synthetic.main.base_fragment_recycler.*
 
 /**
@@ -62,6 +59,8 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
         recyclerView.adapter = mAdapter
+
+        setPageErrorRetryListener(View.OnClickListener { initData() })
 
         initRecyclerView()
     }

@@ -80,4 +80,26 @@ class PlaceholderView : FrameLayout {
     }
 
 
+    /**
+     * 设置错误重连的监听
+     */
+    fun setPageErrorRetryListener(listener: OnClickListener) {
+        tvErrorRetry.visibility = View.VISIBLE
+        tvErrorRetry?.setOnClickListener(listener)
+    }
+
+
+    /**
+     * 设置页面错误的提示信息
+     */
+    fun setPageErrorText(errorMsg: String) {
+        tvError?.text = errorMsg
+    }
+
+    /**
+     * 设置页面加载中的提示信息
+     */
+    fun setPageLoadingText(loadingMsg: String) {
+        tvLoading?.text = loadingMsg
+    }
 }
