@@ -214,6 +214,14 @@ abstract class BasePageFragment : BaseFragment() {
      */
     protected open fun isShowToolBar(): Boolean = true
 
+    /**
+     * 设置ToolBar的展示状态
+     * @param isShow 是否展示
+     */
+    protected open fun setShowToolBar(isShow: Boolean) {
+        ViewUtils.setVisible(findView(R.id.toolBarContainer), isShow)
+    }
+
 
     /**
      * 是否可以返回，如果可以则展示返回按钮，并且设置返回事件
