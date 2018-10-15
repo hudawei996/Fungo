@@ -39,3 +39,8 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
+/.idea/caches
+/.idea/codeStyles
+/.idea/libraries
+/.idea/workspace.xml
+/.idea/vcs.xml
