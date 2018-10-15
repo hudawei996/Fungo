@@ -30,11 +30,11 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mPresenter = getPresenter()
     }
 
-    override fun getContentResId(): Int {
+    final override fun getContentResId(): Int {
         return R.layout.base_fragment_recycler
     }
 
-    override fun initPageView() {
+    final override fun initPageView() {
         smartRefreshLayout.refreshHeader = WaveSwipeHeader(context)
         smartRefreshLayout.refreshFooter = BallPulseFooter(context!!)
         smartRefreshLayout.setDragRate(1f)
@@ -62,10 +62,10 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
 
         setPageErrorRetryListener(View.OnClickListener { initData() })
 
-        initRecyclerView()
+        initRecyView()
     }
 
-    override fun initData() {
+    final override fun initData() {
         mPage = 0
 
         if (isShowLoadingPage()) {
@@ -93,36 +93,47 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 展示所有数据
      */
-    override fun <T> showContent(page: Int, datas: List<T>) {
-        finishLoading(page)
-
-        if (isLoadingShowing) {
-            hidePageLoading()
-        }
-
-        if (isLoadingDialogShowing) {
-            hidePageLoadingDialog()
-        }
+    override fun <T> showContent(datas: List<T>?) {
+        hideLoading()
+        finishLoading()
 
         // 处理空数据的情况
-        if (page == 0) {
+        if (mPage == 0) {
             mAdapter.clear()
-            if (datas.isEmpty())
+            if (datas == null || datas.isEmpty())
                 showPageEmpty()
             else mAdapter.addAll(datas)
         } else {
-            if (datas.isEmpty()) {
+            if (datas == null || datas.isEmpty()) {
                 showToast("暂无更多数据")
             } else mAdapter.addAll(datas)
         }
+    }
+
+    /**
+     * 展示一个数据
+     */
+    override fun <T> showContent(data: T?) {
+        hideLoading()
+        finishLoading()
+
+        // 处理空数据的情况
+        if (mPage == 0) {
+            mAdapter.clear()
+        }
+        if (data == null) {
+            showPageEmpty()
+            return
+        }
+        mAdapter.add(data)
     }
 
 
     /**
      * 更新某一条数据
      */
-    override fun <T> updateItem(data: T, position: Int) {
-        if (mAdapter.itemCount > 0 && position < mAdapter.itemCount) {
+    override fun <T> updateItem(data: T?, position: Int) {
+        if (data != null && mAdapter.itemCount > 0 && position < mAdapter.itemCount) {
             mAdapter.update(data, position)
         }
     }
@@ -130,16 +141,19 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 添加一条数据
      */
-    override fun <T> addItem(data: T) {
-        mAdapter.add(data)
+    override fun <T> addItem(data: T?) {
+        hideLoading()
+        if (data != null) {
+            mAdapter.add(data)
+        }
     }
 
 
     /**
      * 插入一条数据
      */
-    override fun <T> insertItem(position: Int, data: T) {
-        if (position < mAdapter.itemCount) {
+    override fun <T> insertItem(position: Int, data: T?) {
+        if (position < mAdapter.itemCount && data != null) {
             mAdapter.insert(data, position)
         }
     }
@@ -148,14 +162,13 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 结束刷新
      */
-    private fun finishLoading(page: Int) {
-        if (page == 0) {
+    private fun finishLoading() {
+        if (mPage == 0) {
             smartRefreshLayout?.finishRefresh()
         } else {
             smartRefreshLayout?.finishLoadmore()
         }
     }
-
 
     /**
      * 当前页面是否激活，有View相关的操作时，做好先做一下判断
@@ -187,6 +200,18 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      */
     private fun getAdapter(): MultiTypeAdapter {
         return MultiTypeAdapter(context)
+    }
+
+    /**
+     * 隐藏正在加载的进度条
+     */
+    private fun hideLoading() {
+        if (isLoadingShowing) {
+            hidePageLoading()
+        }
+        if (isLoadingDialogShowing) {
+            hidePageLoadingDialog()
+        }
     }
 
     /**
@@ -228,5 +253,5 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 让子类重写，初始化页面
      */
-    protected open fun initRecyclerView() {}
+    protected open fun initRecyView() {}
 }

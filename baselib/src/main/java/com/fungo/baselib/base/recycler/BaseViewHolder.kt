@@ -15,6 +15,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.fungo.baselib.base.basic.SupportActivity
+import com.fungo.baselib.base.page.BasePageActivity
+import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.page.IView
 
 /**
@@ -80,6 +83,17 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
 
     override fun onClick(id: Int) {
 
+    }
+
+    /**
+     * 专门用于在Holder中跳转Fragment
+     */
+    protected fun startFragment(fragment: BasePageFragment) {
+        if (getContext() is BasePageActivity) {
+            (getContext() as BasePageActivity).start(fragment)
+        }else {
+            throw IllegalStateException("current page activity not extend BasePageActivity or implement SupportActivity")
+        }
     }
 
     override fun setGone(@IdRes id: Int) {

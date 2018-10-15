@@ -1,5 +1,6 @@
 package com.fungo.baselib.base.mvp
 
+import android.content.Context
 import com.fungo.baselib.base.page.IPageView
 
 /**
@@ -15,4 +16,10 @@ interface IBaseView : IPageView {
      * View是否激活
      */
     fun isActive(): Boolean
+
+
+    /**
+     * 获取当前页面的Context
+     */
+    fun getContext(): Context?
 }
