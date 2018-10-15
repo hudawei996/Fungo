@@ -30,16 +30,16 @@ dependencies {
     api rootProject.getDependenceProperty()['support_v7']
 
     api rootProject.getDependenceProperty()['support_design']
-    api rootProject.getDependenceProperty()["support_cardview"]
-    api rootProject.getDependenceProperty()["support_recyclerview"]
+    api rootProject.getDependenceProperty()['support_cardview']
+    api rootProject.getDependenceProperty()['support_recyclerview']
 
-    api rootProject.getDependenceProperty()["constraint-layout"]
-    api rootProject.getDependenceProperty()["kotlin"]
+    api rootProject.getDependenceProperty()['constraint-layout']
+    api rootProject.getDependenceProperty()['kotlin']
 
-    api rootProject.getDependenceProperty()["fragmentation_core"]
-    api rootProject.getDependenceProperty()["fragmentation_swipeback"]
+    api rootProject.getDependenceProperty()['fragmentation_core']
+    api rootProject.getDependenceProperty()['fragmentation_swipeback']
 
-    api rootProject.getDependenceProperty()["smartrefresh"]
-    api rootProject.getDependenceProperty()["smartrefresh_header"]
-    api rootProject.getDependenceProperty()["sonic"]
+    api rootProject.getDependenceProperty()['smartrefresh']
+    api rootProject.getDependenceProperty()['smartrefresh_header']
+    api rootProject.getDependenceProperty()['sonic']
 }

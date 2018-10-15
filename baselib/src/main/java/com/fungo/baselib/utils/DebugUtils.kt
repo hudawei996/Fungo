@@ -16,20 +16,48 @@ object DebugUtils {
     /**
      * 是否是内部使用的一些东西，发布到外界需要设置为false
      */
-    private var isInnerUseModel = false
+    private var isCanPrintLog = false
+
+    /**
+     * 是否能切换环境，默认不能切换环境
+     */
+    private var isCanSwitchEnv = false
 
     /**
      * 当前的开发环境模式，默认是线上
      */
     private var currentDevModel: Int = EnvModel.RELEASE.value
 
-    fun isInnerUseModel(): Boolean {
-        return isInnerUseModel
+
+    /**
+     * @return 是否可以打印日志
+     */
+    fun isCanPrintLog(): Boolean {
+        return isCanPrintLog
     }
 
-    fun setInnerUseModel(isLogModel: Boolean) {
-        this.isInnerUseModel = isLogModel
+    /**
+     * 设置是否可以打印日志
+     */
+    fun setCanPrintLog(isCanPrintLog: Boolean) {
+        this.isCanPrintLog = isCanPrintLog
     }
+
+
+    /**
+     * 是否可以切换app环境
+     */
+    fun isCanSwitchEnv(): Boolean {
+        return isCanSwitchEnv
+    }
+
+    /**
+     * 设置当前的开发环境
+     */
+    fun setCanSwitchEnv(canSwitchEnv: Boolean) {
+        this.isCanSwitchEnv = canSwitchEnv
+    }
+
 
     /**
      * @return 调试模式，测试或者开发
@@ -48,7 +76,7 @@ object DebugUtils {
     /**
      * @return 测试模式
      */
-    fun isTestModel(): Boolean {
+    private fun isTestModel(): Boolean {
         return getCurrentEnvModel() == EnvModel.TEST.value
     }
 
@@ -70,7 +98,7 @@ object DebugUtils {
      * 获取当前的模式
      */
     private fun getCurrentEnvModel(): Int {
-        return if (isInnerUseModel()) {
+        return if (isCanSwitchEnv()) {
             val model = SpUtils.getInt(SP_DEBUG_EnvModel)
             if (model == 0)
                 currentDevModel
