@@ -93,8 +93,8 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 展示所有数据
      */
-    override fun <T> showContent(page: Int, datas: List<T>) {
-        finishLoading(page)
+    override fun <T> showContent(datas: List<T>) {
+        finishLoading(mPage)
 
         if (isLoadingShowing) {
             hidePageLoading()
@@ -105,7 +105,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         }
 
         // 处理空数据的情况
-        if (page == 0) {
+        if (mPage == 0) {
             mAdapter.clear()
             if (datas.isEmpty())
                 showPageEmpty()
@@ -115,6 +115,27 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
                 showToast("暂无更多数据")
             } else mAdapter.addAll(datas)
         }
+    }
+
+    /**
+     * 展示一个数据
+     */
+    override fun <T> showContent(data: T) {
+        finishLoading(mPage)
+
+        if (isLoadingShowing) {
+            hidePageLoading()
+        }
+
+        if (isLoadingDialogShowing) {
+            hidePageLoadingDialog()
+        }
+
+        // 处理空数据的情况
+        if (mPage == 0) {
+            mAdapter.clear()
+        }
+        mAdapter.add(data)
     }
 
 

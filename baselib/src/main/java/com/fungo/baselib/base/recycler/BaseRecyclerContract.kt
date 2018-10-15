@@ -12,7 +12,7 @@ import com.fungo.baselib.base.mvp.IBaseView
 class BaseRecyclerContract {
 
 
-    interface View: IBaseView {
+    interface View : IBaseView {
 
 
         /**
@@ -23,18 +23,23 @@ class BaseRecyclerContract {
         /**
          * 指定某一个位置插入一条数据
          */
-        fun  <T> insertItem(position: Int, data: T)
+        fun <T> insertItem(position: Int, data: T)
 
         /**
          * 展示第一屏内容
          * @param datas 加载第一屏的数据
          */
-        fun  <T> showContent(page: Int, datas: List<T>)
+        fun <T> showContent(datas: List<T>)
+
+        /**
+         * 展示一个数据
+         */
+        fun <T> showContent(data: T)
 
         /**
          * 更新某一条数据
          */
-        fun  <T> updateItem(data: T, position: Int)
+        fun <T> updateItem(data: T, position: Int)
     }
 
 

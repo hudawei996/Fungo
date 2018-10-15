@@ -50,6 +50,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
+    implementation project(':netgo')
 
     implementation 'com.github.PingerOne:ImageGo:2.0.2'
 }

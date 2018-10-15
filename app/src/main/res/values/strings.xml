@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fungo</string>
+    <string name="main_netgo">网络加载</string>
 </resources>
