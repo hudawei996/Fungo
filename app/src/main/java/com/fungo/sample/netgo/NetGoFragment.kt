@@ -21,6 +21,9 @@ class NetGoFragment : BasePageFragment() {
     override fun initPageView() {
 
         Api.getGankService().getGankData("Android", 30, 0)
+
+//                .compose(NetGo.getApiTransformer())
+//                .compose(NetGo.<GankResults>getScheduler())
                 .subscribe(object : ApiSubscriber<GankResults>() {
                     override fun onNext(t: GankResults?) {
                         textView?.text = t?.results.toString()
