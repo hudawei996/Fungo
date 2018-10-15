@@ -3,9 +3,8 @@ package com.fungo.sample.main
 import android.view.ViewGroup
 import com.fungo.baselib.base.recycler.BaseViewHolder
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
-import com.fungo.baselib.theme.AppTheme
-import com.fungo.baselib.theme.ThemeUtils
 import com.fungo.sample.R
+import com.fungo.sample.imagego.ImageGoFragment
 import com.fungo.sample.netgo.NetGoFragment
 
 /**
@@ -25,9 +24,7 @@ class MainHolder : MultiTypeViewHolder<MainBean, MainHolder.ViewHolder>() {
         override fun onItemClick(data: MainBean) {
             when (data.index) {
                 1 -> startFragment(NetGoFragment())
-                else -> {
-                    ThemeUtils.setCurrentTheme(getContext()!!, AppTheme.Black)
-                }
+                2 -> startFragment(ImageGoFragment())
             }
 
         }

@@ -1,1 +1,1 @@
-include ':app', ':baselib', ':netgo'
+include ':app', ':baselib', ':netgo', ':imagego'

@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.fungo.baselib.base.page.IView
+import com.fungo.baselib.utils.ToastUtils
 
 /**
  * @author pinger
@@ -132,8 +133,7 @@ abstract class BaseFragment : SupportFragment(), IView {
     }
 
     override fun showToast(content: String?) {
-        if (!TextUtils.isEmpty(content))
-            Toast.makeText(activity, content, Toast.LENGTH_SHORT).show()
+        ToastUtils.showToast(content)
     }
 
     override fun showToast(@StringRes resId: Int) {

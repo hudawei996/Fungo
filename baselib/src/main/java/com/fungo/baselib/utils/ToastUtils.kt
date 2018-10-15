@@ -14,7 +14,7 @@ object ToastUtils {
     /**
      * 展示一个吐司，短时间的吐司
      */
-    fun showToast(msg: String) {
+    fun showToast(msg: String?) {
         ThreadManager.runOnUIThread(Runnable {
             Toast.makeText(AppUtils.getContext(), msg, Toast.LENGTH_SHORT).show()
         })
@@ -34,7 +34,7 @@ object ToastUtils {
     /**
      * 长时间展示的吐司
      */
-    fun showLong(msg: String) {
+    fun showLong(msg: String?) {
         ThreadManager.runOnUIThread(Runnable {
             Toast.makeText(AppUtils.getContext(), msg, Toast.LENGTH_LONG).show()
         })
@@ -53,7 +53,7 @@ object ToastUtils {
     /**
      * 只在开发环境才会展示的吐司，用于开发调试使用
      */
-    fun testToast(msg: String) {
+    fun testToast(msg: String?) {
         if (DebugUtils.isDevModel()) {
             ThreadManager.runOnUIThread(Runnable {
                 Toast.makeText(AppUtils.getContext(), msg, Toast.LENGTH_SHORT).show()
