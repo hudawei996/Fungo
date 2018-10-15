@@ -27,7 +27,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':fungo')
+    implementation project(':baselib')
 
     implementation 'com.github.PingerOne:ImageGo:2.0.1'
 }
