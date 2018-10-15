@@ -27,3 +27,30 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+/**
+ * 获取依赖
+ */
+def getDependenceProperty() {
+    Properties buildProps = new Properties()
+    buildProps.load(new FileInputStream(file('config/dependence.properties')))
+    return buildProps
+}
+
+/**
+ * 读取配置签名
+ */
+def getSignProperty() {
+    Properties buildProperties = new Properties()
+    buildProperties.load(new FileInputStream(file('config/sign.properties')))
+    return buildProperties
+}
+
+/**
+ * 获取构建版本
+ */
+def getBuildProperty() {
+    Properties buildProps = new Properties()
+    buildProps.load(new FileInputStream(file('config/build.properties')))
+    return buildProps
+}

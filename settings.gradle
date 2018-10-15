@@ -1,1 +1,1 @@
-include ':sample', ':fungo'
+include ':app', ':baselib', ':netgo'
