@@ -55,6 +55,7 @@
         <item name="colorPrimaryDark">@color/colorBluePrimaryDark</item>
         <item name="colorAccent">@color/colorBluePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--redTheme-->
@@ -63,6 +64,7 @@
         <item name="colorPrimaryDark">@color/colorRedPrimaryDark</item>
         <item name="colorAccent">@color/colorRedPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--brownTheme-->
@@ -71,6 +73,7 @@
         <item name="colorPrimaryDark">@color/colorBrownPrimaryDark</item>
         <item name="colorAccent">@color/colorBrownPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--greenTheme-->
@@ -79,6 +82,7 @@
         <item name="colorPrimaryDark">@color/colorGreenPrimaryDark</item>
         <item name="colorAccent">@color/colorGreenPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--purpleTheme-->
@@ -87,6 +91,7 @@
         <item name="colorPrimaryDark">@color/colorPurplePrimaryDark</item>
         <item name="colorAccent">@color/colorPurplePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--tealTheme-->
@@ -95,6 +100,7 @@
         <item name="colorPrimaryDark">@color/colorTealPrimaryDark</item>
         <item name="colorAccent">@color/colorTealPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--pinkTheme-->
@@ -103,6 +109,7 @@
         <item name="colorPrimaryDark">@color/colorPinkPrimaryDark</item>
         <item name="colorAccent">@color/colorPinkPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--deepPurpleTheme-->
@@ -111,6 +118,7 @@
         <item name="colorPrimaryDark">@color/colorDeepPurplePrimaryDark</item>
         <item name="colorAccent">@color/colorDeepPurplePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--orange-->
@@ -119,6 +127,7 @@
         <item name="colorPrimaryDark">@color/colorOrangePrimaryDark</item>
         <item name="colorAccent">@color/colorOrangePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -128,6 +137,7 @@
         <item name="colorPrimaryDark">@color/colorIndigoPrimaryDark</item>
         <item name="colorAccent">@color/colorIndigoPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -137,6 +147,7 @@
         <item name="colorPrimaryDark">@color/colorCyanPrimaryDark</item>
         <item name="colorAccent">@color/colorCyanPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -144,7 +155,8 @@
         <item name="colorPrimary">@color/colorBlackPrimary</item>
         <item name="colorPrimaryDark">@color/colorBlackPrimaryDark</item>
         <item name="colorAccent">@color/colorBlackPrimaryDark</item>
-        <item name="background">@color/grey_f7</item>
+        <item name="background">@color/black</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -154,6 +166,7 @@
         <item name="colorPrimaryDark">@color/colorLightGreenPrimaryDark</item>
         <item name="colorAccent">@color/colorLightGreenPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -163,6 +176,7 @@
         <item name="colorPrimaryDark">@color/colorLimePrimaryDark</item>
         <item name="colorAccent">@color/colorLimePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
     <!--deepOrange-->
@@ -171,6 +185,7 @@
         <item name="colorPrimaryDark">@color/colorDeepOrangePrimaryDark</item>
         <item name="colorAccent">@color/colorDeepOrangePrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 
@@ -180,6 +195,7 @@
         <item name="colorPrimaryDark">@color/colorBlueGreyPrimaryDark</item>
         <item name="colorAccent">@color/colorBlueGreyPrimaryDark</item>
         <item name="background">@color/grey_f7</item>
+        <item name="textColorPrimary">@color/white</item>
     </style>
 
 

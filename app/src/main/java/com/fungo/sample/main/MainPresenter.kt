@@ -13,7 +13,8 @@ class MainPresenter(private val mainView: BaseRecyclerContract.View) : BaseRecyc
 
     override fun loadData(page: Int) {
         if (mainView.isActive()) {
-            mainView.showContent(MainBean(mainView.getContext()?.getString(R.string.main_netgo)))
+            mainView.addItem(MainBean(1,mainView.getContext()?.getString(R.string.main_netgo)))
+            mainView.addItem(MainBean(2,"切换主题"))
         }
     }
 }

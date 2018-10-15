@@ -8,7 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import com.fungo.baselib.R
 import com.fungo.baselib.utils.StatusBarUtils
-import com.fungo.baselib.theme.ThemeHelper
+import com.fungo.baselib.theme.ThemeUtils
 import com.fungo.baselib.theme.AppTheme
 
 
@@ -41,7 +41,7 @@ abstract class BaseActivity : SupportActivity() {
 
     private fun initPre() {
         // 主题
-        initTheme()
+        ThemeUtils.setCurrentTheme(this, ThemeUtils.getCurrentTheme())
         // 沉浸式
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
         // 设置状态栏背景颜色
@@ -121,30 +121,5 @@ abstract class BaseActivity : SupportActivity() {
      * 是否可以滑动返回，默认可以
      */
     protected open fun isSwipeBackEnable(): Boolean = true
-
-
-    /**
-     * 设置系统的主题
-     */
-    private fun initTheme() {
-        when (ThemeHelper.getCurrentTheme()) {
-            AppTheme.Blue -> setTheme(R.style.BlueTheme)
-            AppTheme.Red -> setTheme(R.style.RedTheme)
-            AppTheme.Brown -> setTheme(R.style.BrownTheme)
-            AppTheme.Green -> setTheme(R.style.GreenTheme)
-            AppTheme.Purple -> setTheme(R.style.PurpleTheme)
-            AppTheme.Teal -> setTheme(R.style.TealTheme)
-            AppTheme.Pink -> setTheme(R.style.PinkTheme)
-            AppTheme.DeepPurple -> setTheme(R.style.DeepPurpleTheme)
-            AppTheme.Orange -> setTheme(R.style.OrangeTheme)
-            AppTheme.Indigo -> setTheme(R.style.IndigoTheme)
-            AppTheme.LightGreen -> setTheme(R.style.LightGreenTheme)
-            AppTheme.Lime -> setTheme(R.style.LimeTheme)
-            AppTheme.DeepOrange -> setTheme(R.style.DeepOrangeTheme)
-            AppTheme.Cyan -> setTheme(R.style.CyanTheme)
-            AppTheme.BlueGrey -> setTheme(R.style.BlueGreyTheme)
-            else -> setTheme(R.style.BlueTheme)
-        }
-    }
 
 }

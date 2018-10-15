@@ -15,18 +15,17 @@
         android:src="@mipmap/base_ic_back_white"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <TextView
         android:id="@+id/baseTvTitle"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
         android:ellipsize="end"
         android:gravity="center"
+        android:textColor="?attr/textColorPrimary"
         android:lines="1"
-        android:textColor="@color/white"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="万合天宜" />

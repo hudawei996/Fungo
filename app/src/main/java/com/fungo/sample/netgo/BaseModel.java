@@ -10,7 +10,6 @@ import com.fungo.netgo.IModel;
 public class BaseModel implements IModel {
     protected boolean error;
 
-
     public boolean isError() {
         return error;
     }

@@ -37,7 +37,7 @@ abstract class BaseFragment : SupportFragment(), IView {
         initEvent()
     }
 
-    override fun onLazyInitView(savedInstanceState: Bundle?) {
+    final override fun onLazyInitView(savedInstanceState: Bundle?) {
         initData()
     }
 

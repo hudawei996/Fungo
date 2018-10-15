@@ -1,12 +1,8 @@
 package com.fungo.sample.main
 
-import android.view.ViewGroup
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
-import com.fungo.baselib.base.recycler.BaseViewHolder
-import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.sample.R
-import com.fungo.sample.netgo.NetGoFragment
 
 /**
  * @author Pinger
@@ -20,7 +16,7 @@ class MainFragment : BaseRecyclerFragment() {
         return getString(R.string.app_name)
     }
 
-    override fun initRecyclerView() {
+    override fun initRecyView() {
         register(MainBean::class.java, MainHolder())
     }
 
@@ -29,21 +25,6 @@ class MainFragment : BaseRecyclerFragment() {
     }
 
 
-    inner class MainHolder : MultiTypeViewHolder<MainBean, MainHolder.ViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-            return ViewHolder(parent)
-        }
-
-        inner class ViewHolder(parent: ViewGroup) : BaseViewHolder<MainBean>(parent, R.layout.holder_main) {
-            override fun onBindData(data: MainBean) {
-                setText(R.id.tvName, data.name)
-            }
-
-            override fun onItemClick(data: MainBean) {
-                getPageActivity()?.start(NetGoFragment())
-            }
-        }
-    }
 
     override fun isBackEnable(): Boolean = false
 
