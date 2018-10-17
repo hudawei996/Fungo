@@ -20,11 +20,11 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
                         netgoView.showContent(t?.results)
                     }
 
-
                     override fun onError(e: ApiException?) {
                         netgoView.showPageError(e?.message)
                     }
 
                 })
+
     }
 }

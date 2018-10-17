@@ -6,6 +6,8 @@ import com.fungo.netgo.model.IModel;
 /**
  * @author Pinger
  * @since 18-09-12 下午17:21
+ * <p>
+ * 请求订阅者，请求的各种状态都进行封装处理
  */
 public abstract class ApiSubscriber<T extends IModel> extends ResourceSubscriber<T> {
 
