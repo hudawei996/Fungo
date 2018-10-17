@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion Integer.valueOf(rootProject.getBuildProperty()["minSdkVersion"])
         targetSdkVersion Integer.valueOf(rootProject.getBuildProperty()["targetSdkVersion"])
-        versionCode Integer.valueOf(rootProject.getBuildProperty()["versionCode"])
-        versionName rootProject.getBuildProperty()["versionName"]
+        versionCode Integer.valueOf(rootProject.getBuildProperty()["imageGoVersionCode"])
+        versionName rootProject.getBuildProperty()["imageGoVersionName"]
     }
 
     buildTypes {
@@ -23,8 +23,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    
-    api rootProject.getDependenceProperty()['support_v7']
+
     api rootProject.getDependenceProperty()['kotlin']
 
     // Glide依赖

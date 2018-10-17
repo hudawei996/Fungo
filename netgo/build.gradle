@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion Integer.valueOf(rootProject.getBuildProperty()["minSdkVersion"])
         targetSdkVersion Integer.valueOf(rootProject.getBuildProperty()["targetSdkVersion"])
-        versionCode Integer.valueOf(rootProject.getBuildProperty()["versionCode"])
-        versionName rootProject.getBuildProperty()["versionName"]
+        versionCode Integer.valueOf(rootProject.getBuildProperty()["netGoVersionCode"])
+        versionName rootProject.getBuildProperty()["netGoVersionName"]
     }
 
     buildTypes {
