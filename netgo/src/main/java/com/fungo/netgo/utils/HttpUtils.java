@@ -1,12 +1,21 @@
 package com.fungo.netgo.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.fungo.netgo.NetGo;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
@@ -214,6 +223,70 @@ public class HttpUtils {
 
     public static void runOnUiThread(Runnable runnable) {
         NetGo.getInstance().getDelivery().post(runnable);
+    }
+
+    public static byte[] toByteArray(Object input) {
+        ByteArrayOutputStream baos = null;
+        ObjectOutputStream oos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(input);
+            oos.flush();
+            return baos.toByteArray();
+        } catch (IOException e) {
+            NetLogger.printStackTrace(e);
+        } finally {
+            closeQuietly(oos);
+            closeQuietly(baos);
+        }
+        return null;
+    }
+
+
+    public static Object toObject(byte[] input) {
+        if (input == null) return null;
+        ByteArrayInputStream bais = null;
+        ObjectInputStream ois = null;
+        try {
+            bais = new ByteArrayInputStream(input);
+            ois = new ObjectInputStream(bais);
+            return ois.readObject();
+        } catch (Exception e) {
+            NetLogger.printStackTrace(e);
+        } finally {
+            closeQuietly(ois);
+            closeQuietly(bais);
+        }
+        return null;
+    }
+
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable == null) return;
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            NetLogger.printStackTrace(e);
+        }
+    }
+
+    /**
+     * 网络是否连接
+     */
+    public static boolean isNetConnected(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED;
+    }
+
+
+    /**
+     * 网络是否是在WIFI环境
+     */
+    public static boolean isWifiNet(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        return manager.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 
 }

@@ -2,7 +2,6 @@ package com.fungo.netgo.interceptor;
 
 import com.fungo.netgo.utils.NetLogger;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
@@ -208,15 +207,6 @@ public class LogInterceptor implements Interceptor {
             body.writeTo(buffer);
             Charset charset = getCharset(body.contentType());
             log("\tbody:" + buffer.readString(charset));
-        } catch (Exception e) {
-            NetLogger.printStackTrace(e);
-        }
-    }
-
-    private static void closeQuietly(Closeable closeable) {
-        if (closeable == null) return;
-        try {
-            closeable.close();
         } catch (Exception e) {
             NetLogger.printStackTrace(e);
         }

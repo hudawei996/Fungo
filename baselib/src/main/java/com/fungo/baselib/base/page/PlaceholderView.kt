@@ -1,6 +1,7 @@
 package com.fungo.baselib.base.page
 
 import android.content.Context
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -50,8 +51,11 @@ class PlaceholderView : FrameLayout {
         visibility = View.GONE
     }
 
+    /**
+     * 隐藏加载进度条，其实就是隐藏了占位容器
+     */
     fun hideLoading() {
-        ViewUtils.setGone(loadingContainer)
+        showContent()
     }
 
 
@@ -92,8 +96,10 @@ class PlaceholderView : FrameLayout {
     /**
      * 设置页面错误的提示信息
      */
-    fun setPageErrorText(errorMsg: String) {
-        tvError?.text = errorMsg
+    fun setPageErrorText(errorMsg: String?) {
+        if (!TextUtils.isEmpty(errorMsg)) {
+            tvError?.text = errorMsg
+        }
     }
 
     /**

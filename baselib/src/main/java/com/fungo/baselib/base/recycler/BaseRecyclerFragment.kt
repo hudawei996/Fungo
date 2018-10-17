@@ -9,7 +9,6 @@ import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
 import com.scwang.smartrefresh.header.MaterialHeader
-import com.scwang.smartrefresh.header.WaveSwipeHeader
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import kotlinx.android.synthetic.main.base_fragment_recycler.*
 
@@ -49,13 +48,6 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
             mPresenter.loadData(mPage)
         }
 
-        // 设置相关属性
-        smartRefreshLayout.isEnableAutoLoadmore = isEnableAutoLoadmore()
-        smartRefreshLayout.isEnableLoadmore = isEnableLoadmore()
-        smartRefreshLayout.isEnableRefresh = isEnableRefresh()
-        smartRefreshLayout.isEnablePureScrollMode = isEnablePureScrollMode()
-        smartRefreshLayout.isEnableOverScrollBounce = isEnableOverScrollBounce()
-
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
@@ -68,6 +60,8 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
 
     final override fun initData() {
         mPage = 0
+
+        setSmartLayoutAttrs()
 
         if (isShowLoadingPage()) {
             showPageLoading()
@@ -90,6 +84,16 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mPresenter.onStop()
     }
 
+    /**
+     * 设置SmartRefreshLayout相关属性
+     */
+    private fun setSmartLayoutAttrs() {
+        smartRefreshLayout?.isEnableAutoLoadmore = isEnableAutoLoadmore()
+        smartRefreshLayout?.isEnableLoadmore = isEnableLoadmore()
+        smartRefreshLayout?.isEnableRefresh = isEnableRefresh()
+        smartRefreshLayout?.isEnableOverScrollBounce = isEnableOverScrollBounce()
+        smartRefreshLayout?.isEnablePureScrollMode = isEnablePureScrollMode()
+    }
 
     /**
      * 展示所有数据
@@ -164,9 +168,10 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      * 结束刷新
      */
     private fun finishLoading() {
-        if (mPage == 0) {
+        if (smartRefreshLayout?.isRefreshing == true) {
             smartRefreshLayout?.finishRefresh()
-        } else {
+        }
+        if (smartRefreshLayout?.isLoading == true) {
             smartRefreshLayout?.finishLoadmore()
         }
     }
@@ -214,6 +219,27 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
             hidePageLoadingDialog()
         }
     }
+
+    /**
+     * 当展示空视图的时候，可以下拉，但是不可以上拉
+     */
+    override fun showPageEmpty() {
+        smartRefreshLayout?.isEnableLoadmore = false
+        super.showPageEmpty()
+    }
+
+
+    override fun showPageError(msg: String?) {
+        smartRefreshLayout?.isEnableLoadmore = false
+
+        // 当加载异常时，要手动去关闭加载进度，这里统一处理
+        hideLoading()
+        finishLoading()
+
+        // 先把前期工作设置完，最后展示占位图
+        super.showPageError(msg)
+    }
+
 
     /**
      * 是否可以自动加载更多，默认可以

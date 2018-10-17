@@ -23,6 +23,7 @@ interface IPageView {
     fun showPageEmpty()
 
     fun showPageError()
+    fun showPageError(msg: String?)
 
     fun showPageContent()
 }

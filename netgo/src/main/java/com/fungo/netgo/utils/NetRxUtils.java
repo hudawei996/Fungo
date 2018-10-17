@@ -1,7 +1,8 @@
 package com.fungo.netgo.utils;
 
 import com.fungo.netgo.model.IModel;
-import com.fungo.netgo.NetError;
+import com.fungo.netgo.subscribe.NetError;
+import com.fungo.netgo.subscribe.ServerException;
 
 import org.reactivestreams.Publisher;
 
@@ -19,8 +20,6 @@ public class NetRxUtils {
 
     /**
      * 线程切换
-     *
-     * @return
      */
     public static <T extends IModel> FlowableTransformer<T, T> getScheduler() {
         return new FlowableTransformer<T, T>() {
@@ -33,9 +32,7 @@ public class NetRxUtils {
     }
 
     /**
-     * 异常处理变换
-     *
-     * @return
+     * 请求返回后，数据正常的情况下，分发一下数据的异常
      */
     public static <T extends IModel> FlowableTransformer<T, T> getApiTransformer() {
 
@@ -44,22 +41,32 @@ public class NetRxUtils {
             public Publisher<T> apply(Flowable<T> upstream) {
                 return upstream.flatMap(new Function<T, Publisher<T>>() {
                     @Override
-                    public Publisher<T> apply(T model) throws Exception {
-
-                        if (model == null || model.isNull()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.NoDataError));
-                        } else if (model.isAuthError()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.AuthError));
-                        } else if (model.isBizError()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.BusinessError));
-                        } else {
+                    public Publisher<T> apply(T model) {
+                        if (model != null && model.isSuccess()) {
                             return Flowable.just(model);
+                        } else {
+                            if (model == null) {
+                                throw new ServerException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA);
+                            } else {
+                                throw new ServerException(model.getErrorMsg(), model.getCode());
+                            }
                         }
                     }
-                });
+                }).onErrorResumeNext(new HttpResponseFunc<T>());
             }
         };
     }
 
+
+    /**
+     * 响应中的异常处理
+     */
+    private static class HttpResponseFunc<T> implements Function<Throwable, Publisher<? extends T>> {
+
+        @Override
+        public Publisher<? extends T> apply(Throwable throwable) {
+            return Flowable.error(NetError.handleException(throwable));
+        }
+    }
 
 }

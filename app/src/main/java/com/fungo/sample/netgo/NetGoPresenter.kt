@@ -1,8 +1,8 @@
 package com.fungo.sample.netgo
 
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
-import com.fungo.netgo.ApiSubscriber
-import com.fungo.netgo.NetError
+import com.fungo.netgo.subscribe.ApiException
+import com.fungo.netgo.subscribe.ApiSubscriber
 import com.fungo.netgo.utils.NetRxUtils
 
 /**
@@ -16,13 +16,15 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
                 .compose(NetRxUtils.getApiTransformer<GankResults>())
                 .compose(NetRxUtils.getScheduler<GankResults>())
                 .subscribe(object : ApiSubscriber<GankResults>() {
-                    override fun onNext(t: GankResults?) {
+                    override fun onSuccess(t: GankResults?) {
                         netgoView.showContent(t?.results)
                     }
 
-                    override fun onFail(error: NetError?) {
-                        netgoView.showPageError()
+
+                    override fun onError(e: ApiException?) {
+                        netgoView.showPageError(e?.message)
                     }
+
                 })
     }
 }

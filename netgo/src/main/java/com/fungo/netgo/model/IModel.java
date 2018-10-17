@@ -1,15 +1,32 @@
 package com.fungo.netgo.model;
 
+
 /**
- * Created by wanglei on 2016/12/26.
+ * @author Pinger
+ * @since 18-10-14 上午09:12
+ * <p>
+ * 网络请求返回的数据实体父类，让子类实现请求是否成功和后台异常信息的方法
  */
 
 public interface IModel {
-    boolean isNull();       //空数据
 
-    boolean isAuthError();  //验证错误
+    /**
+     * 根据后台定义的code，判断加载是否成功
+     */
+    boolean isSuccess();
 
-    boolean isBizError();   //业务错误
+    /**
+     * 实体内部的对象是否为null
+     */
+    boolean isNull();
 
-    String getErrorMsg();   //后台返回的错误信息
+    /**
+     * 后台返回的错误信息
+     */
+    String getErrorMsg();
+
+    /**
+     * 获取服务端定义的错误码
+     */
+    int getCode();
 }

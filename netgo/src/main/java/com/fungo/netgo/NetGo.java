@@ -27,14 +27,18 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by wanglei on 2016/12/24.
+ * @author Pinger
+ * @since 18-08-16 上午10:52
+ * <p>
+ * <p>
+ * 网络类库封装：RxJava2 + Retrofit2封装
  */
-
 public class NetGo {
 
     private static final String TAG = NetGo.class.getSimpleName();
 
     public static final long DEFAULT_MILLISECONDS = 15000;      // 默认的超时时间,10秒
+    public static long REFRESH_TIME = 300;                      //回调刷新时间（单位ms）
     public static final long CACHE_NEVER_EXPIRE = -1;           // 缓存永不过期
 
     private Context mContext;               //全局上下文

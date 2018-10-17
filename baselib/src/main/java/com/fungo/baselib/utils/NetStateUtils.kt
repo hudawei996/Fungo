@@ -12,7 +12,11 @@ import java.net.InetAddress
 import java.net.NetworkInterface
 import java.net.SocketException
 
-object NetWorkUtils {
+
+/**
+ * 网络状态工具类
+ */
+object NetStateUtils {
 
     // 网络类型 - 无连接
     private const val NETWORK_TYPE_NO_CONNECTION = -1231545315

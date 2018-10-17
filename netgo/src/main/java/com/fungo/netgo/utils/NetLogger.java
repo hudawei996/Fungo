@@ -4,7 +4,7 @@ import android.util.Log;
 
 /**
  * @author Pinger
- * @since 18-10-17 上午9:43
+ * @since 18-08-17 上午9:43
  * NetGo框架的日志打印
  */
 public class NetLogger {

@@ -1,16 +1,9 @@
 package com.fungo.sample.netgo
 
-import android.os.Bundle
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
-import com.fungo.netgo.NetError
 import com.fungo.netgo.NetGo
-import com.fungo.netgo.NetProvider
-import com.fungo.netgo.RequestHandler
 import com.fungo.sample.R
-import okhttp3.CookieJar
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
 
 /**
  * @author Pinger

@@ -153,7 +153,13 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示加载错误的占位图
      */
     open fun showPageError() {
-        findView<PlaceholderView>(R.id.placeholder).showError()
+        showPageError(null)
+    }
+
+    open fun showPageError(msg: String?) {
+        val placeholder = findView<PlaceholderView>(R.id.placeholder)
+        placeholder.setPageErrorText(msg)
+        placeholder.showError()
     }
 
     /**
