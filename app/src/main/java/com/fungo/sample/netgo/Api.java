@@ -16,7 +16,7 @@ public class Api {
         if (gankService == null) {
             synchronized (Api.class) {
                 if (gankService == null) {
-                    gankService = NetGo.getInstance().getRetrofit(API_BASE_URL, true).create(GankService.class);
+                    gankService = NetGo.getInstance().getRetrofitService(API_BASE_URL, GankService.class);
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.fungo.netgo.cookie;
+package com.fungo.netgo.cookie.store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
 /**
- * Created by wanglei on 2017/9/3.
+ * 保存在内存的Cookie，退出应用就没了
  */
 
 public class MemoryCookieStore implements CookieStore {
@@ -27,7 +27,7 @@ public class MemoryCookieStore implements CookieStore {
                 String va = itNew.next().name();
                 while (va != null && itOld.hasNext()) {
                     String v = itOld.next().name();
-                    if (v != null && va.equals(v)) {
+                    if (va.equals(v)) {
                         itOld.remove();
                     }
                 }

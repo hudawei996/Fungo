@@ -1,22 +1,26 @@
 package com.fungo.netgo;
 
-import android.text.TextUtils;
+import android.app.Application;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.fungo.netgo.progress.ProgressHelper;
-
-import org.reactivestreams.Publisher;
+import com.fungo.netgo.cache.CacheMode;
+import com.fungo.netgo.cookie.CookieJarImpl;
+import com.fungo.netgo.cookie.store.MemoryCookieStore;
+import com.fungo.netgo.https.HttpsUtils;
+import com.fungo.netgo.interceptor.LogInterceptor;
+import com.fungo.netgo.model.HttpHeaders;
+import com.fungo.netgo.model.HttpParams;
+import com.fungo.netgo.utils.HttpUtils;
+import com.fungo.netgo.utils.NetLogger;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
-import io.reactivex.Flowable;
-import io.reactivex.FlowableTransformer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.CookieJar;
-import okhttp3.Interceptor;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -27,197 +31,298 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class NetGo {
-    private static NetProvider sProvider = null;
 
-    private Map<String, NetProvider> providerMap = new HashMap<>();
-    private Map<String, Retrofit> retrofitMap = new HashMap<>();
-    private Map<String, OkHttpClient> clientMap = new HashMap<>();
+    private static final String TAG = NetGo.class.getSimpleName();
 
-    public static final long connectTimeoutMills = 10 * 1000l;
-    public static final long readTimeoutMills = 10 * 1000l;
+    public static final long DEFAULT_MILLISECONDS = 15000;      // 默认的超时时间,10秒
+    public static final long CACHE_NEVER_EXPIRE = -1;           // 缓存永不过期
 
-    private static NetGo instance;
+    private Context mContext;               //全局上下文
+    private Handler mDelivery;              //用于在主线程执行的调度器
+    private OkHttpClient mClient;           //okhttp请求的客户端
+    private HttpParams mCommonParams;       //全局公共请求参数
+    private HttpHeaders mCommonHeaders;     //全局公共请求头
+    private int mRetryCount;                //全局超时重试次数
+    private CacheMode mCacheMode;           //全局缓存模式
+    private long mCacheTime;                //全局缓存过期时间,默认永不过期
 
+    // 当有多个baseurl时，需要build多个Retrofit实例，这里缓存 起来
+    private Map<String, Retrofit> mRetrofitMap = new HashMap<>();
+
+    /**
+     * 生成默认的配置
+     */
     private NetGo() {
-
-    }
-
-    public static NetGo getInstance() {
-        if (instance == null) {
-            synchronized (NetGo.class) {
-                if (instance == null) {
-                    instance = new NetGo();
-                }
-            }
-        }
-        return instance;
-    }
-
-
-    public static <S> S get(String baseUrl, Class<S> service) {
-        return getInstance().getRetrofit(baseUrl, true).create(service);
-    }
-
-    public static void registerProvider(NetProvider provider) {
-        NetGo.sProvider = provider;
-    }
-
-    public static void registerProvider(String baseUrl, NetProvider provider) {
-        getInstance().providerMap.put(baseUrl, provider);
-    }
-
-
-    public Retrofit getRetrofit(String baseUrl, boolean useRx) {
-        return getRetrofit(baseUrl, null, useRx);
-    }
-
-
-    public Retrofit getRetrofit(String baseUrl, NetProvider provider, boolean useRx) {
-        if (TextUtils.isEmpty(baseUrl)) {
-            throw new IllegalStateException("baseUrl can not be null");
-        }
-        if (retrofitMap.get(baseUrl) != null) return retrofitMap.get(baseUrl);
-
-        if (provider == null) {
-            provider = providerMap.get(baseUrl);
-            if (provider == null) {
-                provider = sProvider;
-            }
-        }
-        checkProvider(provider);
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(getClient(baseUrl, provider))
-                .addConverterFactory(GsonConverterFactory.create());
-        if (useRx) {
-            builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
-        }
-
-        Retrofit retrofit = builder.build();
-        retrofitMap.put(baseUrl, retrofit);
-        providerMap.put(baseUrl, provider);
-
-        return retrofit;
-    }
-
-    private OkHttpClient getClient(String baseUrl, NetProvider provider) {
-        if (TextUtils.isEmpty(baseUrl)) {
-            throw new IllegalStateException("baseUrl can not be null");
-        }
-        if (clientMap.get(baseUrl) != null) return clientMap.get(baseUrl);
-
-        checkProvider(provider);
+        mDelivery = new Handler(Looper.getMainLooper());
+        mRetryCount = 3;
+        mCacheTime = CACHE_NEVER_EXPIRE;
+        mCacheMode = CacheMode.REQUEST_FAILED_READ_CACHE;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        builder.connectTimeout(provider.configConnectTimeoutMills() != 0
-                ? provider.configConnectTimeoutMills()
-                : connectTimeoutMills, TimeUnit.MILLISECONDS);
-        builder.readTimeout(provider.configReadTimeoutMills() != 0
-                ? provider.configReadTimeoutMills() : readTimeoutMills, TimeUnit.MILLISECONDS);
+        // 日志打印
+        LogInterceptor loggingInterceptor = new LogInterceptor("NetGo");
+        loggingInterceptor.setPrintLevel(LogInterceptor.Level.BODY);
+        loggingInterceptor.setColorLevel(Level.INFO);
+        builder.addInterceptor(loggingInterceptor);
 
-        CookieJar cookieJar = provider.configCookie();
-        if (cookieJar != null) {
-            builder.cookieJar(cookieJar);
-        }
-        provider.configHttps(builder);
+        // 超时
+        builder.readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
 
-        RequestHandler handler = provider.configHandler();
-        if (handler != null) {
-            builder.addInterceptor(new XInterceptor(handler));
-        }
+        // https
+        HttpsUtils.SSLParams sslParams = HttpsUtils.getSslSocketFactory();
+        builder.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager);
+        builder.hostnameVerifier(HttpsUtils.UnSafeHostnameVerifier);
 
-        if (provider.dispatchProgressEnable()) {
-            builder.addInterceptor(ProgressHelper.get().getInterceptor());
-        }
+        // cookie
+        builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));
 
-        Interceptor[] interceptors = provider.configInterceptors();
-        if (interceptors != null && interceptors.length > 0) {
-            for (Interceptor interceptor : interceptors) {
-                builder.addInterceptor(interceptor);
-            }
-        }
+        mClient = builder.build();
+    }
 
-        if (provider.configLogEnable()) {
-            LogInterceptor logInterceptor = new LogInterceptor();
-            builder.addInterceptor(logInterceptor);
-        }
+    public static NetGo getInstance() {
+        return NetGoHolder.holder;
+    }
 
-        OkHttpClient client = builder.build();
-        clientMap.put(baseUrl, client);
-        providerMap.put(baseUrl, provider);
-
-        return client;
+    private static class NetGoHolder {
+        private static NetGo holder = new NetGo();
     }
 
 
-    private void checkProvider(NetProvider provider) {
-        if (provider == null) {
-            throw new IllegalStateException("must register provider first");
+    /**
+     * 必须在全局Application先调用，获取context上下文，否则缓存无法使用
+     */
+    public NetGo init(Application app) {
+        mContext = app.getApplicationContext();
+        return this;
+    }
+
+    /**
+     * 是否开发模式
+     */
+    public NetGo debug(boolean debug) {
+        NetLogger.debug(TAG, debug);
+        return this;
+    }
+
+    /**
+     * 获取全局上下文
+     */
+    public Context getContext() {
+        HttpUtils.checkNotNull(mContext, "please call NetGo.getInstance().init() first in application!");
+        return mContext;
+    }
+
+    public Handler getDelivery() {
+        HttpUtils.checkNotNull(mDelivery, "please call NetGo.getInstance().init() first in application!");
+        return mDelivery;
+    }
+
+
+    /**
+     * 手动设置OkHttpClient
+     */
+    public NetGo setOkHttpClient(OkHttpClient client) {
+        HttpUtils.checkNotNull(client, "client can not be null");
+        this.mClient = client;
+        return this;
+    }
+
+    /**
+     * 获取OkHttpClient
+     */
+    public OkHttpClient getOkHttpClient() {
+        HttpUtils.checkNotNull(mClient, "please call NetGo.getInstance().init() first in application!");
+        return mClient;
+    }
+
+    /**
+     * 获取Retrofit的Service
+     */
+    public <S> S getRetrofitService(String baseUrl, Class<S> service) {
+        return getRetrofit(baseUrl).create(service);
+    }
+
+    /**
+     * 根据baseurl获取Retrofit的实例
+     */
+    public Retrofit getRetrofit(String baseUrl) {
+        HttpUtils.checkNotNull(baseUrl, "baseUrl can not be null");
+
+        if (mRetrofitMap.get(baseUrl) != null) {
+            return mRetrofitMap.get(baseUrl);
         }
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(mClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+
+        Retrofit retrofit = builder.build();
+        mRetrofitMap.put(baseUrl, retrofit);
+        return retrofit;
     }
 
-    public static NetProvider getCommonProvider() {
-        return sProvider;
-    }
-
+    /**
+     * 获取Retrofit的集合
+     */
     public Map<String, Retrofit> getRetrofitMap() {
-        return retrofitMap;
+        return mRetrofitMap;
     }
 
-    public Map<String, OkHttpClient> getClientMap() {
-        return clientMap;
-    }
 
-    public static void clearCache() {
-        getInstance().retrofitMap.clear();
-        getInstance().clientMap.clear();
+    /**
+     * 获取全局的cookie实例
+     */
+    public CookieJarImpl getCookieJar() {
+        return (CookieJarImpl) mClient.cookieJar();
     }
 
     /**
-     * 线程切换
-     *
-     * @return
+     * 超时重试次数
      */
-    public static <T extends IModel> FlowableTransformer<T, T> getScheduler() {
-        return new FlowableTransformer<T, T>() {
-            @Override
-            public Publisher<T> apply(Flowable<T> upstream) {
-                return upstream.subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
-            }
-        };
+    public NetGo setRetryCount(int retryCount) {
+        if (retryCount < 0) throw new IllegalArgumentException("retryCount must > 0");
+        mRetryCount = retryCount;
+        return this;
     }
 
     /**
-     * 异常处理变换
-     *
-     * @return
+     * 超时重试次数
      */
-    public static <T extends IModel> FlowableTransformer<T, T> getApiTransformer() {
-
-        return new FlowableTransformer<T, T>() {
-            @Override
-            public Publisher<T> apply(Flowable<T> upstream) {
-                return upstream.flatMap(new Function<T, Publisher<T>>() {
-                    @Override
-                    public Publisher<T> apply(T model) throws Exception {
-
-                        if (model == null || model.isNull()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.NoDataError));
-                        } else if (model.isAuthError()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.AuthError));
-                        } else if (model.isBizError()) {
-                            return Flowable.error(new NetError(model.getErrorMsg(), NetError.BusinessError));
-                        } else {
-                            return Flowable.just(model);
-                        }
-                    }
-                });
-            }
-        };
+    public int getRetryCount() {
+        return mRetryCount;
     }
 
+    /**
+     * 全局的缓存模式
+     */
+    public NetGo setCacheMode(CacheMode cacheMode) {
+        mCacheMode = cacheMode;
+        return this;
+    }
 
+    /**
+     * 获取全局的缓存模式
+     */
+    public CacheMode getCacheMode() {
+        return mCacheMode;
+    }
+
+    /**
+     * 全局的缓存过期时间
+     */
+    public NetGo setCacheTime(long cacheTime) {
+        if (cacheTime <= -1) cacheTime = CACHE_NEVER_EXPIRE;
+        mCacheTime = cacheTime;
+        return this;
+    }
+
+    /**
+     * 获取全局的缓存过期时间
+     */
+    public long getCacheTime() {
+        return mCacheTime;
+    }
+
+    /**
+     * 获取全局公共请求参数
+     */
+    public HttpParams getCommonParams() {
+        return mCommonParams;
+    }
+
+    /**
+     * 添加全局公共请求参数
+     */
+    public NetGo addCommonParams(HttpParams commonParams) {
+        if (mCommonParams == null) mCommonParams = new HttpParams();
+        mCommonParams.put(commonParams);
+        return this;
+    }
+
+    /**
+     * 获取全局公共请求头
+     */
+    public HttpHeaders getCommonHeaders() {
+        return mCommonHeaders;
+    }
+
+    /**
+     * 添加全局公共请求参数
+     */
+    public NetGo addCommonHeaders(HttpHeaders commonHeaders) {
+        if (mCommonHeaders == null) mCommonHeaders = new HttpHeaders();
+        mCommonHeaders.put(commonHeaders);
+        return this;
+    }
+
+    /**
+     * 根据Tag取消请求
+     */
+    public void cancelTag(Object tag) {
+        if (tag == null) return;
+        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+    }
+
+    /**
+     * 根据Tag取消请求
+     */
+    public static void cancelTag(OkHttpClient client, Object tag) {
+        if (client == null || tag == null) return;
+        for (Call call : client.dispatcher().queuedCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+        for (Call call : client.dispatcher().runningCalls()) {
+            if (tag.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+    }
+
+    /**
+     * 取消所有请求请求
+     */
+    public void cancelAll() {
+        for (Call call : getOkHttpClient().dispatcher().queuedCalls()) {
+            call.cancel();
+        }
+        for (Call call : getOkHttpClient().dispatcher().runningCalls()) {
+            call.cancel();
+        }
+    }
+
+    /**
+     * 取消所有请求请求
+     */
+    public static void cancelAll(OkHttpClient client) {
+        if (client == null) return;
+        for (Call call : client.dispatcher().queuedCalls()) {
+            call.cancel();
+        }
+        for (Call call : client.dispatcher().runningCalls()) {
+            call.cancel();
+        }
+    }
+
+    /**
+     * 清除retrofit缓存
+     */
+    public void clearCache() {
+        mRetrofitMap.clear();
+    }
 }

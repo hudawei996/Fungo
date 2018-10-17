@@ -1,7 +1,7 @@
 package com.fungo.sample.netgo;
 
 
-import com.fungo.netgo.IModel;
+import com.fungo.netgo.model.IModel;
 
 /**
  * Created by wanglei on 2016/12/11.

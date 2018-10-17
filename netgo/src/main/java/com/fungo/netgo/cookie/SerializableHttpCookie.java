@@ -7,11 +7,9 @@ import java.io.Serializable;
 
 import okhttp3.Cookie;
 
-/**
- * Created by wanglei on 2017/9/3.
- */
 
 public class SerializableHttpCookie implements Serializable {
+
     private static final long serialVersionUID = 6374381323722046732L;
 
     private transient final Cookie cookie;
@@ -61,6 +59,5 @@ public class SerializableHttpCookie implements Serializable {
         builder = secure ? builder.secure() : builder;
         builder = httpOnly ? builder.httpOnly() : builder;
         clientCookie = builder.build();
-
     }
 }

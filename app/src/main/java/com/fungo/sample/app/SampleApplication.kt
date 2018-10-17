@@ -1,7 +1,9 @@
 package com.fungo.sample.app
 
 import com.fungo.baselib.app.BaseApplication
+import com.fungo.netgo.NetGo
 import com.fungo.sample.BuildConfig
+
 
 /**
  * @author Pinger
@@ -22,7 +24,11 @@ class SampleApplication : BaseApplication() {
     }
 
     override fun initSDK() {
+        initNetGo()
+    }
 
+    private fun initNetGo() {
+        NetGo.getInstance().init(this).debug(true)
     }
 
 

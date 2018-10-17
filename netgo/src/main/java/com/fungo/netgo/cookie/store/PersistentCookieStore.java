@@ -1,9 +1,11 @@
-package com.fungo.netgo.cookie;
+package com.fungo.netgo.cookie.store;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.fungo.netgo.cookie.SerializableHttpCookie;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +24,7 @@ import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
 /**
- * Created by wanglei on 2017/9/3.
+ * 持久存储的Cookie，使用Sp保存
  */
 
 public class PersistentCookieStore implements CookieStore {
@@ -41,12 +43,12 @@ public class PersistentCookieStore implements CookieStore {
      */
     public PersistentCookieStore(Context context) {
         cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
-        cookies = new HashMap<String, ConcurrentHashMap<String, Cookie>>();
+        cookies = new HashMap<>();
 
         // Load any previously stored cookies into the store
         Map<String, ?> prefsMap = cookiePrefs.getAll();
         for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {
-            if (((String) entry.getValue()) != null && !((String) entry.getValue()).startsWith(COOKIE_NAME_PREFIX)) {
+            if (entry.getValue() != null && !((String) entry.getValue()).startsWith(COOKIE_NAME_PREFIX)) {
                 String[] cookieNames = TextUtils.split((String) entry.getValue(), ",");
                 for (String name : cookieNames) {
                     String encodedCookie = cookiePrefs.getString(COOKIE_NAME_PREFIX + name, null);
@@ -100,7 +102,7 @@ public class PersistentCookieStore implements CookieStore {
 
     @Override
     public List<Cookie> get(HttpUrl uri) {
-        ArrayList<Cookie> ret = new ArrayList<Cookie>();
+        ArrayList<Cookie> ret = new ArrayList<>();
         if (cookies.containsKey(uri.host())) {
             Collection<Cookie> cookies = this.cookies.get(uri.host()).values();
             for (Cookie cookie : cookies) {
@@ -151,7 +153,7 @@ public class PersistentCookieStore implements CookieStore {
 
     @Override
     public List<Cookie> getCookies() {
-        ArrayList<Cookie> ret = new ArrayList<Cookie>();
+        ArrayList<Cookie> ret = new ArrayList<>();
         for (String key : cookies.keySet())
             ret.addAll(cookies.get(key).values());
 

@@ -3,7 +3,7 @@ package com.fungo.sample.netgo
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.netgo.ApiSubscriber
 import com.fungo.netgo.NetError
-import com.fungo.netgo.NetGo
+import com.fungo.netgo.utils.NetRxUtils
 
 /**
  * @author Pinger
@@ -13,8 +13,8 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
 
     override fun loadData(page: Int) {
         Api.getGankService().getGankData("Android", 30, page)
-                .compose(NetGo.getApiTransformer<GankResults>())
-                .compose(NetGo.getScheduler<GankResults>())
+                .compose(NetRxUtils.getApiTransformer<GankResults>())
+                .compose(NetRxUtils.getScheduler<GankResults>())
                 .subscribe(object : ApiSubscriber<GankResults>() {
                     override fun onNext(t: GankResults?) {
                         netgoView.showContent(t?.results)

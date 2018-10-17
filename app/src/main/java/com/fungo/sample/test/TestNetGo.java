@@ -3,6 +3,7 @@ package com.fungo.sample.test;
 import com.fungo.netgo.ApiSubscriber;
 import com.fungo.netgo.NetError;
 import com.fungo.netgo.NetGo;
+import com.fungo.netgo.utils.NetRxUtils;
 import com.fungo.sample.netgo.Api;
 import com.fungo.sample.netgo.GankResults;
 
@@ -15,8 +16,8 @@ public class TestNetGo {
 
     public static void main(String[] args) {
         Api.getGankService().getGankData("Android", 30, 1)
-                .compose(NetGo.<GankResults>getApiTransformer())
-                .compose(NetGo.<GankResults>getScheduler())
+                .compose(NetRxUtils.<GankResults>getApiTransformer())
+                .compose(NetRxUtils.<GankResults>getScheduler())
                 .subscribe(new ApiSubscriber<GankResults>() {
                     @Override
                     protected void onFail(NetError error) {

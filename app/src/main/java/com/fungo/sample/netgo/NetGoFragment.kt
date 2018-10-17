@@ -23,48 +23,6 @@ class NetGoFragment : BaseRecyclerFragment() {
         return NetGoPresenter(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        NetGo.registerProvider(object : NetProvider {
-            override fun configHttps(builder: OkHttpClient.Builder?) {
-
-            }
-
-            override fun configCookie(): CookieJar? {
-                return null
-            }
-
-            override fun configHandler(): RequestHandler? {
-                return null
-            }
-
-            override fun configConnectTimeoutMills(): Long {
-                return 30000
-            }
-
-            override fun configReadTimeoutMills(): Long {
-                return 30000
-            }
-
-            override fun configLogEnable(): Boolean {
-                return true
-            }
-
-            override fun handleError(error: NetError?): Boolean {
-                return true
-            }
-
-            override fun dispatchProgressEnable(): Boolean {
-                return true
-            }
-
-            override fun configInterceptors(): Array<Interceptor>? {
-                return null
-            }
-
-        })
-
-        super.onCreate(savedInstanceState)
-    }
 
     override fun getPageTitle(): String? {
         return getString(R.string.main_netgo)

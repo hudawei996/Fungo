@@ -1,5 +1,6 @@
 package com.fungo.netgo;
 
+import com.fungo.netgo.model.IModel;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
@@ -35,12 +36,6 @@ public abstract class ApiSubscriber<T extends IModel> extends ResourceSubscriber
                 error = (NetError) e;
             }
 
-            if (useCommonErrorHandler()
-                    && NetGo.getCommonProvider() != null) {
-                if (NetGo.getCommonProvider().handleError(error)) {        //使用通用异常处理
-                    return;
-                }
-            }
             onFail(error);
         }
 

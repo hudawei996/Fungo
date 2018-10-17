@@ -8,6 +8,7 @@ import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
+import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.header.WaveSwipeHeader
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
 import kotlinx.android.synthetic.main.base_fragment_recycler.*
@@ -35,7 +36,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     }
 
     final override fun initPageView() {
-        smartRefreshLayout.refreshHeader = WaveSwipeHeader(context)
+        smartRefreshLayout.refreshHeader = MaterialHeader(context)
         smartRefreshLayout.refreshFooter = BallPulseFooter(context!!)
         smartRefreshLayout.setDragRate(1f)
         smartRefreshLayout.setHeaderMaxDragRate(1.5f)
