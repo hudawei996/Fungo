@@ -11,7 +11,7 @@ import com.fungo.netgo.subscribe.ApiSubscriber
 class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRecyclerContract.Presenter {
 
     override fun loadData(page: Int) {
-        Api.getGankData(object : ApiSubscriber<GankResults>() {
+        Api.getGankData().subscribe(object : ApiSubscriber<GankResults>() {
             override fun onSuccess(t: GankResults?) {
                 netgoView.showContent(t?.results)
             }
@@ -21,6 +21,7 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
 
             }
         })
+
 
     }
 }

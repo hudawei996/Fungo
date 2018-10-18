@@ -57,6 +57,10 @@ object GsonUtils {
         return getGson().fromJson(jsonElement, type)
     }
 
+    fun <V> fromJson(jsonElement: JsonElement, type: Class<V>): V {
+        return getGson().fromJson(jsonElement, type)
+    }
+
     fun <V> fromJson(params: Map<String, Any>, type: Class<V>): V {
         return getGson().fromJson(getGson().toJson(params), type)
     }

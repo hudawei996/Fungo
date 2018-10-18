@@ -450,14 +450,10 @@ public class NetGo {
                                     Method declaredMethod = NetGo.class.getDeclaredMethod("request", RequestType.class, String.class, Map.class);
                                     // 获取返回值的类型，此处不是数组，请注意返回值只能是一个
                                     Type genericReturnType = declaredMethod.getGenericReturnType();
-
+                                    // genericReturnType = Flowable<T>
                                     // 走到这里泛型就被擦除了，Flowable中的泛型变成了T，不是外界传入的具体的对象了
-
                                     // 获取返回值的泛型参数
                                     Type tType = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
-
-                                    // 此时的tType表示的是外界传入的泛型，并不是泛型的类型
-                                    // 这里需要对这个传入的类型进行判断
 
                                     T t = GsonUtils.INSTANCE.fromJson(jsonElement, tType);
 
