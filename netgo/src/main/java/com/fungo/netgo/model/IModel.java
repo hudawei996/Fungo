@@ -16,11 +16,6 @@ public interface IModel {
     boolean isSuccess();
 
     /**
-     * 实体内部的对象是否为null
-     */
-    boolean isNull();
-
-    /**
      * 后台返回的错误信息
      */
     String getErrorMsg();

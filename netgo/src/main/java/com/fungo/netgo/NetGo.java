@@ -12,14 +12,35 @@ import com.fungo.netgo.https.HttpsUtils;
 import com.fungo.netgo.interceptor.LogInterceptor;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
+import com.fungo.netgo.model.IModel;
+import com.fungo.netgo.request.BaseBodyRequest;
+import com.fungo.netgo.request.FungoApi;
+import com.fungo.netgo.request.RequestType;
+import com.fungo.netgo.subscribe.ApiException;
+import com.fungo.netgo.subscribe.NetError;
+import com.fungo.netgo.utils.GsonUtils;
 import com.fungo.netgo.utils.HttpUtils;
 import com.fungo.netgo.utils.NetLogger;
+import com.google.gson.JsonElement;
 
+import org.reactivestreams.Publisher;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.FlowableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -52,6 +73,9 @@ public class NetGo {
 
     // 当有多个baseurl时，需要build多个Retrofit实例，这里缓存 起来
     private Map<String, Retrofit> mRetrofitMap = new HashMap<>();
+    private Map<String, FungoApi> mFungoMap = new HashMap<>();
+    private FungoApi mFungoApi;
+
 
     /**
      * 生成默认的配置
@@ -140,6 +164,22 @@ public class NetGo {
     public OkHttpClient getOkHttpClient() {
         HttpUtils.checkNotNull(mClient, "please call NetGo.getInstance().init() first in application!");
         return mClient;
+    }
+
+
+    /**
+     * 根据url生成对应的Service
+     */
+    public NetGo getApi(String url) {
+        HttpUtils.checkNotNull(url, "url can not be null");
+
+        if (mFungoMap.get(url) == null) {
+            mFungoApi = getRetrofitService(url, FungoApi.class);
+            mFungoMap.put(url, mFungoApi);
+        } else {
+            mFungoApi = mFungoMap.get(url);
+        }
+        return this;
     }
 
     /**
@@ -328,5 +368,161 @@ public class NetGo {
      */
     public void clearCache() {
         mRetrofitMap.clear();
+        mFungoMap.clear();
+    }
+
+
+    //=======================请求方式=======================
+    //=======================请求方式=======================
+    //=======================请求方式=======================
+
+    // TODO 讲请求参数抽取出去
+
+    /**
+     * GET请求，不带任何参数
+     */
+    public <T extends IModel> Flowable<T> getRequest(String url) {
+        return request(RequestType.GET, url, null);
+    }
+
+    /**
+     * GET请求，带有参数
+     */
+    public <T extends IModel> Flowable<T> getRequest(String url, Map<String, Object> params) {
+        return request(RequestType.GET, url, params);
+    }
+
+
+    /**
+     * POST请求，请求体不带参数
+     */
+    public <T extends IModel> Flowable<T> postRequest(String url) {
+        return request(RequestType.POST, url, null);
+    }
+
+    /**
+     * POST请求，带有参数
+     */
+    public <T extends IModel> Flowable<T> postRequest(String url, Map<String, Object> params) {
+        return request(RequestType.POST, url, params);
+    }
+
+
+    /**
+     * 网络请求核心业务
+     */
+    private <T extends IModel> Flowable<T> request(final RequestType type, final String url, final Map<String, Object> params) {
+        if (HttpUtils.isNetConnected(mContext)) {
+
+            return Flowable
+                    .just(url)
+                    .flatMap(new Function<String, Publisher<JsonElement>>() {
+                        @Override
+                        public Publisher<JsonElement> apply(String s) {
+
+                            // 重组请求链接和参数
+                            if (type == RequestType.GET) {
+                                String fullUrl = HttpUtils.appendUrlParams(url, params);
+                                if (fullUrl.contains("http") || fullUrl.contains("https")) {
+                                    return mFungoApi.getRequestWithFullUrl(fullUrl);
+                                } else {
+                                    return mFungoApi.getRequest(fullUrl);
+                                }
+
+                            } else {
+                                BaseBodyRequest bodyParams = HttpUtils.getPostBody(params);
+                                if (url.contains("http") || url.contains("https")) {
+                                    return mFungoApi.postRequestWithFullUrl(url, bodyParams);
+                                } else {
+                                    return mFungoApi.postRequest(url, bodyParams);
+                                }
+                            }
+                        }
+                    })
+                    .flatMap(new Function<JsonElement, Publisher<T>>() {
+                        @Override
+                        public Publisher<T> apply(JsonElement jsonElement) {
+                            if (jsonElement == null) {
+                                return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
+                            } else {
+                                try {
+                                    // 通过反射获取到方法
+                                    Method declaredMethod = NetGo.class.getDeclaredMethod("request", RequestType.class, String.class, Map.class);
+                                    // 获取返回值的类型，此处不是数组，请注意返回值只能是一个
+                                    Type genericReturnType = declaredMethod.getGenericReturnType();
+
+                                    // 走到这里泛型就被擦除了，Flowable中的泛型变成了T，不是外界传入的具体的对象了
+
+                                    // 获取返回值的泛型参数
+                                    Type tType = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
+
+                                    // 此时的tType表示的是外界传入的泛型，并不是泛型的类型
+                                    // 这里需要对这个传入的类型进行判断
+
+                                    T t = GsonUtils.INSTANCE.fromJson(jsonElement, tType);
+
+                                    if (t == null) {
+                                        return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
+                                    } else {
+                                        if (t.isSuccess()) {
+                                            return Flowable.just(t);
+                                        } else {
+                                            return requestError(NetError.MSG_SERVER_ERROR, NetError.SERVER_ERROR);
+                                        }
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    return requestError(NetError.MSG_PARSE_ERROR, NetError.PARSE_ERROR);
+                                }
+                            }
+                        }
+                    })
+
+                    // 请求过程中和请求相应后的异常处理
+                    .onErrorResumeNext(new Function<Throwable, Publisher<? extends T>>() {
+                        @Override
+                        public Publisher<? extends T> apply(Throwable throwable) {
+                            return Flowable.error(NetError.handleException(throwable));
+                        }
+
+                    })
+                    // 网络请求线程自动切换
+                    .compose(this.<T>getScheduler());
+
+        } else {
+            // 没有网络时，直接进入异常状态
+            // TODO 加入缓存时的处理
+            return Flowable.create(new FlowableOnSubscribe<T>() {
+                @Override
+                public void subscribe(FlowableEmitter<T> e) {
+                    if (!e.isCancelled()) {
+                        e.onError(new ApiException(NetError.MSG_NET_BREAK, NetError.NET_BREAK));
+                        e.onComplete();
+                    }
+                }
+            }, BackpressureStrategy.BUFFER);
+        }
+    }
+
+
+    /**
+     * 内部的错误处理封装
+     */
+    private static <T> Flowable<T> requestError(String message, int code) {
+        return Flowable.error(new ApiException(message, code));
+    }
+
+    /**
+     * 线程切换
+     */
+    private <T extends IModel> FlowableTransformer<T, T> getScheduler() {
+        return new FlowableTransformer<T, T>() {
+            @Override
+            public Publisher<T> apply(Flowable<T> upstream) {
+                return upstream.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
     }
 }

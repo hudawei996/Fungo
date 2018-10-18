@@ -17,13 +17,6 @@ public class GankResults extends GankModel {
     public void setResults(List<Item> results) {
         this.results = results;
     }
-
-    @Override
-    public boolean isNull() {
-        return results == null || results.isEmpty();
-    }
-
-
     public static class Item{
         private String _id;
         private String _ns;
@@ -117,4 +110,12 @@ public class GankResults extends GankModel {
         }
     }
 
+
+    @Override
+    public String toString() {
+        return "GankResults{" +
+                "results=" + results +
+                ", error=" + error +
+                '}';
+    }
 }

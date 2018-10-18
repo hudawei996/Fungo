@@ -3,11 +3,17 @@ package com.fungo.netgo.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.fungo.netgo.NetGo;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
+import com.fungo.netgo.request.BaseBodyRequest;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,10 +23,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -289,4 +298,27 @@ public class HttpUtils {
         return manager.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
 
+
+    /**
+     * 生成请求体对象
+     */
+    public static BaseBodyRequest getPostBody(Map<String, Object> params){
+        return new BaseBodyRequest(params);
+    }
+
+    /**
+     * 拼接请求参数
+     */
+    public static String appendUrlParams( String url, Map<String, Object> params) {
+        if (params != null && params.size() > 0) {
+            Uri.Builder builder = Uri.parse(url).buildUpon();
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null) {
+                    builder.appendQueryParameter(entry.getKey(), entry.getValue().toString());
+                }
+            }
+            url = builder.build().toString();
+        }
+        return url;
+    }
 }

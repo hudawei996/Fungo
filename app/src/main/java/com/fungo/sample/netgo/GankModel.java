@@ -21,11 +21,6 @@ public class GankModel implements IModel {
     }
 
     @Override
-    public boolean isNull() {
-        return false;
-    }
-
-    @Override
     public String getErrorMsg() {
         return null;
     }

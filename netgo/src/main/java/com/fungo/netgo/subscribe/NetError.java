@@ -35,15 +35,19 @@ public class NetError {
     public static final int HTTP_ERROR = 1003;      // 协议出错
     public static final int ERROR_DATA = 1005;      // 数据错误
     public static final int UNKNOW_HOST = 10006;    // 域名解析异常
+    public static final int NET_BREAK = 10007;      // 网络连接失败
+    public static final int SERVER_ERROR = 10008;   // 服务器异常
 
     // 异常描述
     public static final String MSG_HTTP_ERROR = "网络错误";
     public static final String MSG_UNKNOW = "未知错误";
-    public static final String MSG_PARSE_ERROR = "解析错误";
+    public static final String MSG_PARSE_ERROR = "数据解析错误";
     public static final String MSG_NETWORD_ERROR = "连接失败";
     public static final String MSG_ERROR_DATA = "数据错误";
     public static final String MSG_UNKNOW_HOST = "域名解析异常";
+    public static final String MSG_NET_BREAK = "网络连接失败";
 
+    public static final String MSG_SERVER_ERROR = "服务器异常";
 
     /**
      * 分发网络请求的异常

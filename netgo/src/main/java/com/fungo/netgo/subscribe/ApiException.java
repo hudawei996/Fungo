@@ -25,6 +25,10 @@ public class ApiException extends Exception {
         this.message = message;
     }
 
+    public ApiException( String message, int code) {
+        this.code = code;
+        this.message = message;
+    }
 
     @Override
     public String getMessage() {
