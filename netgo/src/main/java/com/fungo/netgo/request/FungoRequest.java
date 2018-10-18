@@ -8,7 +8,4 @@ package com.fungo.netgo.request;
  */
 public class FungoRequest {
 
-    fun get();
-
-    fun post();
 }
