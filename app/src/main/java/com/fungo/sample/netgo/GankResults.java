@@ -2,9 +2,6 @@ package com.fungo.sample.netgo;
 
 import java.util.List;
 
-/**
- * Created by wanglei on 2016/12/10.
- */
 
 public class GankResults extends GankModel {
 

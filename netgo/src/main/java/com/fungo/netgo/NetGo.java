@@ -8,16 +8,15 @@ import android.os.Looper;
 import com.fungo.netgo.cache.CacheMode;
 import com.fungo.netgo.cookie.CookieJarImpl;
 import com.fungo.netgo.cookie.store.MemoryCookieStore;
+import com.fungo.netgo.error.ApiException;
+import com.fungo.netgo.error.NetError;
 import com.fungo.netgo.https.HttpsUtils;
 import com.fungo.netgo.interceptor.LogInterceptor;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
-import com.fungo.netgo.model.IModel;
 import com.fungo.netgo.request.BaseBodyRequest;
 import com.fungo.netgo.request.FungoApi;
 import com.fungo.netgo.request.RequestType;
-import com.fungo.netgo.subscribe.ApiException;
-import com.fungo.netgo.subscribe.NetError;
 import com.fungo.netgo.utils.GsonUtils;
 import com.fungo.netgo.utils.HttpUtils;
 import com.fungo.netgo.utils.NetLogger;
@@ -25,9 +24,6 @@ import com.google.gson.JsonElement;
 
 import org.reactivestreams.Publisher;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -376,42 +372,49 @@ public class NetGo {
     //=======================请求方式=======================
     //=======================请求方式=======================
 
-    // TODO 讲请求参数抽取出去
+    // TODO 讲请求参数抽取出去，通过Builder的方式设置各个参数
 
     /**
      * GET请求，不带任何参数
      */
-    public <T extends IModel> Flowable<T> getRequest(String url) {
-        return request(RequestType.GET, url, null);
+    public <T> Flowable<T> getRequest(String url,Class<T> clazz) {
+        return request(RequestType.GET, url, null,clazz);
+    }
+
+    public <T> Flowable<T> getRequest(String url) {
+        return request(RequestType.GET, url,null,null);
     }
 
     /**
      * GET请求，带有参数
      */
-    public <T extends IModel> Flowable<T> getRequest(String url, Map<String, Object> params) {
-        return request(RequestType.GET, url, params);
+    public <T> Flowable<T> getRequest(String url, Map<String, Object> params,Class<T> clazz) {
+        return request(RequestType.GET, url, params,clazz);
     }
 
 
     /**
      * POST请求，请求体不带参数
      */
-    public <T extends IModel> Flowable<T> postRequest(String url) {
-        return request(RequestType.POST, url, null);
+    public <T> Flowable<T> postRequest(String url,Class<T> clazz) {
+        return request(RequestType.POST, url, null,clazz);
     }
 
     /**
      * POST请求，带有参数
      */
-    public <T extends IModel> Flowable<T> postRequest(String url, Map<String, Object> params) {
-        return request(RequestType.POST, url, params);
+    public <T> Flowable<T> postRequest(String url, Map<String, Object> params,Class<T> clazz) {
+        return request(RequestType.POST, url, params,clazz);
     }
 
 
     /**
      * 网络请求核心业务
+     *
+     * 由于解析数据的时候发现解析方法上泛型会发生泛型擦除，确定不了T的类型，所有这里将数据类型由外部传入进入
+     *
      */
-    private <T extends IModel> Flowable<T> request(final RequestType type, final String url, final Map<String, Object> params) {
+    private <T> Flowable<T> request(final RequestType type, final String url, final Map<String, Object> params, final Class<T> clazz) {
         if (HttpUtils.isNetConnected(mContext)) {
 
             return Flowable
@@ -446,25 +449,19 @@ public class NetGo {
                                 return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
                             } else {
                                 try {
-                                    // 通过反射获取到方法
-                                    Method declaredMethod = NetGo.class.getDeclaredMethod("request", RequestType.class, String.class, Map.class);
-                                    // 获取返回值的类型，此处不是数组，请注意返回值只能是一个
-                                    Type genericReturnType = declaredMethod.getGenericReturnType();
-                                    // genericReturnType = Flowable<T>
-                                    // 走到这里泛型就被擦除了，Flowable中的泛型变成了T，不是外界传入的具体的对象了
-                                    // 获取返回值的泛型参数
-                                    Type tType = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
+                                    // 对class的类型进行区分，不同的class做不同的处理
+                                    T t;
+                                    if (clazz == null || clazz == String.class) {
+                                        t = (T) jsonElement.toString();
+                                    }else {
 
-                                    T t = GsonUtils.INSTANCE.fromJson(jsonElement, tType);
+                                        t = GsonUtils.INSTANCE.fromJson(jsonElement, clazz);
+                                    }
 
                                     if (t == null) {
                                         return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
                                     } else {
-                                        if (t.isSuccess()) {
-                                            return Flowable.just(t);
-                                        } else {
-                                            return requestError(NetError.MSG_SERVER_ERROR, NetError.SERVER_ERROR);
-                                        }
+                                        return Flowable.just(t);
                                     }
 
                                 } catch (Exception e) {
@@ -505,14 +502,14 @@ public class NetGo {
     /**
      * 内部的错误处理封装
      */
-    private static <T> Flowable<T> requestError(String message, int code) {
+    private <T> Flowable<T> requestError(String message, int code) {
         return Flowable.error(new ApiException(message, code));
     }
 
     /**
      * 线程切换
      */
-    private <T extends IModel> FlowableTransformer<T, T> getScheduler() {
+    private <T> FlowableTransformer<T, T> getScheduler() {
         return new FlowableTransformer<T, T>() {
             @Override
             public Publisher<T> apply(Flowable<T> upstream) {

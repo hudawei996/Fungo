@@ -1,4 +1,4 @@
-package com.fungo.netgo.subscribe;
+package com.fungo.netgo.error;
 
 import android.text.TextUtils;
 

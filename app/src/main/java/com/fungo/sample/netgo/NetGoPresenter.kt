@@ -1,7 +1,8 @@
 package com.fungo.sample.netgo
 
+import android.annotation.SuppressLint
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
-import com.fungo.netgo.subscribe.ApiException
+import com.fungo.netgo.error.ApiException
 import com.fungo.netgo.subscribe.ApiSubscriber
 
 /**
@@ -10,7 +11,10 @@ import com.fungo.netgo.subscribe.ApiSubscriber
  */
 class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRecyclerContract.Presenter {
 
+    @SuppressLint("CheckResult")
     override fun loadData(page: Int) {
+
+        // 发起一个需要解析的请求
         Api.getGankData().subscribe(object : ApiSubscriber<GankResults>() {
             override fun onSuccess(t: GankResults?) {
                 netgoView.showContent(t?.results)
@@ -20,8 +24,16 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
                 netgoView.showPageError(e?.message)
 
             }
+
         })
 
+
+        // 发起一个不需要结果的请求
+        // Api.getGankDespite()
+
+        // 发起一个返回String的请求
+//        Api.getGankString().subscribe(object : StringSubscriber() {
+//        })
 
     }
 }

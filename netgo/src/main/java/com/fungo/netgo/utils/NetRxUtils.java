@@ -1,8 +1,8 @@
 package com.fungo.netgo.utils;
 
 import com.fungo.netgo.model.IModel;
-import com.fungo.netgo.subscribe.NetError;
-import com.fungo.netgo.subscribe.ServerException;
+import com.fungo.netgo.error.NetError;
+import com.fungo.netgo.error.ServerException;
 
 import org.reactivestreams.Publisher;
 
