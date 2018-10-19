@@ -1,6 +1,5 @@
 package com.fungo.sample.netgo
 
-import android.annotation.SuppressLint
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.netgo.error.ApiException
 import com.fungo.netgo.subscribe.ApiSubscriber

@@ -31,7 +31,7 @@
 
     <!--内容容器-->
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/pageFragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,9 +44,9 @@
         android:id="@+id/placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/container"
-        app:layout_constraintEnd_toEndOf="@id/container"
-        app:layout_constraintStart_toStartOf="@id/container"
-        app:layout_constraintTop_toTopOf="@id/container" />
+        app:layout_constraintBottom_toBottomOf="@id/pageFragmentContainer"
+        app:layout_constraintEnd_toEndOf="@id/pageFragmentContainer"
+        app:layout_constraintStart_toStartOf="@id/pageFragmentContainer"
+        app:layout_constraintTop_toTopOf="@id/pageFragmentContainer" />
 
 </android.support.constraint.ConstraintLayout>

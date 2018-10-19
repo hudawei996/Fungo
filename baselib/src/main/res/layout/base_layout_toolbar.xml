@@ -4,41 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_48"
-    android:elevation="@dimen/dp_4">
+    android:background="?attr/colorPrimary">
 
-    <ImageView
-        android:id="@+id/baseIvBack"
+    <!--左侧返回按钮-->
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/baseIvLeftBack"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
-        android:foreground="?android:selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="center"
-        android:src="@mipmap/base_ic_back_white"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/base_ic_back_white" />
 
-    <TextView
+
+    <!--标题，可以在左边，也可以在中间-->
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/baseTvTitle"
-        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginRight="@dimen/dp_48"
         android:ellipsize="end"
         android:gravity="center"
-        android:textColor="?attr/textColorPrimary"
         android:lines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="?attr/textColorPrimary"
+        android:textSize="@dimen/sp_18"
+        android:visibility="gone"
         tools:text="万合天宜" />
 
-    <ImageView
-        android:id="@+id/baseIvShare"
+    <!--右侧的按钮图标-->
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/baseIvRightIcon"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
-        android:foreground="?android:selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="center"
-        android:src="@mipmap/base_ic_share_white"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible" />
+        app:srcCompat="@mipmap/base_ic_share_white"
+        tools:visibility="gone" />
 
 </android.support.constraint.ConstraintLayout>

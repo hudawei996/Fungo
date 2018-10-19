@@ -1,16 +1,16 @@
 package com.fungo.baselib.base.page
 
 import android.app.AlertDialog
-import android.support.annotation.ColorInt
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseFragment
 import com.fungo.baselib.utils.StatusBarUtils
 import com.fungo.baselib.utils.ViewUtils
+import kotlinx.android.synthetic.main.base_fragment_page.*
+import kotlinx.android.synthetic.main.base_layout_toolbar.*
 
 /**
  * @author Pinger
@@ -18,6 +18,8 @@ import com.fungo.baselib.utils.ViewUtils
  * 页面Fragment基类，封装ToolBar和StatusBar，可以不用搭理顶部的标题栏。
  * 另外将页面的各种状态进行统一处理，方便直接调用展示，比如加载中试图，空试图，错误试图等。
  * 还有将平时开发中用到的各种工具类进行封装，提供给子类调用。
+ *
+ * TODO TitleBar使用ToolBar来代替
  */
 
 abstract class BasePageFragment : BaseFragment() {
@@ -34,42 +36,43 @@ abstract class BasePageFragment : BaseFragment() {
     final override fun initView() {
         // 设置状态栏高度
         if (isSetStatusBarHeight()) {
-            StatusBarUtils.setStatusBarHeight(findView(R.id.statusView))
+            StatusBarUtils.setStatusBarHeight(statusView)
         }
 
-        ViewUtils.setVisible(findView(R.id.toolBarContainer), isShowToolBar())
+        ViewUtils.setVisible(toolBarContainer, isShowToolBar())
 
         // 设置导航栏文字等
         if (isShowToolBar()) {
-            findView<TextView>(R.id.baseTvTitle).text = getPageTitle()
-
-            // 返回按钮
-            ViewUtils.setVisible(findView(R.id.baseIvBack), isBackEnable())
-            if (isBackEnable()) {
-                findView<ImageView>(R.id.baseIvBack).setOnClickListener {
+            setPageTitle(getPageTitle())
+            // 左侧返回按钮
+            ViewUtils.setVisible(baseIvLeftBack, isShowBackIcon())
+            if (isShowBackIcon()) {
+                baseIvLeftBack.setOnClickListener {
                     doBackAction()
                 }
+            } else {
+                // 如果不展示返回按钮，但是展示主标题，就要调整一下标题的左边距
+                //baseTvTitle.setPadding(ViewUtils.dp2px(context, R.dimen.dp_12), 0, 0, 0)
+                baseTvTitle.setPadding(0, 0, 0, 0)
             }
 
-            // 分享按钮
-            ViewUtils.setVisible(findView(R.id.baseIvShare), isShareEnable())
-            if (isShareEnable()) {
-                findView<ImageView>(R.id.baseIvShare).setOnClickListener {
-                    doShareAction()
+            // 右侧按钮
+            ViewUtils.setVisible(baseIvRightIcon, isShowRightIcon())
+            if (isShowRightIcon()) {
+                baseIvRightIcon.setOnClickListener {
+                    doRightIconAction()
                 }
             }
         }
 
         // 设置填充容器
-        val container = findView<FrameLayout>(R.id.container)
-        if (container.childCount > 0) {
-            container.removeAllViews()
+        if (pageFragmentContainer.childCount > 0) {
+            pageFragmentContainer.removeAllViews()
         }
-        LayoutInflater.from(context).inflate(getContentResId(), container)
+        LayoutInflater.from(context).inflate(getContentResId(), pageFragmentContainer)
 
         initPageView()
     }
-
 
     /**
      * 执行返回操作
@@ -126,19 +129,18 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示加载中的占位图
      */
     open fun showPageLoading() {
-        findView<PlaceholderView>(R.id.placeholder).showLoading()
+        placeholder.showLoading()
         isLoadingShowing = true
     }
 
     open fun showPageLoading(msg: String) {
-        val placeholder = findView<PlaceholderView>(R.id.placeholder)
         placeholder.showLoading()
         placeholder.setPageLoadingText(msg)
         isLoadingShowing = true
     }
 
     open fun hidePageLoading() {
-        findView<PlaceholderView>(R.id.placeholder).hideLoading()
+        placeholder.hideLoading()
         isLoadingShowing = false
     }
 
@@ -146,7 +148,7 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示空数据的占位图
      */
     open fun showPageEmpty() {
-        findView<PlaceholderView>(R.id.placeholder).showEmpty()
+        placeholder.showEmpty()
     }
 
     /**
@@ -157,7 +159,6 @@ abstract class BasePageFragment : BaseFragment() {
     }
 
     open fun showPageError(msg: String?) {
-        val placeholder = findView<PlaceholderView>(R.id.placeholder)
         placeholder.setPageErrorText(msg)
         placeholder.showError()
     }
@@ -166,43 +167,38 @@ abstract class BasePageFragment : BaseFragment() {
      * 设置页面加载错误重连的监听
      */
     open fun setPageErrorRetryListener(listener: View.OnClickListener) {
-        findView<PlaceholderView>(R.id.placeholder).setPageErrorRetryListener(listener)
+        placeholder.setPageErrorRetryListener(listener)
     }
 
     /**
      * 展示加载完成，要显示的内容
      */
     open fun showPageContent() {
-        findView<PlaceholderView>(R.id.placeholder).showContent()
+        placeholder.showContent()
         isLoadingShowing = false
     }
 
-
     /**
-     * 主动设置页面标题，给子类调用设置标题
+     * 主动设置页面标题，给子类调用
      */
     protected open fun setPageTitle(title: String?) {
-        findView<TextView>(R.id.baseTvTitle).text = title
+        if (!TextUtils.isEmpty(title)) {
+            ViewUtils.setVisible(baseTvTitle)
+            baseTvTitle.text = title
+        }
     }
 
     /**
-     * 设置标题字体的颜色
+     * 获取标题栏对象，让子类主动去设置样式
      */
-    protected open fun setPageTitleColor(@ColorInt color: Int) {
-        findView<TextView>(R.id.baseTvTitle).setTextColor(color)
+    protected open fun getPageTitleView(): TextView {
+        return baseTvTitle
     }
-
-    /**
-     * 设置标题字体的大小
-     */
-    protected open fun setPageTitleSize(size: Float) {
-        findView<TextView>(R.id.baseTvTitle).textSize = size
-    }
-
 
     /**
      * 获取页面标题，进入页面后会调用该方法获取标题，设置给ToolBar
-     * 标题默认为空
+     * 调用该方法返回Title，则会使用默认的Title样式，如果需要设置样式
+     * 请调用setPageTitle()
      */
     protected open fun getPageTitle(): String? = ""
 
@@ -225,27 +221,38 @@ abstract class BasePageFragment : BaseFragment() {
      * @param isShow 是否展示
      */
     protected open fun setShowToolBar(isShow: Boolean) {
-        ViewUtils.setVisible(findView(R.id.toolBarContainer), isShow)
+        ViewUtils.setVisible(toolBarContainer, isShow)
     }
+
+    /**
+     * 是否使用主要标题栏
+     */
+    protected open fun isShowMainTitle() = false
+
+    /**
+     * 是否使用二级标题栏
+     * 默认使用二级的小标题
+     */
+    protected open fun isShowSubTitle() = true
 
 
     /**
      * 是否可以返回，如果可以则展示返回按钮，并且设置返回事件
      * 默认可以返回
      */
-    protected open fun isBackEnable(): Boolean = true
+    protected open fun isShowBackIcon(): Boolean = true
 
     /**
-     * 是否可以分享，如果可以则展示分享按钮
+     * 是否展示右侧的按钮
      * 默认不展示
      */
-    protected open fun isShareEnable(): Boolean = false
+    protected open fun isShowRightIcon(): Boolean = false
 
 
     /**
-     * 执行分享动作
+     * 执行右侧按钮点击动作
      */
-    protected open fun doShareAction() {}
+    protected open fun doRightIconAction() {}
 
     /**
      * 给子类初始化页面
@@ -257,4 +264,13 @@ abstract class BasePageFragment : BaseFragment() {
      * 获取子页面布局
      */
     abstract fun getContentResId(): Int
+
+
+    /**
+     * 标题的位置
+     */
+    enum class POSITION {
+        LEFT,
+        CENTER;
+    }
 }

@@ -453,7 +453,7 @@ public class NetGo {
                                     if (clazz == null || clazz == String.class) {
                                         t = (T) jsonElement.toString();
                                     } else {
-
+                                        // 其他类型的数据类型可以直接转换
                                         t = GsonUtils.INSTANCE.fromJson(jsonElement, clazz);
                                     }
 

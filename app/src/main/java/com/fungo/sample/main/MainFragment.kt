@@ -1,5 +1,7 @@
 package com.fungo.sample.main
 
+import android.graphics.Typeface
+import android.view.Gravity
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
 import com.fungo.sample.R
@@ -12,11 +14,11 @@ import com.fungo.sample.R
 
 class MainFragment : BaseRecyclerFragment() {
 
-    override fun getPageTitle(): String? {
-        return getString(R.string.app_name)
-    }
-
     override fun initRecyView() {
+        setPageTitle(getString(R.string.app_name))
+        getPageTitleView().gravity = Gravity.START or Gravity.CENTER_VERTICAL
+        getPageTitleView().typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+
         register(MainBean::class.java, MainHolder())
     }
 
@@ -24,9 +26,7 @@ class MainFragment : BaseRecyclerFragment() {
         return MainPresenter(this)
     }
 
-
-
-    override fun isBackEnable(): Boolean = false
+    override fun isShowBackIcon(): Boolean = false
 
 
     override fun isSwipeBackEnable(): Boolean = false

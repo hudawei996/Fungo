@@ -1,5 +1,7 @@
 package com.fungo.sample.netgo
 
+import android.graphics.Typeface
+import android.view.Gravity
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
 import com.fungo.netgo.NetGo
@@ -17,11 +19,9 @@ class NetGoFragment : BaseRecyclerFragment() {
     }
 
 
-    override fun getPageTitle(): String? {
-        return getString(R.string.main_netgo)
-    }
-
     override fun initRecyView() {
+        setPageTitle(getString(R.string.main_netgo))
+        getPageTitleView().gravity = Gravity.START or Gravity.CENTER_VERTICAL
         register(GankResults.Item::class.java, NetGoHolder())
     }
 }
