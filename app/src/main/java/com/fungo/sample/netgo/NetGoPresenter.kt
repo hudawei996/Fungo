@@ -11,7 +11,6 @@ import com.fungo.netgo.subscribe.ApiSubscriber
  */
 class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRecyclerContract.Presenter {
 
-    @SuppressLint("CheckResult")
     override fun loadData(page: Int) {
 
         // 发起一个需要解析的请求

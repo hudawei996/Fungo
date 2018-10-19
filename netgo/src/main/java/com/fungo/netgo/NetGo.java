@@ -377,42 +377,41 @@ public class NetGo {
     /**
      * GET请求，不带任何参数
      */
-    public <T> Flowable<T> getRequest(String url,Class<T> clazz) {
-        return request(RequestType.GET, url, null,clazz);
+    public <T> Flowable<T> getRequest(String url, Class<T> clazz) {
+        return request(RequestType.GET, url, null, clazz);
     }
 
     public <T> Flowable<T> getRequest(String url) {
-        return request(RequestType.GET, url,null,null);
+        return request(RequestType.GET, url, null, null);
     }
 
     /**
      * GET请求，带有参数
      */
-    public <T> Flowable<T> getRequest(String url, Map<String, Object> params,Class<T> clazz) {
-        return request(RequestType.GET, url, params,clazz);
+    public <T> Flowable<T> getRequest(String url, Map<String, Object> params, Class<T> clazz) {
+        return request(RequestType.GET, url, params, clazz);
     }
 
 
     /**
      * POST请求，请求体不带参数
      */
-    public <T> Flowable<T> postRequest(String url,Class<T> clazz) {
-        return request(RequestType.POST, url, null,clazz);
+    public <T> Flowable<T> postRequest(String url, Class<T> clazz) {
+        return request(RequestType.POST, url, null, clazz);
     }
 
     /**
      * POST请求，带有参数
      */
-    public <T> Flowable<T> postRequest(String url, Map<String, Object> params,Class<T> clazz) {
-        return request(RequestType.POST, url, params,clazz);
+    public <T> Flowable<T> postRequest(String url, Map<String, Object> params, Class<T> clazz) {
+        return request(RequestType.POST, url, params, clazz);
     }
 
 
     /**
      * 网络请求核心业务
-     *
+     * <p>
      * 由于解析数据的时候发现解析方法上泛型会发生泛型擦除，确定不了T的类型，所有这里将数据类型由外部传入进入
-     *
      */
     private <T> Flowable<T> request(final RequestType type, final String url, final Map<String, Object> params, final Class<T> clazz) {
         if (HttpUtils.isNetConnected(mContext)) {
@@ -453,7 +452,7 @@ public class NetGo {
                                     T t;
                                     if (clazz == null || clazz == String.class) {
                                         t = (T) jsonElement.toString();
-                                    }else {
+                                    } else {
 
                                         t = GsonUtils.INSTANCE.fromJson(jsonElement, clazz);
                                     }
@@ -482,10 +481,8 @@ public class NetGo {
                     })
                     // 网络请求线程自动切换
                     .compose(this.<T>getScheduler());
-
         } else {
             // 没有网络时，直接进入异常状态
-            // TODO 加入缓存时的处理
             return Flowable.create(new FlowableOnSubscribe<T>() {
                 @Override
                 public void subscribe(FlowableEmitter<T> e) {
