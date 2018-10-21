@@ -1,47 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_48"
-    android:background="?attr/colorPrimary">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <!--左侧返回按钮-->
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/baseIvLeftBack"
-        android:layout_width="@dimen/dp_48"
-        android:layout_height="@dimen/dp_48"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="center"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@mipmap/base_ic_back_white" />
-
-
-    <!--标题，可以在左边，也可以在中间-->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/baseTvTitle"
+    <!--状态栏-->
+    <View
+        android:id="@+id/statusView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_48"
-        android:layout_marginRight="@dimen/dp_48"
-        android:ellipsize="end"
-        android:gravity="center"
-        android:lines="1"
-        android:textColor="?attr/textColorPrimary"
-        android:textSize="@dimen/sp_18"
-        android:visibility="gone"
-        tools:text="万合天宜" />
+        android:layout_height="@dimen/dp_25"
+        android:background="?attr/colorPrimaryDark" />
 
-    <!--右侧的按钮图标-->
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/baseIvRightIcon"
-        android:layout_width="@dimen/dp_48"
-        android:layout_height="@dimen/dp_48"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@mipmap/base_ic_share_white"
-        tools:visibility="gone" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ToolbarTheme"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ToolbarMenuPopTheme"
+        app:titleTextAppearance="@style/ToolbarTextAppearance" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.appbar.AppBarLayout>
+

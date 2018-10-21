@@ -1,6 +1,5 @@
 package com.fungo.baselib.base.page
 
-import android.os.Bundle
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseActivity
 

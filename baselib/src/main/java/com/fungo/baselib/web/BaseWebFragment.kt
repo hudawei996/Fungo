@@ -150,17 +150,6 @@ abstract class BaseWebFragment : BasePageFragment() {
         // Android　4.0版本没有　WebChromeClient.FileChooserParams　这个类，所有要单独处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWebView!!.webChromeClient = object : WebChromeClient() {
-
-                override fun onReceivedTitle(view: WebView?, title: String?) {
-                    super.onReceivedTitle(view, title)
-                    if (!TextUtils.isEmpty(title)) {
-                        // 如果传入的标题为null，截取网页的标题
-                        this@BaseWebFragment.setWebTitle(title)
-
-                    }
-                }
-
-
                 /**
                  *　加载进度发生改变
                  */
@@ -190,14 +179,6 @@ abstract class BaseWebFragment : BasePageFragment() {
             }
         } else {
             mWebView!!.webChromeClient = object : WebChromeClient() {
-                override fun onReceivedTitle(view: WebView?, title: String?) {
-                    super.onReceivedTitle(view, title)
-                    if (!TextUtils.isEmpty(title)) {
-                        // 如果传入的标题为null，截取网页的标题
-                        this@BaseWebFragment.setWebTitle(title)
-                    }
-                }
-
                 // 3.0++版本
                 fun openFileChooser(uploadMsg: ValueCallback<Uri>, acceptType: String) {
                     openFileChooser(uploadMsg)
@@ -273,7 +254,7 @@ abstract class BaseWebFragment : BasePageFragment() {
     /**
      * 返回按键的处理
      */
-    override fun doBackAction() {
+    override fun onBackClick() {
         if (mWebView?.canGoBack() == true && !isOriginalUrl && canBack()) {
             mWebView?.goBack()
         } else {

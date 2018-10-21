@@ -1,14 +1,17 @@
 package com.fungo.baselib.base.page
 
 import android.app.AlertDialog
-import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import com.fungo.baselib.R
 import com.fungo.baselib.base.basic.BaseFragment
+import com.fungo.baselib.theme.UiUtils
 import com.fungo.baselib.utils.StatusBarUtils
 import com.fungo.baselib.utils.ViewUtils
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import kotlinx.android.synthetic.main.base_fragment_page.*
 import kotlinx.android.synthetic.main.base_layout_toolbar.*
 
@@ -18,18 +21,17 @@ import kotlinx.android.synthetic.main.base_layout_toolbar.*
  * 页面Fragment基类，封装ToolBar和StatusBar，可以不用搭理顶部的标题栏。
  * 另外将页面的各种状态进行统一处理，方便直接调用展示，比如加载中试图，空试图，错误试图等。
  * 还有将平时开发中用到的各种工具类进行封装，提供给子类调用。
- *
- * TODO TitleBar使用ToolBar来代替
  */
 
 abstract class BasePageFragment : BaseFragment() {
 
     private var mLoadingDialog: AlertDialog? = null
+    private var mPageTitle: String? = null
 
     protected var isLoadingShowing = false
     protected var isLoadingDialogShowing = false
 
-    override fun getLayoutResId(): Int {
+    final override fun getLayoutResId(): Int {
         return R.layout.base_fragment_page
     }
 
@@ -38,29 +40,25 @@ abstract class BasePageFragment : BaseFragment() {
         if (isSetStatusBarHeight()) {
             StatusBarUtils.setStatusBarHeight(statusView)
         }
-
         ViewUtils.setVisible(toolBarContainer, isShowToolBar())
-
         // 设置导航栏文字等
         if (isShowToolBar()) {
+            // 设置标题
             setPageTitle(getPageTitle())
+
             // 左侧返回按钮
-            ViewUtils.setVisible(baseIvLeftBack, isShowBackIcon())
             if (isShowBackIcon()) {
-                baseIvLeftBack.setOnClickListener {
-                    doBackAction()
+                toolbar.navigationIcon = UiUtils.getIconFont(context!!, MaterialDesignIconic.Icon.gmi_arrow_back)
+                toolbar.setNavigationOnClickListener {
+                    onBackClick()
                 }
-            } else {
-                // 如果不展示返回按钮，但是展示主标题，就要调整一下标题的左边距
-                //baseTvTitle.setPadding(ViewUtils.dp2px(context, R.dimen.dp_12), 0, 0, 0)
-                baseTvTitle.setPadding(0, 0, 0, 0)
             }
 
-            // 右侧按钮
-            ViewUtils.setVisible(baseIvRightIcon, isShowRightIcon())
-            if (isShowRightIcon()) {
-                baseIvRightIcon.setOnClickListener {
-                    doRightIconAction()
+            // 填充Menu
+            if (getMenuResId() != 0) {
+                toolbar.inflateMenu(getMenuResId())
+                toolbar.setOnMenuItemClickListener {
+                    onMenuItemClick(it)
                 }
             }
         }
@@ -79,10 +77,14 @@ abstract class BasePageFragment : BaseFragment() {
      * 默认是Fragment弹栈，然后退出Activity
      * 如果栈内只有一个Fragment，则退出Activity
      */
-    protected open fun doBackAction() {
+    protected open fun onBackClick() {
         getPageActivity()?.onBackPressedSupport()
     }
 
+    /**
+     * 菜单项点击
+     */
+    protected open fun onMenuItemClick(item: MenuItem): Boolean = true
 
     /**
      * 获取页面的Activity
@@ -129,18 +131,18 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示加载中的占位图
      */
     open fun showPageLoading() {
-        placeholder.showLoading()
+        placeholder?.showLoading()
         isLoadingShowing = true
     }
 
     open fun showPageLoading(msg: String) {
-        placeholder.showLoading()
-        placeholder.setPageLoadingText(msg)
+        placeholder?.showLoading()
+        placeholder?.setPageLoadingText(msg)
         isLoadingShowing = true
     }
 
     open fun hidePageLoading() {
-        placeholder.hideLoading()
+        placeholder?.hideLoading()
         isLoadingShowing = false
     }
 
@@ -148,7 +150,7 @@ abstract class BasePageFragment : BaseFragment() {
      * 展示空数据的占位图
      */
     open fun showPageEmpty() {
-        placeholder.showEmpty()
+        placeholder?.showEmpty()
     }
 
     /**
@@ -159,22 +161,22 @@ abstract class BasePageFragment : BaseFragment() {
     }
 
     open fun showPageError(msg: String?) {
-        placeholder.setPageErrorText(msg)
-        placeholder.showError()
+        placeholder?.setPageErrorText(msg)
+        placeholder?.showError()
     }
 
     /**
      * 设置页面加载错误重连的监听
      */
     open fun setPageErrorRetryListener(listener: View.OnClickListener) {
-        placeholder.setPageErrorRetryListener(listener)
+        placeholder?.setPageErrorRetryListener(listener)
     }
 
     /**
      * 展示加载完成，要显示的内容
      */
     open fun showPageContent() {
-        placeholder.showContent()
+        placeholder?.showContent()
         isLoadingShowing = false
     }
 
@@ -182,17 +184,17 @@ abstract class BasePageFragment : BaseFragment() {
      * 主动设置页面标题，给子类调用
      */
     protected open fun setPageTitle(title: String?) {
-        if (!TextUtils.isEmpty(title)) {
-            ViewUtils.setVisible(baseTvTitle)
-            baseTvTitle.text = title
+        if (mPageTitle != title) {
+            mPageTitle = title
         }
+        toolbar.title = title
     }
 
     /**
      * 获取标题栏对象，让子类主动去设置样式
      */
-    protected open fun getPageTitleView(): TextView {
-        return baseTvTitle
+    protected open fun getPageToolBar(): Toolbar {
+        return toolbar
     }
 
     /**
@@ -200,7 +202,7 @@ abstract class BasePageFragment : BaseFragment() {
      * 调用该方法返回Title，则会使用默认的Title样式，如果需要设置样式
      * 请调用setPageTitle()
      */
-    protected open fun getPageTitle(): String? = ""
+    protected open fun getPageTitle(): String? = mPageTitle
 
 
     /**
@@ -225,34 +227,10 @@ abstract class BasePageFragment : BaseFragment() {
     }
 
     /**
-     * 是否使用主要标题栏
-     */
-    protected open fun isShowMainTitle() = false
-
-    /**
-     * 是否使用二级标题栏
-     * 默认使用二级的小标题
-     */
-    protected open fun isShowSubTitle() = true
-
-
-    /**
      * 是否可以返回，如果可以则展示返回按钮，并且设置返回事件
      * 默认可以返回
      */
     protected open fun isShowBackIcon(): Boolean = true
-
-    /**
-     * 是否展示右侧的按钮
-     * 默认不展示
-     */
-    protected open fun isShowRightIcon(): Boolean = false
-
-
-    /**
-     * 执行右侧按钮点击动作
-     */
-    protected open fun doRightIconAction() {}
 
     /**
      * 给子类初始化页面
@@ -267,10 +245,8 @@ abstract class BasePageFragment : BaseFragment() {
 
 
     /**
-     * 标题的位置
+     * 获取填充menu菜单
      */
-    enum class POSITION {
-        LEFT,
-        CENTER;
-    }
+    protected open fun getMenuResId(): Int = 0
+
 }

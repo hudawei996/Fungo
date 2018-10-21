@@ -39,11 +39,34 @@
         <item name="android:windowAnimationStyle">@style/BaseAppTheme.Right.Animation</item>
     </style>
 
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+
+    <!--toolbar的主题-->
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">?attr/textColorPrimary</item>
+        <item name="android:actionMenuTextAppearance">@style/ToolbarMenuTextAppearance</item>
+    </style>
+
+    <!--menu上弹出的样式-->
+    <style name="ToolbarMenuPopTheme" parent="AppTheme.PopupOverlay">
+        <item name="android:textColor">@color/text_black</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <!--toolbar标题的样式-->
+    <style name="ToolbarTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+    </style>
+
+    <!--toolbar上的菜单文字样式，不是弹出menu的样式，是在toolbar上的menu的样式-->
+    <style name="ToolbarMenuTextAppearance" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:textColor">?attr/textColorPrimary</item>
+    </style>
 
     <!--系统的主题-->
     <!--系统的主题-->

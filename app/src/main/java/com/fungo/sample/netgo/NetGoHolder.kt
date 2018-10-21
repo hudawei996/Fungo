@@ -22,7 +22,7 @@ class NetGoHolder : MultiTypeViewHolder<GankResults.Item, NetGoHolder.ViewHolder
         }
 
         override fun onItemClick(data: GankResults.Item) {
-            WebActivity.start(getContext()!!, data.url, data.desc)
+            WebActivity.start(getContext()!!, data.url)
         }
 
     }

@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.fungo.baselib.R
+import com.fungo.baselib.theme.UiUtils
 import com.fungo.baselib.utils.StatusBarUtils
-import com.fungo.baselib.theme.ThemeUtils
-import com.fungo.baselib.theme.AppTheme
 
 
 /**
@@ -41,7 +39,7 @@ abstract class BaseActivity : SupportActivity() {
 
     private fun initPre() {
         // 主题
-        ThemeUtils.setCurrentTheme(this, ThemeUtils.getCurrentTheme())
+        UiUtils.setCurrentTheme(this, UiUtils.getCurrentTheme())
         // 沉浸式
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
         // 设置状态栏背景颜色
@@ -50,7 +48,6 @@ abstract class BaseActivity : SupportActivity() {
         // 设置是否可以滑动返回，默认可以
         setSwipeBackEnable(isSwipeBackEnable())
     }
-
 
     protected fun <T : View> findView(id: Int): T {
         return findViewById(id)
@@ -70,7 +67,6 @@ abstract class BaseActivity : SupportActivity() {
     fun dismissProgress() {
         mProgressDialog?.dismiss()
     }
-
 
     protected fun startActivity(clazz: Class<*>) {
         startActivity(Intent(this, clazz))

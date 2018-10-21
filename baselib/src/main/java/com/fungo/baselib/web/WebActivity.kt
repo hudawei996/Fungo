@@ -15,7 +15,6 @@ import com.fungo.baselib.base.page.BasePageFragment
 
 class WebActivity : BasePageActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window?.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
@@ -24,7 +23,6 @@ class WebActivity : BasePageActivity() {
     override fun getPageFragment(): BasePageFragment {
         return WebFragment()
     }
-
 
     /**
      * 跳转暂时使用传统方法

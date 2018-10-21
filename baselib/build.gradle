@@ -27,24 +27,30 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // 官方api
     api rootProject.getDependenceProperty()['appcompat']
     api rootProject.getDependenceProperty()['material']
     api rootProject.getDependenceProperty()['cardview']
     api rootProject.getDependenceProperty()['recyclerview']
     api rootProject.getDependenceProperty()['constraintlayout']
 
+    // kotlin支持
     api rootProject.getDependenceProperty()['kotlin']
 
+    // fragment封装处理
     api rootProject.getDependenceProperty()['fragmentation_core']
     api rootProject.getDependenceProperty()['fragmentation_swipeback']
 
+    // 下拉刷新
     api rootProject.getDependenceProperty()['smartrefresh']
     api rootProject.getDependenceProperty()['smartrefresh_header']
+
+    // h5秒开
     api rootProject.getDependenceProperty()['sonic']
 
-    // fonts icon 字体图标
-//    implementation "com.mikepenz:iconics-core:3.1.0"
-//    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.5@aar'
-//    implementation 'com.mikepenz:fontawesome-typeface:5.3.1.1@aar'
-//    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.5@aar'
+    // 字体图标
+    implementation "com.mikepenz:iconics-core:3.1.0"
+    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.5@aar'
+    implementation 'com.mikepenz:fontawesome-typeface:5.3.1.1@aar'
+    implementation 'com.mikepenz:foundation-icons-typeface:3.0.0.5@aar'
 }

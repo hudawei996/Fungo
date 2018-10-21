@@ -1,17 +1,23 @@
 package com.fungo.baselib.theme
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import android.widget.TextView
 import com.fungo.baselib.R
 import com.fungo.baselib.utils.SpUtils
+import com.fungo.baselib.utils.ViewUtils
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 
 
 /**
  * @author Pinger
  * @since 18-8-3 上午11:29
- * 处理app中的主题
+ * 系统UI处理工具类，包括主题，图标等等
  */
 
-object ThemeUtils {
+object UiUtils {
 
     private const val KEY_THEME = "KEY_THEME"
 
@@ -64,4 +70,60 @@ object ThemeUtils {
     private fun saveCurrentTheme(currentTheme: AppTheme) {
         SpUtils.putString(KEY_THEME, currentTheme.name)
     }
+
+    /**
+     * 设置ImageView的图标
+     */
+    fun setIconFont(imageView: ImageView, icon: IIcon, size: Int) {
+        imageView.setImageDrawable(
+                IconicsDrawable(imageView.context)
+                        .icon(icon)
+                        .color(getThemeColor(imageView.context, R.attr.textColorPrimary))
+                        .sizeDp(size))
+    }
+
+    /**
+     * 设置ImageView默认的Icon大小
+     */
+    fun setIconFont(imageView: ImageView, icon: IIcon) {
+        setIconFont(imageView, icon, 16)
+    }
+
+
+    /**
+     * 设置TextView图标
+     */
+    fun setIconFont(textView: TextView, icon: IIcon, size: Int, padding: Int) {
+        textView.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(textView.context)
+                .icon(icon)
+                .color(getThemeColor(textView.context, R.attr.textColorPrimary))
+                .sizeDp(size),
+                null, null, null)
+        textView.compoundDrawablePadding = ViewUtils.dp2px(textView.context, padding)
+    }
+
+    /**
+     * 设置TextView默认的Icon大小
+     */
+    fun setIconFont(textView: TextView, icon: IIcon) {
+        setIconFont(textView, icon, 14, 5)
+    }
+
+    /**
+     * 生成一个icon font
+     */
+    fun getIconFont(context: Context, icon: IIcon, size: Int): Drawable {
+        return IconicsDrawable(context)
+                .icon(icon)
+                .color(getThemeColor(context, R.attr.textColorPrimary))
+                .sizeDp(size)
+    }
+
+    /**
+     * 生成一个icon font，指定大小
+     */
+    fun getIconFont(context: Context, icon: IIcon): Drawable {
+        return getIconFont(context, icon, 16)
+    }
+
 }
