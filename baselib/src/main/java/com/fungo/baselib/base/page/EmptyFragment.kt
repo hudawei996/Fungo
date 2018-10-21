@@ -13,7 +13,7 @@ class EmptyFragment : BasePageFragment() {
         return "暂无数据"
     }
 
-    override fun getContentResId(): Int {
+    override fun getPageLayoutResId(): Int {
         return R.layout.base_fragment_empty
     }
 }

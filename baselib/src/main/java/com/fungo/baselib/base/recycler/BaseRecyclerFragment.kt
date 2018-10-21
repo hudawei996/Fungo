@@ -2,14 +2,16 @@ package com.fungo.baselib.base.recycler
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fungo.baselib.R
 import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.recycler.multitype.MultiTypeAdapter
 import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.base.recycler.multitype.OneToManyFlow
 import com.scwang.smartrefresh.header.MaterialHeader
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
-import kotlinx.android.synthetic.main.base_fragment_recycler.*
 
 /**
  * @author Pinger
@@ -22,6 +24,9 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     private lateinit var mPresenter: BaseRecyclerContract.Presenter
     private lateinit var mAdapter: MultiTypeAdapter
 
+    private var mSmartRefreshLayout: SmartRefreshLayout? = null
+    private var mRecyclerView: RecyclerView? = null
+
     private var mPage = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,28 +34,30 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mPresenter = getPresenter()
     }
 
-    final override fun getContentResId(): Int {
+    override fun getPageLayoutResId(): Int {
         return R.layout.base_fragment_recycler
     }
 
     final override fun initPageView() {
-        smartRefreshLayout.refreshHeader = MaterialHeader(context)
-        smartRefreshLayout.refreshFooter = BallPulseFooter(context!!)
-        smartRefreshLayout.setDragRate(1f)
-        smartRefreshLayout.setHeaderMaxDragRate(1.5f)
-        smartRefreshLayout.setOnRefreshListener {
+        setSmartRefreshLayout(findView(R.id.smartRefreshLayout))
+        setRecyclerView(findView(R.id.recyclerView))
+        mSmartRefreshLayout?.refreshHeader = MaterialHeader(context)
+        mSmartRefreshLayout?.refreshFooter = BallPulseFooter(context!!)
+        mSmartRefreshLayout?.setDragRate(1f)
+        mSmartRefreshLayout?.setHeaderMaxDragRate(1.5f)
+        mSmartRefreshLayout?.setOnRefreshListener {
             mPage = 0
             mPresenter.loadData(mPage)
         }
-        smartRefreshLayout.setOnLoadmoreListener {
+        mSmartRefreshLayout?.setOnLoadmoreListener {
             mPage += 1
             mPresenter.loadData(mPage)
         }
 
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        recyclerView.layoutManager = layoutManager
+        val layoutManager = LinearLayoutManager(context)
+        mRecyclerView?.layoutManager = layoutManager
         mAdapter = getAdapter()
-        recyclerView.adapter = mAdapter
+        mRecyclerView?.adapter = mAdapter
 
         setPageErrorRetryListener(View.OnClickListener { initData() })
 
@@ -84,14 +91,29 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     }
 
     /**
+     * 从子类设置SmartRefreshLayout对象
+     */
+    protected open fun setSmartRefreshLayout(layout: SmartRefreshLayout) {
+        mSmartRefreshLayout = layout
+    }
+
+    /**
+     * 子类设置RecyclerView
+     */
+    protected open fun setRecyclerView(recyclerView: RecyclerView) {
+        mRecyclerView = recyclerView
+    }
+
+
+    /**
      * 设置SmartRefreshLayout相关属性
      */
     private fun setSmartLayoutAttrs() {
-        smartRefreshLayout?.isEnableAutoLoadmore = isEnableAutoLoadmore()
-        smartRefreshLayout?.isEnableLoadmore = isEnableLoadmore()
-        smartRefreshLayout?.isEnableRefresh = isEnableRefresh()
-        smartRefreshLayout?.isEnableOverScrollBounce = isEnableOverScrollBounce()
-        smartRefreshLayout?.isEnablePureScrollMode = isEnablePureScrollMode()
+        mSmartRefreshLayout?.isEnableAutoLoadmore = isEnableAutoLoadmore()
+        mSmartRefreshLayout?.isEnableLoadmore = isEnableLoadmore()
+        mSmartRefreshLayout?.isEnableRefresh = isEnableRefresh()
+        mSmartRefreshLayout?.isEnableOverScrollBounce = isEnableOverScrollBounce()
+        mSmartRefreshLayout?.isEnablePureScrollMode = isEnablePureScrollMode()
     }
 
     /**
@@ -167,11 +189,11 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      * 结束刷新
      */
     private fun finishLoading() {
-        if (smartRefreshLayout?.isRefreshing == true) {
-            smartRefreshLayout?.finishRefresh()
+        if (mSmartRefreshLayout?.isRefreshing == true) {
+            mSmartRefreshLayout?.finishRefresh()
         }
-        if (smartRefreshLayout?.isLoading == true) {
-            smartRefreshLayout?.finishLoadmore()
+        if (mSmartRefreshLayout?.isLoading == true) {
+            mSmartRefreshLayout?.finishLoadmore()
         }
     }
 
@@ -189,11 +211,9 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mAdapter.register(clazz, holder)
     }
 
-
     fun <T> register(clazz: Class<out T>): OneToManyFlow<T> {
         return mAdapter.register(clazz)
     }
-
 
     /**
      * 获取子类Presenter对象
@@ -223,13 +243,13 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      * 当展示空视图的时候，可以下拉，但是不可以上拉
      */
     override fun showPageEmpty() {
-        smartRefreshLayout?.isEnableLoadmore = false
+        mSmartRefreshLayout?.isEnableLoadmore = false
         super.showPageEmpty()
     }
 
 
     override fun showPageError(msg: String?) {
-        smartRefreshLayout?.isEnableLoadmore = false
+        mSmartRefreshLayout?.isEnableLoadmore = false
 
         // 当加载异常时，要手动去关闭加载进度，这里统一处理
         hideLoading()

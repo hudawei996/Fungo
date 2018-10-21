@@ -27,7 +27,7 @@ class ImageGoFragment : BasePageFragment() {
         return getString(R.string.main_imagego)
     }
 
-    override fun getContentResId(): Int {
+    override fun getPageLayoutResId(): Int {
         return R.layout.fragment_imagego
     }
 

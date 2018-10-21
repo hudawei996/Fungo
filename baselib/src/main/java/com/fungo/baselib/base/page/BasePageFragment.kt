@@ -11,7 +11,6 @@ import com.fungo.baselib.base.basic.BaseFragment
 import com.fungo.baselib.theme.UiUtils
 import com.fungo.baselib.utils.StatusBarUtils
 import com.fungo.baselib.utils.ViewUtils
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import kotlinx.android.synthetic.main.base_fragment_page.*
 import kotlinx.android.synthetic.main.base_layout_toolbar.*
 
@@ -48,7 +47,7 @@ abstract class BasePageFragment : BaseFragment() {
 
             // 左侧返回按钮
             if (isShowBackIcon()) {
-                toolbar.navigationIcon = UiUtils.getIconFont(context!!, MaterialDesignIconic.Icon.gmi_arrow_back)
+                toolbar.navigationIcon = UiUtils.getBackIconFont(context!!)
                 toolbar.setNavigationOnClickListener {
                     onBackClick()
                 }
@@ -67,7 +66,7 @@ abstract class BasePageFragment : BaseFragment() {
         if (pageFragmentContainer.childCount > 0) {
             pageFragmentContainer.removeAllViews()
         }
-        LayoutInflater.from(context).inflate(getContentResId(), pageFragmentContainer)
+        LayoutInflater.from(context).inflate(getPageLayoutResId(), pageFragmentContainer)
 
         initPageView()
     }
@@ -241,7 +240,7 @@ abstract class BasePageFragment : BaseFragment() {
     /**
      * 获取子页面布局
      */
-    abstract fun getContentResId(): Int
+    abstract fun getPageLayoutResId(): Int
 
 
     /**

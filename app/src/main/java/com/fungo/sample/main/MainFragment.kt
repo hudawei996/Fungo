@@ -1,8 +1,13 @@
 package com.fungo.sample.main
 
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.color.colorChooser
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
 import com.fungo.baselib.base.recycler.BaseRecyclerFragment
+import com.fungo.baselib.theme.UiUtils
 import com.fungo.sample.R
+import kotlinx.android.synthetic.main.fragment_main.*
+
 
 /**
  * @author Pinger
@@ -12,12 +17,48 @@ import com.fungo.sample.R
 
 class MainFragment : BaseRecyclerFragment() {
 
+
+    override fun getPageLayoutResId(): Int {
+        return R.layout.fragment_main
+    }
+
     override fun getPageTitle(): String? {
         return getString(R.string.app_name)
     }
 
     override fun initRecyView() {
+        setSmartRefreshLayout(smartRefreshLayout)
+        setRecyclerView(recyclerView)
         register(MainBean::class.java, MainHolder())
+        UiUtils.setAddIconFont(floatActionButton)
+
+        floatActionButton.setOnClickListener {
+            showColorPiker()
+        }
+    }
+
+
+    /**
+     * 主题颜色选择器
+     */
+    private fun showColorPiker() {
+        // 设置主题
+//        ColorChooserDialog.Builder(getPageActivity()!!, R.string.theme_choose)
+//                .customColors(R.array.colors, null)
+//                .doneButton(R.string.confirm)
+//                .cancelButton(R.string.cancel)
+//                .allowUserColorInput(false)
+//                .allowUserColorInputAlpha(false)
+//                .show()
+
+
+        MaterialDialog(context!!)
+                .title(R.string.theme_choose)
+                .colorChooser(context!!.resources.getIntArray(R.array.colors), initialSelection = UiUtils.getCurrentThemeColor(context!!)) { dialog, color ->
+                    // Use color integer
+                }
+                .positiveButton(R.string.confirm)
+                .show()
     }
 
     override fun getPresenter(): BaseRecyclerContract.Presenter {
@@ -25,7 +66,6 @@ class MainFragment : BaseRecyclerFragment() {
     }
 
     override fun isShowBackIcon(): Boolean = false
-
 
     override fun isSwipeBackEnable(): Boolean = false
 

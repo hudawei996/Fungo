@@ -52,4 +52,7 @@ dependencies {
     implementation project(':baselib')
     implementation project(':netgo')
     implementation project(':imagego')
+
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-beta4'
+    implementation 'com.afollestad.material-dialogs:color:2.0.0-beta4'
 }

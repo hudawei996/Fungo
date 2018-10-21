@@ -29,7 +29,7 @@ class WebFragment : BaseWebFragment() {
         private const val FILE_CHOOSER_RESULT_CODE = 1001
     }
 
-    override fun getContentResId(): Int {
+    override fun getPageLayoutResId(): Int {
         return R.layout.base_fragment_web
     }
 

@@ -7,8 +7,10 @@ import android.widget.TextView
 import com.fungo.baselib.R
 import com.fungo.baselib.utils.SpUtils
 import com.fungo.baselib.utils.ViewUtils
+import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 
 
 /**
@@ -55,13 +57,20 @@ object UiUtils {
     }
 
     /**
-     * 获取主题的颜色
+     * 获取某一个属性的主题颜色
      */
     fun getThemeColor(context: Context, attrRes: Int): Int {
         val typedArray = context.obtainStyledAttributes(intArrayOf(attrRes))
         val color = typedArray.getColor(0, 0xffffff)
         typedArray.recycle()
         return color
+    }
+
+    /**
+     * 获取当前的主题颜色
+     */
+    fun getCurrentThemeColor(context: Context): Int {
+        return getThemeColor(context, R.attr.colorPrimary)
     }
 
     /**
@@ -124,6 +133,21 @@ object UiUtils {
      */
     fun getIconFont(context: Context, icon: IIcon): Drawable {
         return getIconFont(context, icon, 16)
+    }
+
+
+    /**
+     * 返回键
+     */
+    fun getBackIconFont(context: Context): Drawable {
+        return getIconFont(context, MaterialDesignIconic.Icon.gmi_arrow_back)
+    }
+
+    /**
+     * 添加
+     */
+    fun setAddIconFont(view: ImageView) {
+        setIconFont(view, FontAwesome.Icon.faw_github)
     }
 
 }
