@@ -1,7 +1,7 @@
 package com.fungo.baselib.base.recycler
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import java.util.*
 
@@ -10,7 +10,7 @@ import java.util.*
  * @since 2018/1/13 23:53
  * 基类适配器封装，将数据和UI抽离到具体的Holder中实现，适配器只关心数据状态
  */
-abstract class BaseRecyclerAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>> {
+abstract class BaseRecyclerAdapter<T> : androidx.recyclerview.widget.RecyclerView.Adapter<BaseViewHolder<T>> {
 
     private lateinit var mDatas: ArrayList<T>
     private lateinit var mContext: Context

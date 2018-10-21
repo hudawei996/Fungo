@@ -8,8 +8,8 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
-import android.support.annotation.ArrayRes
-import android.support.annotation.StringRes
+import androidx.annotation.ArrayRes
+import androidx.annotation.StringRes
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log

@@ -1,7 +1,6 @@
 package com.fungo.baselib.base.recycler
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.fungo.baselib.R
 import com.fungo.baselib.base.page.BasePageFragment
@@ -48,7 +47,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
             mPresenter.loadData(mPage)
         }
 
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         mAdapter = getAdapter()
         recyclerView.adapter = mAdapter

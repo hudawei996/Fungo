@@ -20,6 +20,9 @@ class MainFragment : BaseRecyclerFragment() {
         getPageTitleView().typeface = Typeface.defaultFromStyle(Typeface.BOLD)
 
         register(MainBean::class.java, MainHolder())
+
+
+
     }
 
     override fun getPresenter(): BaseRecyclerContract.Presenter {

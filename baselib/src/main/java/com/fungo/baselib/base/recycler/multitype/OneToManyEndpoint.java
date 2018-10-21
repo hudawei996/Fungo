@@ -1,6 +1,6 @@
 package com.fungo.baselib.base.recycler.multitype;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public interface OneToManyEndpoint<T> {
 

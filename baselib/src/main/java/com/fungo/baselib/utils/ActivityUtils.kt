@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import android.view.View
 import java.lang.reflect.InvocationTargetException
 

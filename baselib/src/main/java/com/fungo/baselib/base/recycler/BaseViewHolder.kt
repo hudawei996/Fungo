@@ -3,11 +3,11 @@ package com.fungo.baselib.base.recycler
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.support.annotation.DrawableRes
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
-import android.support.annotation.StringRes
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baselib.base.basic.SupportActivity
 import com.fungo.baselib.base.page.BasePageActivity
 import com.fungo.baselib.base.page.BasePageFragment
 import com.fungo.baselib.base.page.IView
@@ -25,7 +24,7 @@ import com.fungo.baselib.base.page.IView
  * @since 2018/1/13 23:53
  * RecyclerView的Holder二次封装，只关心试图初始化和数据绑定
  */
-abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
+abstract class BaseViewHolder<T> : androidx.recyclerview.widget.RecyclerView.ViewHolder, IView {
 
     override fun getContext(): Context? {
         return itemView.context
@@ -60,14 +59,14 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
     open fun onItemClick(data: T) {}
 
     open fun getData(): T? {
-        val adapter = getOwnerAdapter<RecyclerView.Adapter<*>>()
+        val adapter = getOwnerAdapter<androidx.recyclerview.widget.RecyclerView.Adapter<*>>()
         return if (adapter != null && adapter is BaseRecyclerAdapter<*>) {
             adapter.getItemData(dataPosition) as T
         } else null
     }
 
     open fun getDataCount(): Int {
-        val adapter = getOwnerAdapter<RecyclerView.Adapter<*>>()
+        val adapter = getOwnerAdapter<androidx.recyclerview.widget.RecyclerView.Adapter<*>>()
         return if (adapter != null && adapter is BaseRecyclerAdapter<*>) {
             adapter.getCount()
         } else 0
@@ -182,16 +181,16 @@ abstract class BaseViewHolder<T> : RecyclerView.ViewHolder, IView {
         showLongToast(getContext()?.getString(resId))
     }
 
-    private fun <T : RecyclerView.Adapter<*>> getOwnerAdapter(): T? {
+    private fun <T : androidx.recyclerview.widget.RecyclerView.Adapter<*>> getOwnerAdapter(): T? {
         val recyclerView = getOwnerRecyclerView()
         return if (recyclerView == null) null else recyclerView.adapter as T
     }
 
-    private fun getOwnerRecyclerView(): RecyclerView? {
+    private fun getOwnerRecyclerView(): androidx.recyclerview.widget.RecyclerView? {
         try {
-            val field = RecyclerView.ViewHolder::class.java.getDeclaredField("mOwnerRecyclerView")
+            val field = androidx.recyclerview.widget.RecyclerView.ViewHolder::class.java.getDeclaredField("mOwnerRecyclerView")
             field.isAccessible = true
-            return field.get(this) as RecyclerView
+            return field.get(this) as androidx.recyclerview.widget.RecyclerView
         } catch (e: NoSuchFieldException) {
         } catch (e: IllegalAccessException) {
         }

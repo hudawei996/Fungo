@@ -1,7 +1,7 @@
 package com.fungo.baselib.base.recycler.stickyheader.utils;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * OrientationProvider for ReyclerViews who use a LinearLayoutManager

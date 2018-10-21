@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,7 @@
     android:background="?attr/colorPrimary">
 
     <!--左侧返回按钮-->
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/baseIvLeftBack"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
@@ -19,7 +19,7 @@
 
 
     <!--标题，可以在左边，也可以在中间-->
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/baseTvTitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
         tools:text="万合天宜" />
 
     <!--右侧的按钮图标-->
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/baseIvRightIcon"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
@@ -44,4 +44,4 @@
         app:srcCompat="@mipmap/base_ic_share_white"
         tools:visibility="gone" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

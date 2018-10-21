@@ -1,8 +1,8 @@
 package com.fungo.baselib.base.basic
 
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MotionEvent
 import com.fungo.baselib.base.page.anim.DefaultActivityHorizontalAnimator
 import me.yokeyword.fragmentation.*

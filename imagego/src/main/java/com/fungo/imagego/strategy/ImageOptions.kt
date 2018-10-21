@@ -1,7 +1,7 @@
 package com.fungo.imagego.strategy
 
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import com.fungo.imagego.glide.transform.RoundType
 
 /**

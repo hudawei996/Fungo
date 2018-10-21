@@ -1,7 +1,7 @@
 package com.fungo.baselib.base.recycler.multitype;
 
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 
 public interface OneToManyFlow<T> {
 

@@ -1,6 +1,6 @@
 package com.fungo.baselib.base.recycler.stickyheader.caching;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 /**

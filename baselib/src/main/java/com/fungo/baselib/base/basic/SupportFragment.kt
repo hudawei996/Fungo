@@ -2,7 +2,7 @@ package com.fungo.baselib.base.basic
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.animation.Animation
 import me.yokeyword.fragmentation.*
@@ -17,7 +17,7 @@ import me.yokeyword.fragmentation_swipeback.core.SwipeBackFragmentDelegate
  *
  */
 
-open class SupportFragment : Fragment(), ISupportFragment, ISwipeBackFragment {
+open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment, ISwipeBackFragment {
 
     private val mDelegate = SupportFragmentDelegate(this)
     private val mSwipeBackDelegate = SwipeBackFragmentDelegate(this)
