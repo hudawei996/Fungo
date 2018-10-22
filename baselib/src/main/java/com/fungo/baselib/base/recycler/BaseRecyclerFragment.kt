@@ -159,7 +159,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      * 更新某一条数据
      */
     override fun <T> updateItem(data: T?, position: Int) {
-        if (data != null && mAdapter.itemCount > 0 && position < mAdapter.itemCount) {
+        if (data != null && mAdapter.getCount() > 0 && position < mAdapter.getCount()) {
             mAdapter.update(data, position)
         }
     }
@@ -179,7 +179,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
      * 插入一条数据
      */
     override fun <T> insertItem(position: Int, data: T?) {
-        if (position < mAdapter.itemCount && data != null) {
+        if (position < mAdapter.getCount() && data != null) {
             mAdapter.insert(data, position)
         }
     }

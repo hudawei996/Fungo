@@ -34,9 +34,9 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.config
 
-            buildConfigField "String", "canSwitchEnv", rootProject.getBuildProperty()['canSwitchEnv']
-            buildConfigField "String", "canPrintLog", rootProject.getBuildProperty()['canPrintLog']
-            buildConfigField "Integer", "currentDevEnv", rootProject.getBuildProperty()['currentDevEnv']
+            buildConfigField "Boolean", "CAN_SWITCH_ENV", rootProject.getBuildProperty()['canSwitchEnv']
+            buildConfigField "Boolean", "CAN_PRINT_LOG", rootProject.getBuildProperty()['canPrintLog']
+            buildConfigField "Integer", "CURRENT_DEV_ENV", rootProject.getBuildProperty()['currentDevEnv']
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
