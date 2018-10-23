@@ -1,4 +1,4 @@
-package com.fungo.netgo.convert;
+package com.fungo.netgo.callback;
 
 import okhttp3.ResponseBody;
 

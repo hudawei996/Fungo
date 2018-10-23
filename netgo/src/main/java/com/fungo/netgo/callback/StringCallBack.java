@@ -8,7 +8,7 @@ import okhttp3.ResponseBody;
  * @author Pinger
  * @since 18-10-23 下午4:31
  */
-public abstract class StringCallBack extends AbsCallBack<String> {
+public abstract class StringCallBack extends BaseCallBack<String> {
 
 
     @Override

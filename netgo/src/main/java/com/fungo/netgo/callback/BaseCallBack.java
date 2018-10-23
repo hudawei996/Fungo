@@ -9,7 +9,7 @@ import com.fungo.netgo.progress.Progress;
  * <p>
  * 回调适配器
  */
-public abstract class AbsCallBack<T> implements CallBack<T> {
+public abstract class BaseCallBack<T> implements CallBack<T> {
 
     @Override
     public void onStart() {

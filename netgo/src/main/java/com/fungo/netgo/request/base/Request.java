@@ -164,6 +164,12 @@ public abstract class Request<T, R extends Request> {
         return mRetryCount;
     }
 
+
+    public ApiService getApiService() {
+        return mApiService;
+    }
+
+
     /**
      * 获取请求方式
      */
@@ -184,10 +190,10 @@ public abstract class Request<T, R extends Request> {
         Flowable<ResponseBody> flowable = null;
         switch (getMethod()) {
             case GET:
-                flowable = mApiService.get(mUrl, mParams.getParams());
+                flowable = mApiService.get(mUrl, mHeaders.getHeaders(), mParams.getParams());
                 break;
             case POST:
-                flowable = mApiService.post(mUrl, mParams.getParams());
+                flowable = mApiService.post(mUrl, mHeaders.getHeaders(), mParams.getParams());
                 break;
         }
 

@@ -14,7 +14,7 @@ import okhttp3.ResponseBody;
  * <p>
  * 将相应数据转换成具体的实体对象
  */
-public abstract class JsonCallBack<T> extends AbsCallBack<T> {
+public abstract class JsonCallBack<T> extends BaseCallBack<T> {
 
 
     @Override

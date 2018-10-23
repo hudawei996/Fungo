@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -29,13 +30,15 @@ public interface ApiService {
     /**
      * post请求
      *
-     * @param url    服务器接口
-     * @param params 参数
+     * @param url     服务器接口
+     * @param headers 请求头
+     * @param params  参数
      */
     @POST()
     @FormUrlEncoded
     Flowable<ResponseBody> post(
             @Url() String url,
+            @HeaderMap Map<String, String> headers,
             @FieldMap Map<String, Object> params);
 
     /**
@@ -65,12 +68,14 @@ public interface ApiService {
     /**
      * get请求
      *
-     * @param url    服务器接口
-     * @param params 参数
+     * @param url     服务器接口
+     * @param headers 请求头
+     * @param params  参数
      */
     @GET()
     Flowable<ResponseBody> get(
             @Url String url,
+            @HeaderMap Map<String, String> headers,
             @QueryMap Map<String, Object> params);
 
 

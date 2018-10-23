@@ -256,6 +256,12 @@ public class HttpHeaders implements Serializable {
         return simpleDateFormat.format(date);
     }
 
+
+    public Map<String, String> getHeaders() {
+        return headersMap;
+    }
+
+
     @Override
     public String toString() {
         return "HttpHeaders{" + "headersMap=" + headersMap + '}';

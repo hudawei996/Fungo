@@ -1,6 +1,5 @@
 package com.fungo.netgo.callback;
 
-import com.fungo.netgo.convert.Converter;
 import com.fungo.netgo.error.ApiException;
 import com.fungo.netgo.progress.Progress;
 
