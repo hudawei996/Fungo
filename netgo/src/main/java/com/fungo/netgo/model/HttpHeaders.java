@@ -257,7 +257,7 @@ public class HttpHeaders implements Serializable {
     }
 
 
-    public Map<String, String> getHeaders() {
+    public Map<String, String> getHeaderParams() {
         return headersMap;
     }
 

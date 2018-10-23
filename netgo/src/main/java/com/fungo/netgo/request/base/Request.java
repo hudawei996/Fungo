@@ -190,10 +190,10 @@ public abstract class Request<T, R extends Request> {
         Flowable<ResponseBody> flowable = null;
         switch (getMethod()) {
             case GET:
-                flowable = mApiService.get(mUrl, mHeaders.getHeaders(), mParams.getParams());
+                flowable = mApiService.get(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
                 break;
             case POST:
-                flowable = mApiService.post(mUrl, mHeaders.getHeaders(), mParams.getParams());
+                flowable = mApiService.post(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
                 break;
         }
 

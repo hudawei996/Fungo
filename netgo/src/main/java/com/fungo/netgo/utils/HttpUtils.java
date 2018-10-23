@@ -42,19 +42,16 @@ public class HttpUtils {
     /**
      * 将传递进来的参数拼接成 url
      */
-    public static String createUrlFromParams(String url, Map<String, List<String>> params) {
+    public static String createUrlFromParams(String url, Map<String, String> params) {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append(url);
             if (url.indexOf('&') > 0 || url.indexOf('?') > 0) sb.append("&");
             else sb.append("?");
-            for (Map.Entry<String, List<String>> urlParams : params.entrySet()) {
-                List<String> urlValues = urlParams.getValue();
-                for (String value : urlValues) {
-                    //对参数进行 utf-8 编码,防止头信息传中文
-                    String urlValue = URLEncoder.encode(value, "UTF-8");
-                    sb.append(urlParams.getKey()).append("=").append(urlValue).append("&");
-                }
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                //对参数进行 utf-8 编码,防止头信息传中文
+                String urlValue = URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8");
+                sb.append(entry.getKey()).append("=").append(urlValue).append("&");
             }
             sb.deleteCharAt(sb.length() - 1);
             return sb.toString();
@@ -256,16 +253,49 @@ public class HttpUtils {
     /**
      * 拼接请求参数
      */
-    public static String appendUrlParams( String url, Map<String, Object> params) {
+    public static String appendUrlParams(String url, Map<String, Object> params) {
         if (params != null && params.size() > 0) {
             Uri.Builder builder = Uri.parse(url).buildUpon();
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 if (entry.getValue() != null) {
-                    builder.appendQueryParameter(entry.getKey(), entry.getValue().toString());
+                    builder.appendQueryParameter(entry.getKey(), String.valueOf(entry.getKey()));
                 }
             }
             url = builder.build().toString();
         }
         return url;
+    }
+
+
+    /**
+     * 生成类似表单的请求体
+     */
+    public static RequestBody generateMultipartRequestBody(HttpParams params, boolean isMultipart) {
+        if (params.getFileParams().isEmpty() && !isMultipart) {
+            //表单提交，没有文件
+            FormBody.Builder bodyBuilder = new FormBody.Builder();
+            for (String key : params.getUrlParams().keySet()) {
+                bodyBuilder.addEncoded(key, String.valueOf(params.getUrlParams().get(key)));
+            }
+            return bodyBuilder.build();
+        } else {
+            //表单提交，有文件
+            MultipartBody.Builder multipartBodybuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            //拼接键值对
+            if (!params.getUrlParams().isEmpty()) {
+                for (Map.Entry<String, Object> entry : params.getUrlParams().entrySet()) {
+                    multipartBodybuilder.addFormDataPart(entry.getKey(), String.valueOf(entry.getValue()));
+                }
+            }
+            //拼接文件
+            for (Map.Entry<String, List<HttpParams.FileWrapper>> entry : params.fileParamsMap.entrySet()) {
+                List<HttpParams.FileWrapper> fileValues = entry.getValue();
+                for (HttpParams.FileWrapper fileWrapper : fileValues) {
+                    RequestBody fileBody = RequestBody.create(fileWrapper.contentType, fileWrapper.file);
+                    multipartBodybuilder.addFormDataPart(entry.getKey(), fileWrapper.fileName, fileBody);
+                }
+            }
+            return multipartBodybuilder.build();
+        }
     }
 }

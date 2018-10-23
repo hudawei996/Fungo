@@ -123,10 +123,13 @@ public class HttpParams {
         }
     }
 
-    public Map<String, Object> getParams() {
+    public Map<String, Object> getUrlParams() {
         return urlParamsMap;
     }
 
+    public Map<String, List<FileWrapper>> getFileParams() {
+        return fileParamsMap;
+    }
 
     public void removeUrl(String key) {
         urlParamsMap.remove(key);
