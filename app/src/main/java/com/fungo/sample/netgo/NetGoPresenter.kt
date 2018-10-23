@@ -1,8 +1,8 @@
 package com.fungo.sample.netgo
 
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
+import com.fungo.netgo.callback.JsonCallBack
 import com.fungo.netgo.error.ApiException
-import com.fungo.netgo.subscribe.ApiSubscriber
 
 /**
  * @author Pinger
@@ -13,7 +13,7 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
     override fun loadData(page: Int) {
 
         // 发起一个需要解析的请求
-        Api.getGankData().subscribe(object : ApiSubscriber<GankResults>() {
+        Api.getGankData(object : JsonCallBack<GankResults>() {
             override fun onSuccess(t: GankResults?) {
                 netgoView.showContent(t?.results)
             }
@@ -30,7 +30,12 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
         // Api.getGankDespite()
 
         // 发起一个返回String的请求
-//        Api.getGankString().subscribe(object : StringSubscriber() {
+//        Api.getGankString(object : StringCallBack() {
+//
+//            override fun onSuccess(t: String?) {
+//                netgoView.showContent(ArrayList<Any>())
+//                println("---------> s = $t")
+//            }
 //        })
 
     }

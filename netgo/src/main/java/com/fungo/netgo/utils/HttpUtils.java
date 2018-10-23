@@ -9,11 +9,6 @@ import android.text.TextUtils;
 import com.fungo.netgo.NetGo;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
-import com.fungo.netgo.request.BaseBodyRequest;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,13 +18,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,43 +83,6 @@ public class HttpUtils {
         return builder;
     }
 
-    /**
-     * 生成类似表单的请求体
-     */
-    public static RequestBody generateMultipartRequestBody(HttpParams params, boolean isMultipart) {
-        if (params.fileParamsMap.isEmpty() && !isMultipart) {
-            //表单提交，没有文件
-            FormBody.Builder bodyBuilder = new FormBody.Builder();
-            for (String key : params.urlParamsMap.keySet()) {
-                List<String> urlValues = params.urlParamsMap.get(key);
-                for (String value : urlValues) {
-                    bodyBuilder.addEncoded(key, value);
-                }
-            }
-            return bodyBuilder.build();
-        } else {
-            //表单提交，有文件
-            MultipartBody.Builder multipartBodybuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-            //拼接键值对
-            if (!params.urlParamsMap.isEmpty()) {
-                for (Map.Entry<String, List<String>> entry : params.urlParamsMap.entrySet()) {
-                    List<String> urlValues = entry.getValue();
-                    for (String value : urlValues) {
-                        multipartBodybuilder.addFormDataPart(entry.getKey(), value);
-                    }
-                }
-            }
-            //拼接文件
-            for (Map.Entry<String, List<HttpParams.FileWrapper>> entry : params.fileParamsMap.entrySet()) {
-                List<HttpParams.FileWrapper> fileValues = entry.getValue();
-                for (HttpParams.FileWrapper fileWrapper : fileValues) {
-                    RequestBody fileBody = RequestBody.create(fileWrapper.contentType, fileWrapper.file);
-                    multipartBodybuilder.addFormDataPart(entry.getKey(), fileWrapper.fileName, fileBody);
-                }
-            }
-            return multipartBodybuilder.build();
-        }
-    }
 
     /**
      * 根据响应头或者url获取文件名
@@ -296,14 +251,6 @@ public class HttpUtils {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         return manager.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
-    }
-
-
-    /**
-     * 生成请求体对象
-     */
-    public static BaseBodyRequest getPostBody(Map<String, Object> params){
-        return new BaseBodyRequest(params);
     }
 
     /**

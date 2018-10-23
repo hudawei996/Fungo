@@ -32,7 +32,7 @@ object UiUtils {
 
 
     /**
-     * 设置当前的主题
+     * 根据提供的主题枚举设置当前的主题
      */
     fun setCurrentTheme(context: Context, theme: AppTheme) {
         when (theme) {
@@ -55,6 +55,34 @@ object UiUtils {
         }
         saveCurrentTheme(theme)
     }
+
+
+    /**
+     * 根据提供的颜色值设置当前的主题
+     */
+    fun setCurrentTheme(context: Context, color: Int) {
+        var appTheme: AppTheme = AppTheme.Blue
+        when (color) {
+            R.color.colorBluePrimary -> appTheme = AppTheme.Blue
+            R.color.colorRedPrimary -> appTheme = AppTheme.Red
+            R.color.colorBrownPrimary -> appTheme = AppTheme.Brown
+            R.color.colorGreenPrimary -> appTheme = AppTheme.Green
+            R.color.colorPurplePrimary -> appTheme = AppTheme.Purple
+            R.color.colorTealPrimary -> appTheme = AppTheme.Teal
+            R.color.colorPinkPrimary -> appTheme = AppTheme.Pink
+            R.color.colorDeepPurplePrimary -> appTheme = AppTheme.DeepPurple
+            R.color.colorOrangePrimary -> appTheme = AppTheme.Orange
+            R.color.colorIndigoPrimary -> appTheme = AppTheme.Indigo
+            R.color.colorLightGreenPrimary -> AppTheme.LightGreen
+            R.color.colorLimePrimary -> AppTheme.Lime
+            R.color.colorDeepOrangePrimary -> AppTheme.DeepOrange
+            R.color.colorCyanPrimary -> AppTheme.Cyan
+            R.color.colorBlackPrimary -> AppTheme.Black
+            R.color.colorBlueGreyPrimary -> AppTheme.BlueGrey
+        }
+        setCurrentTheme(context, appTheme)
+    }
+
 
     /**
      * 获取某一个属性的主题颜色

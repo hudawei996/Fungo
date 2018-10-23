@@ -2,9 +2,8 @@ package com.fungo.sample.netgo;
 
 
 import com.fungo.netgo.NetGo;
-import com.fungo.netgo.subscribe.DespiteSubscribe;
-
-import io.reactivex.Flowable;
+import com.fungo.netgo.callback.JsonCallBack;
+import com.fungo.netgo.callback.StringCallBack;
 
 
 /**
@@ -19,20 +18,14 @@ public class Api {
     }
 
 
-    public static Flowable<GankResults> getGankData() {
-        String url = API_BASE_URL + "data/Android/30/1";
-        return getApi().getRequest(url,GankResults.class);
+    public static void getGankData(JsonCallBack<GankResults> callBack) {
+        String url = "data/Android/30/1";
+        getApi().<GankResults>get(url).execute(callBack);
     }
 
-    public static Flowable<String> getGankString() {
-        String url = API_BASE_URL + "data/Android/30/1";
-        return getApi().getRequest(url,String.class);
-    }
-
-
-    public static void getGankDespite(){
-        String url = API_BASE_URL + "data/Android/30/1";
-        getApi().getRequest(url).subscribe(new DespiteSubscribe());
+    public static void getGankString(StringCallBack callBack) {
+        String url = "data/Android/30/1";
+        getApi().<String>get(url).execute(callBack);
     }
 
 

@@ -55,7 +55,7 @@ class MainFragment : BaseRecyclerFragment() {
         MaterialDialog(context!!)
                 .title(R.string.theme_choose)
                 .colorChooser(context!!.resources.getIntArray(R.array.colors), initialSelection = UiUtils.getCurrentThemeColor(context!!)) { dialog, color ->
-                    // Use color integer
+                  context!!.setTheme(color)
                 }
                 .positiveButton(R.string.confirm)
                 .show()
