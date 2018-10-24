@@ -219,7 +219,7 @@ public class DownloadTask implements Runnable {
         try {
             Request<?, ? extends Request> request = progress.request;
             request.headers(HttpHeaders.HEAD_KEY_RANGE, "bytes=" + startPosition + "-");
-            response = request.execute().body();
+            response = request.execute();
         } catch (IOException e) {
             postOnError(progress, e);
             return;

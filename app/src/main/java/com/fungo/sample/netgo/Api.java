@@ -25,7 +25,13 @@ public class Api {
 
     public static void getGankString(StringCallBack callBack) {
         String url = "data/Android/30/1";
-        getApi().<String>get(url).execute(callBack);
+        getApi()
+                .<String>get(url)
+                .execute(callBack);
+    }
+
+    public static void postData() {
+        String url = "data/Android/30/1";
     }
 
 

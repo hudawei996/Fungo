@@ -18,8 +18,8 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 /**
  * @author Pinger
@@ -182,11 +182,11 @@ public abstract class Request<T, R extends Request> {
     /**
      * 同步请求
      */
-    public Response<okhttp3.Response> execute() throws IOException {
+    public Response execute() throws IOException {
         if (getMethod() == RequestMethod.GET) {
-            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute();
+            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute().body();
         } else {
-            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute();
+            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute().body();
         }
     }
 
