@@ -1,6 +1,6 @@
 package com.fungo.netgo.callback;
 
-import com.fungo.netgo.error.ApiException;
+import com.fungo.netgo.exception.ApiException;
 import com.fungo.netgo.progress.Progress;
 
 /**

@@ -1,8 +1,8 @@
 package com.fungo.netgo.subscribe;
 
 import com.fungo.netgo.callback.CallBack;
-import com.fungo.netgo.error.ApiException;
-import com.fungo.netgo.error.NetError;
+import com.fungo.netgo.exception.ApiException;
+import com.fungo.netgo.exception.NetError;
 
 import okhttp3.ResponseBody;
 

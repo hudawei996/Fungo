@@ -12,12 +12,14 @@ import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.HttpUtils;
 import com.fungo.netgo.utils.RxUtils;
 
+import java.io.IOException;
 import java.util.Map;
 
 import io.reactivex.Flowable;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 /**
  * @author Pinger
@@ -180,9 +182,22 @@ public abstract class Request<T, R extends Request> {
      */
     public abstract RequestBody generateRequestBody();
 
+
+    /**
+     * 同步请求
+     */
+    public Response<okhttp3.Response> execute() throws IOException {
+        if (getMethod() == RequestMethod.GET) {
+            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute();
+        } else {
+            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), generateRequestBody()).execute();
+        }
+    }
+
+
     /**
      * 订阅请求
-     * TODO 结合缓存统一处理
+     * 异步请求
      */
     public void execute(CallBack<T> callBack) {
         HttpUtils.checkNotNull(mApiService, "retrofit service not be null,please call NetGo.getApi() fist.");
@@ -190,10 +205,10 @@ public abstract class Request<T, R extends Request> {
         Flowable<ResponseBody> flowable = null;
         switch (getMethod()) {
             case GET:
-                flowable = mApiService.get(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
+                flowable = mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
                 break;
             case POST:
-                flowable = mApiService.post(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
+                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), generateRequestBody());
                 break;
         }
 

@@ -1,4 +1,4 @@
-package com.fungo.netgo.error;
+package com.fungo.netgo.exception;
 
 import com.google.gson.JsonParseException;
 

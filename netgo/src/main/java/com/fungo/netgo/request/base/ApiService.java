@@ -5,10 +5,10 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.FieldMap;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
@@ -28,52 +28,53 @@ public interface ApiService {
 
 
     /**
-     * post请求
-     *
-     * @param url     服务器接口
-     * @param headers 请求头
-     * @param params  参数
-     */
-    @POST()
-    @FormUrlEncoded
-    Flowable<ResponseBody> post(
-            @Url() String url,
-            @HeaderMap Map<String, String> headers,
-            @FieldMap Map<String, Object> params);
-
-    /**
-     * post请求
-     *
-     * @param url    服务器接口
-     * @param object 请求体，为任意对象
-     */
-    @POST()
-    Flowable<ResponseBody> postBody(
-            @Url String url,
-            @Body Object object);
-
-
-    /**
-     * post请求
+     * post异步请求
      *
      * @param url  服务器接口
      * @param body 请求体，为RequestBody对象
      */
     @POST()
-    Flowable<ResponseBody> postRequestBody(
+    Flowable<ResponseBody> postAsync(
             @Url() String url,
+            @HeaderMap Map<String, String> headers,
             @Body RequestBody body);
 
 
     /**
-     * get请求
+     * post同步请求
+     *
+     * @param url  服务器接口
+     * @param body 请求体，为RequestBody对象
+     */
+    @POST()
+    Call<Response> postSync(
+            @Url() String url,
+            @HeaderMap Map<String, String> headers,
+            @Body RequestBody body);
+
+
+    /**
+     * get异步请求
      *
      * @param url     服务器接口
      * @param headers 请求头
      * @param params  参数
      */
     @GET()
-    Flowable<ResponseBody> get(
+    Flowable<ResponseBody> getAsync(
+            @Url String url,
+            @HeaderMap Map<String, String> headers,
+            @QueryMap Map<String, Object> params);
+
+
+    /**
+     * get同步请求
+     *
+     * @param url    服务器接口
+     * @param params 参数
+     */
+    @GET()
+    Call<Response> getSync(
             @Url String url,
             @HeaderMap Map<String, String> headers,
             @QueryMap Map<String, Object> params);

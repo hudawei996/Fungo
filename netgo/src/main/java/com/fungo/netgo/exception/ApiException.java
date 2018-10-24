@@ -1,4 +1,4 @@
-package com.fungo.netgo.error;
+package com.fungo.netgo.exception;
 
 import android.text.TextUtils;
 
@@ -46,4 +46,23 @@ public class ApiException extends Exception {
     public int getCode() {
         return code;
     }
+
+
+
+    public ApiException(String detailMessage) {
+        super(detailMessage);
+    }
+
+    public static ApiException UNKNOWN() {
+        return new ApiException("unknown exception!");
+    }
+
+    public static ApiException BREAKPOINT_NOT_EXIST() {
+        return new ApiException("breakpoint file does not exist!");
+    }
+
+    public static ApiException BREAKPOINT_EXPIRED() {
+        return new ApiException("breakpoint file has expired!");
+    }
+
 }
