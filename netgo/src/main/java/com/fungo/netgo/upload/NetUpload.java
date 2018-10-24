@@ -23,10 +23,10 @@ public class NetUpload {
     private UploadThreadPool threadPool;                //上传的线程池
 
     public static NetUpload getInstance() {
-        return OkUploadHolder.instance;
+        return NetUploadHolder.instance;
     }
 
-    private static class OkUploadHolder {
+    private static class NetUploadHolder {
         private static final NetUpload instance = new NetUpload();
     }
 

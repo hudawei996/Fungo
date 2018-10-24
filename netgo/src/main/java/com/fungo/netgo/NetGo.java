@@ -98,9 +98,8 @@ public class NetGo {
     }
 
     private static class NetGoHolder {
-        private static NetGo holder = new NetGo();
+        private static final NetGo holder = new NetGo();
     }
-
 
     /**
      * 必须在全局Application先调用，获取context上下文，否则缓存无法使用
@@ -305,7 +304,8 @@ public class NetGo {
 
 
     /**
-     * get请求,传入的可能是全路径url，也可能是其中的path
+     * get请求,传入的可以是全路径url，也可以是其中的path
+     * 当传入全路径url时会使用整个url访问
      */
     public <T> GetRequest<T> get(String url) {
         return new GetRequest<>(url, mService);
@@ -318,134 +318,4 @@ public class NetGo {
     public <T> PostRequest<T> post(String url) {
         return new PostRequest<>(url, mService);
     }
-
-
-
-
-
-
-
-
-//    /**
-//     * GET请求，不带任何参数
-//     */
-//    public <T> Flowable<T> getRequest(String url, Class<T> clazz) {
-//        return request(RequestMethod.GET, url, null, clazz);
-//    }
-//
-//    public <T> Flowable<T> getRequest(String url) {
-//        return request(RequestMethod.GET, url, null, null);
-//    }
-//
-//    /**
-//     * GET请求，带有参数
-//     */
-//    public <T> Flowable<T> getRequest(String url, Map<String, Object> params, Class<T> clazz) {
-//        return request(RequestMethod.GET, url, params, clazz);
-//    }
-//
-//
-//    /**
-//     * POST请求，请求体不带参数
-//     */
-//    public <T> Flowable<T> postRequest(String url, Class<T> clazz) {
-//        return request(RequestMethod.POST, url, null, clazz);
-//    }
-//
-//    /**
-//     * POST请求，带有参数
-//     */
-//    public <T> Flowable<T> postRequest(String url, Map<String, Object> params, Class<T> clazz) {
-//        return request(RequestMethod.POST, url, params, clazz);
-//    }
-//
-//
-//    /**
-//     * 网络请求核心业务
-//     * <p>
-//     * 由于解析数据的时候发现解析方法上泛型会发生泛型擦除，确定不了T的类型，所有这里将数据类型由外部传入进入
-//     */
-//    private <T> Flowable<T> request(final RequestMethod type, final String url, final Map<String, Object> params, final Class<T> clazz) {
-//        if (HttpUtils.isNetConnected(mContext)) {
-//
-//            return Flowable
-//                    .just(url)
-//                    .flatMap(new Function<String, Publisher<JsonElement>>() {
-//                        @Override
-//                        public Publisher<JsonElement> apply(String s) {
-//
-//                            // 重组请求链接和参数
-//                            if (type == RequestMethod.GET) {
-//                                String fullUrl = HttpUtils.appendUrlParams(url, params);
-//                                if (fullUrl.contains("http") || fullUrl.contains("https")) {
-//                                    return mFungoApi.getRequestWithFullUrl(fullUrl);
-//                                } else {
-//                                    return mFungoApi.getRequest(fullUrl);
-//                                }
-//
-//                            } else {
-//                                Request.BaseBodyRequest bodyParams = HttpUtils.getPostBody(params);
-//                                if (url.contains("http") || url.contains("https")) {
-//                                    return mFungoApi.postRequestWithFullUrl(url, bodyParams);
-//                                } else {
-//                                    return mFungoApi.postRequest(url, bodyParams);
-//                                }
-//                            }
-//                        }
-//                    })
-//                    .flatMap(new Function<JsonElement, Publisher<T>>() {
-//                        @Override
-//                        public Publisher<T> apply(JsonElement jsonElement) {
-//                            if (jsonElement == null) {
-//                                return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
-//                            } else {
-//                                try {
-//                                    // 对class的类型进行区分，不同的class做不同的处理
-//                                    T t;
-//                                    if (clazz == null || clazz == String.class) {
-//                                        t = (T) jsonElement.toString();
-//                                    } else {
-//                                        // 其他类型的数据类型可以直接转换
-//                                        t = GsonUtils.INSTANCE.fromJson(jsonElement, clazz);
-//                                    }
-//
-//                                    if (t == null) {
-//                                        return Flowable.error(new ApiException(NetError.MSG_ERROR_DATA, NetError.ERROR_DATA));
-//                                    } else {
-//                                        return Flowable.just(t);
-//                                    }
-//
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                    return requestError(NetError.MSG_PARSE_ERROR, NetError.PARSE_ERROR);
-//                                }
-//                            }
-//                        }
-//                    })
-//
-//                    // 请求过程中和请求相应后的异常处理
-//                    .onErrorResumeNext(new Function<Throwable, Publisher<? extends T>>() {
-//                        @Override
-//                        public Publisher<? extends T> apply(Throwable throwable) {
-//                            return Flowable.error(NetError.handleException(throwable));
-//                        }
-//
-//                    })
-//                    // 网络请求线程自动切换
-//                    .compose(this.<T>getScheduler());
-//        } else {
-//            // 没有网络时，直接进入异常状态
-//            return Flowable.create(new FlowableOnSubscribe<T>() {
-//                @Override
-//                public void subscribe(FlowableEmitter<T> e) {
-//                    if (!e.isCancelled()) {
-//                        e.onError(new ApiException(NetError.MSG_NET_BREAK, NetError.NET_BREAK));
-//                        e.onComplete();
-//                    }
-//                }
-//            }, BackpressureStrategy.BUFFER);
-//        }
-//    }
-//
-
 }

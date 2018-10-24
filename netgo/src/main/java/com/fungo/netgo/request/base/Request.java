@@ -38,8 +38,6 @@ public abstract class Request<T, R extends Request> {
     protected HttpParams mParams = new HttpParams();     //添加的param
     protected HttpHeaders mHeaders = new HttpHeaders();  //添加的header
 
-    protected transient CallBack<T> mCallBack;
-
     // retrofit请求执行者，如果没有的话，就不用retrofit
     protected transient ApiService mApiService;
 
@@ -137,7 +135,6 @@ public abstract class Request<T, R extends Request> {
         return (R) this;
     }
 
-
     public HttpParams getParams() {
         return mParams;
     }
@@ -171,7 +168,6 @@ public abstract class Request<T, R extends Request> {
         return mApiService;
     }
 
-
     /**
      * 获取请求方式
      */
@@ -190,10 +186,9 @@ public abstract class Request<T, R extends Request> {
         if (getMethod() == RequestMethod.GET) {
             return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute();
         } else {
-            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), generateRequestBody()).execute();
+            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute();
         }
     }
-
 
     /**
      * 订阅请求
@@ -208,7 +203,7 @@ public abstract class Request<T, R extends Request> {
                 flowable = mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
                 break;
             case POST:
-                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), generateRequestBody());
+                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
                 break;
         }
 

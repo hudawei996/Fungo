@@ -177,15 +177,14 @@ public abstract class BodyRequest<T, R extends Request> extends Request<T, R> im
 
     @Override
     public RequestBody generateRequestBody() {
-
         if (requestBody != null)
-            return requestBody;                                                //自定义的请求体
+            return requestBody;                                                // 自定义的请求体
         if (content != null && mediaType != null)
-            return RequestBody.create(mediaType, content);    //上传字符串数据
+            return RequestBody.create(mediaType, content);                     // 上传字符串数据
         if (bs != null && mediaType != null)
-            return RequestBody.create(mediaType, bs);              //上传字节数组
+            return RequestBody.create(mediaType, bs);                          // 上传字节数组
         if (file != null && mediaType != null)
-            return RequestBody.create(mediaType, file);          //上传一个文件
+            return RequestBody.create(mediaType, file);                        // 上传一个文件
         return HttpUtils.generateMultipartRequestBody(mParams, isMultipart);
     }
 

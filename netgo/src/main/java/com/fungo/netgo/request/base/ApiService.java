@@ -30,26 +30,32 @@ public interface ApiService {
     /**
      * post异步请求
      *
-     * @param url  服务器接口
-     * @param body 请求体，为RequestBody对象
+     * @param url     服务器接口
+     * @param headers 请求头
+     * @param params  请求参数
+     * @param body    请求体，为RequestBody对象
      */
     @POST()
     Flowable<ResponseBody> postAsync(
             @Url() String url,
-            @HeaderMap Map<String, String> headers,
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params,
             @Body RequestBody body);
 
 
     /**
      * post同步请求
      *
-     * @param url  服务器接口
-     * @param body 请求体，为RequestBody对象
+     * @param url     服务器接口
+     * @param headers 请求头
+     * @param params  请求参数
+     * @param body    请求体，为RequestBody对象
      */
     @POST()
     Call<Response> postSync(
             @Url() String url,
-            @HeaderMap Map<String, String> headers,
+            @HeaderMap Map<String, Object> headers,
+            @QueryMap Map<String, Object> params,
             @Body RequestBody body);
 
 
@@ -63,7 +69,7 @@ public interface ApiService {
     @GET()
     Flowable<ResponseBody> getAsync(
             @Url String url,
-            @HeaderMap Map<String, String> headers,
+            @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params);
 
 
@@ -76,7 +82,7 @@ public interface ApiService {
     @GET()
     Call<Response> getSync(
             @Url String url,
-            @HeaderMap Map<String, String> headers,
+            @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params);
 
 
