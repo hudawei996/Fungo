@@ -7,7 +7,6 @@ import com.fungo.netgo.cache.CacheFlowable;
 import com.fungo.netgo.cache.CacheManager;
 import com.fungo.netgo.cache.CacheMode;
 import com.fungo.netgo.request.base.Request;
-import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.HttpUtils;
 import com.fungo.netgo.utils.RxUtils;
 
@@ -17,8 +16,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.Maybe;
-import io.reactivex.MaybeSource;
 import io.reactivex.functions.Function;
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
@@ -30,8 +27,7 @@ import retrofit2.Response;
  */
 public class BaseCachePolicy<T> implements CachePolicy<T> {
 
-    private Request<T, ? extends Request> mRequest;
-
+    protected Request<T, ? extends Request> mRequest;
 
     public BaseCachePolicy(Request<T, ? extends Request> request) {
         mRequest = request;
@@ -42,36 +38,25 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         return null;
     }
 
+
+    /**
+     * 发起异步请求
+     */
     @Override
     public void requestAsync() {
-
-        Flowable
-                .concat(prepareCacheFlowable(), prepareAsyncRequestFlowable())
-                .firstElement()
-                .concatMap(new Function<CacheFlowable<T>, MaybeSource<T>>() {
-                    @Override
-                    public MaybeSource<T> apply(CacheFlowable<T> cacheFlowable) {
-                        return Maybe.just(cacheFlowable.data);
-                    }
-                })
-                .toFlowable()
-                .compose(RxUtils.<T>getScheduler())
-                .onErrorResumeNext(RxUtils.<T>getErrorFunction())
-                .subscribe(new RxSubscriber<>(mRequest.getCallBack()));
-
-
     }
 
 
     /**
      * 构建缓存加载观察者
      */
-    private Flowable<CacheFlowable<T>> prepareCacheFlowable() {
+    protected Flowable<CacheFlowable<T>> prepareCacheFlowable() {
         return Flowable.create(new FlowableOnSubscribe<CacheFlowable<T>>() {
             @Override
             public void subscribe(FlowableEmitter<CacheFlowable<T>> emitter) {
                 if (!emitter.isCancelled()) {
                     CacheEntity<T> cacheEntity = prepareCache();
+                    // TODO 缓存的回调
                     if (cacheEntity != null) {
                         System.out.println("-----------> 有缓存数据--------");
                         emitter.onNext(new CacheFlowable<>(true, cacheEntity.getData()));
@@ -88,29 +73,28 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
     /**
      * 构建异步网络请求加载观察者
      */
-    private Flowable<CacheFlowable<T>> prepareAsyncRequestFlowable() {
+    Flowable<CacheFlowable<T>> prepareAsyncRequestFlowable() {
         Flowable<Response<ResponseBody>> requestFlowable = null;
         switch (mRequest.getMethod()) {
             case GET:
                 requestFlowable = mRequest.getAsync();
                 break;
             case POST:
-                //requestFlowable = mRequest.postAsync();
+                requestFlowable = mRequest.postAsync();
                 break;
         }
-
 
         Flowable<CacheFlowable<T>> resultFlowable = null;
         if (requestFlowable != null) {
             resultFlowable = requestFlowable
                     .flatMap(new Function<Response<ResponseBody>, Publisher<T>>() {
                         @Override
-                        public Publisher<T> apply(Response<ResponseBody> response) throws Exception{
+                        public Publisher<T> apply(Response<ResponseBody> response) throws Exception {
 
-                           T t=  mRequest.getCallBack().convertResponse(response.body());
+                            T t = mRequest.getCallBack().convertResponse(response.body());
                             System.out.println("-----------> 请求网络数据成功--------");
 
-                            saveCache(response.headers(),t);
+                            saveCache(response.headers(), t);
                             System.out.println("-----------> 保存缓存成功--------");
 
                             return Flowable.just(t);
@@ -124,12 +108,30 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
 
 
     /**
-     * 构建同步网络请求加载观察者
+     * 构建同步网络请求
      */
-//    private Flowable<CacheFlowable<T>> prepareSyncRequestFlowable() {
-//
-//    }
+    CacheFlowable<T> prepareSyncRequest() {
+        Response<ResponseBody> response = null;
+        T t = null;
+        try {
+            switch (mRequest.getMethod()) {
+                case GET:
+                    response = mRequest.getSync();
+                    break;
+                case POST:
+                    response = mRequest.postSync();
+                    break;
+            }
 
+            t = mRequest.getCallBack().convertResponse(response.body());
+
+            // 保存缓存
+            saveCache(response.headers(), t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new CacheFlowable<>(false, t);
+    }
 
     /**
      * 加载缓存
@@ -168,7 +170,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
      * @param headers 响应头
      * @param data    响应数据
      */
-    private void saveCache(Headers headers, T data) {
+    protected void saveCache(Headers headers, T data) {
         if (mRequest.getCacheMode() == CacheMode.NO_CACHE) return;    //不需要缓存,直接返回
         if (data instanceof Bitmap) return;             //Bitmap没有实现Serializable,不能缓存
 

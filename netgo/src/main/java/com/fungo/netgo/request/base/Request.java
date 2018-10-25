@@ -270,15 +270,33 @@ public abstract class Request<T, R extends Request> {
 
 
     /**
-     * 封装底层的Get请求
+     * 封装底层的Get异步请求
      */
     public Flowable<Response<ResponseBody>> getAsync() {
         return mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
     }
 
 
-    public Flowable<Response> postAsync() {
+    /**
+     * 封装底层的Get同步请求
+     */
+    public Response<ResponseBody> getSync() throws Exception {
+        return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute().body();
+    }
+
+
+    /**
+     * 封装底层的Post异步请求
+     */
+    public Flowable<Response<ResponseBody>> postAsync() {
         return mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
     }
 
+
+    /**
+     * 封装底层的Post同步请求
+     */
+    public Response<ResponseBody> postSync() throws Exception {
+        return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute().body();
+    }
 }

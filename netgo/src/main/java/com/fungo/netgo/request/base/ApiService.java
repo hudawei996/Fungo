@@ -36,7 +36,7 @@ public interface ApiService {
      * @param body    请求体，为RequestBody对象
      */
     @POST()
-    Flowable<Response> postAsync(
+    Flowable<Response<ResponseBody>> postAsync(
             @Url() String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params,
@@ -52,7 +52,7 @@ public interface ApiService {
      * @param body    请求体，为RequestBody对象
      */
     @POST()
-    Call<Response> postSync(
+    Call<Response<ResponseBody>> postSync(
             @Url() String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params,
@@ -80,7 +80,7 @@ public interface ApiService {
      * @param params 参数
      */
     @GET()
-    Call<Response> getSync(
+    Call<Response<ResponseBody>> getSync(
             @Url String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params);
@@ -94,7 +94,7 @@ public interface ApiService {
      */
     @Multipart
     @POST()
-    Flowable<Response> uploadImage(
+    Flowable<Response<ResponseBody>> uploadImage(
             @Url() String url,
             @Part("image\"; filename=\"image.jpg") RequestBody requestBody);
 
@@ -108,7 +108,7 @@ public interface ApiService {
      */
     @Multipart
     @POST()
-    Flowable<Response> uploadFile(
+    Flowable<Response<ResponseBody>> uploadFile(
             @Url String url,
             @Part("description") RequestBody requestBody,
             @Part("image\"; filename=\"image.jpg") MultipartBody.Part file);
@@ -121,6 +121,6 @@ public interface ApiService {
      */
     @Streaming
     @GET
-    Flowable<Response> downloadFile(@Url String url);
+    Flowable<Response<ResponseBody>> downloadFile(@Url String url);
 
 }
