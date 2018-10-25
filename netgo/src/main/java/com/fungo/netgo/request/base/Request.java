@@ -21,6 +21,7 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 /**
@@ -271,7 +272,7 @@ public abstract class Request<T, R extends Request> {
     /**
      * 封装底层的Get请求
      */
-    public Flowable<Response> getAsync() {
+    public Flowable<Response<ResponseBody>> getAsync() {
         return mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
     }
 

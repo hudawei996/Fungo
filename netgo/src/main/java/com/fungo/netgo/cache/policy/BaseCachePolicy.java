@@ -89,13 +89,13 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
      * 构建异步网络请求加载观察者
      */
     private Flowable<CacheFlowable<T>> prepareAsyncRequestFlowable() {
-        Flowable<Response> requestFlowable = null;
+        Flowable<Response<ResponseBody>> requestFlowable = null;
         switch (mRequest.getMethod()) {
             case GET:
                 requestFlowable = mRequest.getAsync();
                 break;
             case POST:
-                requestFlowable = mRequest.postAsync();
+                //requestFlowable = mRequest.postAsync();
                 break;
         }
 
@@ -103,11 +103,11 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         Flowable<CacheFlowable<T>> resultFlowable = null;
         if (requestFlowable != null) {
             resultFlowable = requestFlowable
-                    .flatMap(new Function<Response, Publisher<T>>() {
+                    .flatMap(new Function<Response<ResponseBody>, Publisher<T>>() {
                         @Override
-                        public Publisher<T> apply(Response response) throws Exception{
+                        public Publisher<T> apply(Response<ResponseBody> response) throws Exception{
 
-                           T t=  mRequest.getCallBack().convertResponse(response.raw().body());
+                           T t=  mRequest.getCallBack().convertResponse(response.body());
                             System.out.println("-----------> 请求网络数据成功--------");
 
                             saveCache(response.headers(),t);

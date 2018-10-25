@@ -5,6 +5,7 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -66,7 +67,7 @@ public interface ApiService {
      * @param params  参数
      */
     @GET()
-    Flowable<Response> getAsync(
+    Flowable<Response<ResponseBody>> getAsync(
             @Url String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params);

@@ -1,9 +1,10 @@
 package com.fungo.sample.netgo;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class GankResults extends GankModel {
+public class GankResults extends GankModel implements Serializable {
 
     private List<Item> results;
 
@@ -14,7 +15,7 @@ public class GankResults extends GankModel {
     public void setResults(List<Item> results) {
         this.results = results;
     }
-    public static class Item{
+    public static class Item implements Serializable{
         private String _id;
         private String _ns;
         private String createdAt;
