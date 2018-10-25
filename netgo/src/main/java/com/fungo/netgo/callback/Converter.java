@@ -1,6 +1,6 @@
 package com.fungo.netgo.callback;
 
-import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * @author Pinger
@@ -13,5 +13,5 @@ public interface Converter<T> {
     /**
      * 将服务器返回的Response，抓换成想要的数据实体
      */
-    T convertResponse(Response response) throws Exception;
+    T convertResponse(ResponseBody response) throws Exception;
 }

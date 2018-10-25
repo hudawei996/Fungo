@@ -12,8 +12,7 @@ import io.reactivex.FlowableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 /**
  * @author Pinger
@@ -22,20 +21,6 @@ import okhttp3.ResponseBody;
 public class RxUtils {
 
 
-    /**
-     * 获取转换结果
-     */
-    public static <T> Function<Response, Publisher<T>> getResultFunction(final CallBack<T> callBack) {
-        return new Function<Response, Publisher<T>>() {
-            @Override
-            public Publisher<T> apply(Response response) throws Exception {
-
-                System.out.println("-----------> 请求网络数据成功--------");
-
-                return Flowable.just(callBack.convertResponse(response));
-            }
-        };
-    }
 
 
     /**

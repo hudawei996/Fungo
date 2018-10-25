@@ -2,7 +2,6 @@ package com.fungo.netgo.callback;
 
 import java.io.IOException;
 
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -13,8 +12,8 @@ public abstract class StringCallBack extends BaseCallBack<String> {
 
 
     @Override
-    public String convertResponse(Response response) throws IOException {
-        String result = response.body().string();
+    public String convertResponse(ResponseBody response) throws IOException {
+        String result = response.string();
         response.close();
         return result;
     }

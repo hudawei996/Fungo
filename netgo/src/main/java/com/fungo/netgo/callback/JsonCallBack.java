@@ -19,10 +19,10 @@ public abstract class JsonCallBack<T> extends BaseCallBack<T> {
 
 
     @Override
-    public T convertResponse(Response response) throws IOException {
+    public T convertResponse(ResponseBody response) throws IOException {
         Type genType = getClass().getGenericSuperclass();
         Type type = ((ParameterizedType) genType).getActualTypeArguments()[0];
 
-        return GsonUtils.INSTANCE.fromJson(response.body().string(), type);
+        return GsonUtils.INSTANCE.fromJson(response.string(), type);
     }
 }

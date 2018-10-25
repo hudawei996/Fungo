@@ -11,6 +11,8 @@ import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.HttpUtils;
 import com.fungo.netgo.utils.RxUtils;
 
+import org.reactivestreams.Publisher;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -19,7 +21,8 @@ import io.reactivex.Maybe;
 import io.reactivex.MaybeSource;
 import io.reactivex.functions.Function;
 import okhttp3.Headers;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 /**
  * @author Pinger
@@ -70,10 +73,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
                 if (!emitter.isCancelled()) {
                     CacheEntity<T> cacheEntity = prepareCache();
                     if (cacheEntity != null) {
-
                         System.out.println("-----------> 有缓存数据--------");
-
-
                         emitter.onNext(new CacheFlowable<>(true, cacheEntity.getData()));
                     } else {
                         System.out.println("-----------> 无缓存数据--------");
@@ -103,7 +103,19 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         Flowable<CacheFlowable<T>> resultFlowable = null;
         if (requestFlowable != null) {
             resultFlowable = requestFlowable
-                    .flatMap(RxUtils.getResultFunction(mRequest.getCallBack()))
+                    .flatMap(new Function<Response, Publisher<T>>() {
+                        @Override
+                        public Publisher<T> apply(Response response) throws Exception{
+
+                           T t=  mRequest.getCallBack().convertResponse(response.raw().body());
+                            System.out.println("-----------> 请求网络数据成功--------");
+
+                            saveCache(response.headers(),t);
+                            System.out.println("-----------> 保存缓存成功--------");
+
+                            return Flowable.just(t);
+                        }
+                    })
                     .flatMap(RxUtils.<T>getCacheFunction());
         }
 

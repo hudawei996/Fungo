@@ -21,7 +21,7 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+import retrofit2.Response;
 
 /**
  * @author Pinger
