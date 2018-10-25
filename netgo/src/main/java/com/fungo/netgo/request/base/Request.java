@@ -4,22 +4,24 @@ import android.text.TextUtils;
 
 import com.fungo.netgo.NetGo;
 import com.fungo.netgo.cache.CacheMode;
+import com.fungo.netgo.cache.policy.CachePolicy;
+import com.fungo.netgo.cache.policy.DefaultCachePolicy;
+import com.fungo.netgo.cache.policy.FirstCacheRequestPolicy;
+import com.fungo.netgo.cache.policy.NoCachePolicy;
+import com.fungo.netgo.cache.policy.NoneCacheRequestPolicy;
+import com.fungo.netgo.cache.policy.RequestFailedCachePolicy;
 import com.fungo.netgo.callback.CallBack;
 import com.fungo.netgo.model.HttpHeaders;
 import com.fungo.netgo.model.HttpParams;
 import com.fungo.netgo.request.RequestMethod;
-import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.HttpUtils;
-import com.fungo.netgo.utils.RxUtils;
 
-import java.io.IOException;
 import java.util.Map;
 
 import io.reactivex.Flowable;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * @author Pinger
@@ -37,6 +39,7 @@ public abstract class Request<T, R extends Request> {
     protected long mCacheTime;                           //默认缓存的超时时间
     protected HttpParams mParams = new HttpParams();     //添加的param
     protected HttpHeaders mHeaders = new HttpHeaders();  //添加的header
+    private CallBack<T> mCallBack;
 
     // retrofit请求执行者，如果没有的话，就不用retrofit
     protected transient ApiService mApiService;
@@ -151,8 +154,22 @@ public abstract class Request<T, R extends Request> {
         return mCacheMode;
     }
 
+
+    public void cacheMode(CacheMode cacheMode) {
+        this.mCacheMode = cacheMode;
+    }
+
     public String getCacheKey() {
         return mCacheKey;
+    }
+
+    public void cacheKey(String cacheKey) {
+        this.mCacheKey = cacheKey;
+    }
+
+
+    public CallBack<T> getCallBack() {
+        return mCallBack;
     }
 
     public long getCacheTime() {
@@ -182,12 +199,14 @@ public abstract class Request<T, R extends Request> {
     /**
      * 同步请求
      */
-    public Response execute() throws IOException {
-        if (getMethod() == RequestMethod.GET) {
-            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute().body();
-        } else {
-            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute().body();
-        }
+    public T execute() {
+//        if (getMethod() == RequestMethod.GET) {
+//            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute().body();
+//        } else {
+//            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute().body();
+//        }
+
+        return preparePolicy().requestSync();
     }
 
     /**
@@ -195,24 +214,70 @@ public abstract class Request<T, R extends Request> {
      * 异步请求
      */
     public void execute(CallBack<T> callBack) {
-        HttpUtils.checkNotNull(mApiService, "retrofit service not be null,please call NetGo.getApi() fist.");
+        this.mCallBack = callBack;
+//        HttpUtils.checkNotNull(mApiService, "retrofit service not be null,please call NetGo.getApi() fist.");
+//
+//        Flowable<ResponseBody> flowable = null;
+//        switch (getMethod()) {
+//            case GET:
+//                flowable = mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
+//                break;
+//            case POST:
+//                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
+//                break;
+//        }
+//
+//        if (flowable != null) {
+//            flowable.onErrorResumeNext(RxUtils.getErrorFuntion())
+//                    .compose(RxUtils.<ResponseBody>getScheduler())
+//                    .subscribe(new RxSubscriber<>(callBack));
+//        }
 
-        Flowable<ResponseBody> flowable = null;
-        switch (getMethod()) {
-            case GET:
-                flowable = mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
-                break;
-            case POST:
-                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
-                break;
-        }
+        preparePolicy().requestAsync();
 
-        if (flowable != null) {
-            flowable.onErrorResumeNext(RxUtils.getErrorFuntion())
-                    .compose(RxUtils.<ResponseBody>getScheduler())
-                    .subscribe(new RxSubscriber<>(callBack));
-        }
+
     }
 
+
+    /**
+     * 准备好缓存策略执行者
+     */
+    private CachePolicy<T> preparePolicy() {
+        CachePolicy<T> policy;
+        switch (getCacheMode()) {
+            case NO_CACHE:
+                policy = new NoCachePolicy<>(this);
+                break;
+            case IF_NONE_CACHE_REQUEST:
+                policy = new NoneCacheRequestPolicy<>(this);
+                break;
+            case FIRST_CACHE_THEN_REQUEST:
+                policy = new FirstCacheRequestPolicy<>(this);
+                break;
+            case REQUEST_FAILED_READ_CACHE:
+                policy = new RequestFailedCachePolicy<>(this);
+                break;
+            case DEFAULT:
+            default:
+                policy = new DefaultCachePolicy<>(this);
+                break;
+        }
+
+        HttpUtils.checkNotNull(policy, "policy == null");
+        return policy;
+    }
+
+
+    /**
+     * 封装底层的Get请求
+     */
+    public Flowable<Response> getAsync() {
+        return mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
+    }
+
+
+    public Flowable<Response> postAsync() {
+        return mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
+    }
 
 }

@@ -215,15 +215,16 @@ public class DownloadTask implements Runnable {
         }
 
         //request network from startPosition
-        Response response;
-        try {
-            Request<?, ? extends Request> request = progress.request;
-            request.headers(HttpHeaders.HEAD_KEY_RANGE, "bytes=" + startPosition + "-");
-            response = request.execute();
-        } catch (IOException e) {
-            postOnError(progress, e);
-            return;
-        }
+        Response response = null;
+        // TODO
+//        try {
+//            Request<?, ? extends Request> request = progress.request;
+//            request.headers(HttpHeaders.HEAD_KEY_RANGE, "bytes=" + startPosition + "-");
+//            response = request.execute();
+//        } catch (IOException e) {
+//            postOnError(progress, e);
+//            return;
+//        }
 
         if (response == null) return;
 

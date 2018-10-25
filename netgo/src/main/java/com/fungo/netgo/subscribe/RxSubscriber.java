@@ -12,7 +12,7 @@ import okhttp3.ResponseBody;
  * <p>
  * 请求订阅者，请求的各种状态都交给CallBack去处理
  */
-public class RxSubscriber<T> extends BaseSubscriber {
+public class RxSubscriber<T> extends BaseSubscriber<T> {
 
     private CallBack<T> mCallBack;
 
@@ -32,13 +32,15 @@ public class RxSubscriber<T> extends BaseSubscriber {
 
 
     @Override
-    public void onNext(ResponseBody responseBody) {
-        try {
-            mCallBack.onSuccess(mCallBack.convertResponse(responseBody));
-        } catch (Exception e) {
-            mCallBack.onError(new ApiException(NetError.MSG_PARSE_ERROR, NetError.PARSE_ERROR));
-            e.printStackTrace();
-        }
+    public void onNext(T t) {
+//        try {
+//            mCallBack.onSuccess(mCallBack.convertResponse(responseBody));
+//        } catch (Exception e) {
+//            mCallBack.onError(new ApiException(NetError.MSG_PARSE_ERROR, NetError.PARSE_ERROR));
+//            e.printStackTrace();
+//        }
+
+        mCallBack.onSuccess(t);
     }
 
     @Override

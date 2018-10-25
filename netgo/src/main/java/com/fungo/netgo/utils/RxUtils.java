@@ -1,6 +1,8 @@
 package com.fungo.netgo.utils;
 
-import com.fungo.netgo.exception.ApiException;
+import com.fungo.netgo.cache.CacheFlowable;
+import com.fungo.netgo.cache.CacheManager;
+import com.fungo.netgo.callback.CallBack;
 import com.fungo.netgo.exception.NetError;
 
 import org.reactivestreams.Publisher;
@@ -10,6 +12,7 @@ import io.reactivex.FlowableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -20,25 +23,34 @@ public class RxUtils {
 
 
     /**
+     * 获取转换结果
+     */
+    public static <T> Function<Response, Publisher<T>> getResultFunction(final CallBack<T> callBack) {
+        return new Function<Response, Publisher<T>>() {
+            @Override
+            public Publisher<T> apply(Response response) throws Exception {
+
+                System.out.println("-----------> 请求网络数据成功--------");
+
+                return Flowable.just(callBack.convertResponse(response));
+            }
+        };
+    }
+
+
+    /**
      * 错误的处理方法
      */
-    public static Function<Throwable, Publisher<? extends ResponseBody>> getErrorFuntion() {
-        return new Function<Throwable, Publisher<? extends ResponseBody>>() {
+    public static <T> Function<Throwable, Publisher<T>> getErrorFunction() {
+        return new Function<Throwable, Publisher<T>>() {
             @Override
-            public Publisher<? extends ResponseBody> apply(Throwable throwable) {
+            public Publisher<T> apply(Throwable throwable) {
                 return Flowable.error(NetError.handleException(throwable));
             }
         };
 
     }
 
-
-    /**
-     * 内部的错误处理封装
-     */
-    public static <T> Flowable<T> requestError(String message, int code) {
-        return Flowable.error(new ApiException(message, code));
-    }
 
     /**
      * 线程切换
@@ -53,4 +65,16 @@ public class RxUtils {
         };
     }
 
+
+    /**
+     * 网络数据转成缓存Flowable统一处理
+     */
+    public static <T> Function<T, Publisher<CacheFlowable<T>>> getCacheFunction() {
+        return new Function<T, Publisher<CacheFlowable<T>>>() {
+            @Override
+            public Publisher<CacheFlowable<T>> apply(T t) {
+                return Flowable.just(new CacheFlowable<>(false, t));
+            }
+        };
+    }
 }

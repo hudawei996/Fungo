@@ -6,7 +6,6 @@ import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -36,7 +35,7 @@ public interface ApiService {
      * @param body    请求体，为RequestBody对象
      */
     @POST()
-    Flowable<ResponseBody> postAsync(
+    Flowable<Response> postAsync(
             @Url() String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params,
@@ -67,7 +66,7 @@ public interface ApiService {
      * @param params  参数
      */
     @GET()
-    Flowable<ResponseBody> getAsync(
+    Flowable<Response> getAsync(
             @Url String url,
             @HeaderMap Map<String, Object> headers,
             @QueryMap Map<String, Object> params);
@@ -94,7 +93,7 @@ public interface ApiService {
      */
     @Multipart
     @POST()
-    Flowable<ResponseBody> uploadImage(
+    Flowable<Response> uploadImage(
             @Url() String url,
             @Part("image\"; filename=\"image.jpg") RequestBody requestBody);
 
@@ -108,7 +107,7 @@ public interface ApiService {
      */
     @Multipart
     @POST()
-    Flowable<ResponseBody> uploadFile(
+    Flowable<Response> uploadFile(
             @Url String url,
             @Part("description") RequestBody requestBody,
             @Part("image\"; filename=\"image.jpg") MultipartBody.Part file);
@@ -121,6 +120,6 @@ public interface ApiService {
      */
     @Streaming
     @GET
-    Flowable<ResponseBody> downloadFile(@Url String url);
+    Flowable<Response> downloadFile(@Url String url);
 
 }

@@ -11,7 +11,7 @@ import okhttp3.ResponseBody;
  * <p>
  * 订阅者基类，抽离出来，应对其他的变化
  */
-public abstract class BaseSubscriber extends ResourceSubscriber<ResponseBody> {
+public abstract class BaseSubscriber<T> extends ResourceSubscriber<T> {
 
 
     /**

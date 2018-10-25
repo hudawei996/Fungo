@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -18,10 +19,10 @@ public abstract class JsonCallBack<T> extends BaseCallBack<T> {
 
 
     @Override
-    public T convertResponse(ResponseBody response) throws IOException {
+    public T convertResponse(Response response) throws IOException {
         Type genType = getClass().getGenericSuperclass();
         Type type = ((ParameterizedType) genType).getActualTypeArguments()[0];
 
-        return GsonUtils.INSTANCE.fromJson(response.string(), type);
+        return GsonUtils.INSTANCE.fromJson(response.body().string(), type);
     }
 }
