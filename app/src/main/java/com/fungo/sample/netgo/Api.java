@@ -27,6 +27,14 @@ public class Api {
                 .execute(callBack);
     }
 
+    public static GankResults getGankData() {
+        String url = "data/Android/30/1";
+        return getApi()
+                .<GankResults>get(url)
+                .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
+                .execute();
+    }
+
     public static void getGankString(StringCallBack callBack) {
         String url = "data/Android/30/1";
         getApi()

@@ -25,8 +25,4 @@ public class NoCachePolicy<T> extends BaseCachePolicy<T> {
                 .subscribe(new RxSubscriber<>(mRequest.getCallBack()));
     }
 
-    @Override
-    public T requestSync() {
-        return prepareSyncRequest();
-    }
 }

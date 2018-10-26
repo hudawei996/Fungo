@@ -34,7 +34,25 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
 
     @Override
     public T requestSync() {
-        return null;
+        T t = null;
+        try {
+            t = prepareSyncRequest();
+            System.out.println("-----------> 同步请求：加载成功--------");
+        } catch (Exception e) {
+            // TODO 如果是连接超时异常，这里做重连
+            CacheEntity<T> cacheEntity = prepareCache();
+            if (cacheEntity != null) {
+                t = cacheEntity.getData();
+                System.out.println("-----------> 同步请求：有缓存--------");
+            } else {
+                System.out.println("-----------> 同步请求：无缓存--------");
+            }
+        }
+
+        if (t == null) {
+            System.out.println("-----------> 同步请求：请求失败--------");
+        }
+        return t;
     }
 
 
@@ -106,26 +124,22 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
     /**
      * 构建同步网络请求
      */
-    T prepareSyncRequest() {
+    T prepareSyncRequest() throws Exception {
         Response<ResponseBody> response = null;
-        T t = null;
-        try {
-            switch (mRequest.getMethod()) {
-                case GET:
-                    response = mRequest.getSync();
-                    break;
-                case POST:
-                    response = mRequest.postSync();
-                    break;
-            }
-
-            t = mRequest.getCallBack().convertResponse(response.body());
-
-            // 保存缓存
-            saveCache(response.headers(), t);
-        } catch (Exception e) {
-            e.printStackTrace();
+        switch (mRequest.getMethod()) {
+            case GET:
+                response = mRequest.getSync();
+                break;
+            case POST:
+                response = mRequest.postSync();
+                break;
         }
+
+        T t = mRequest.getCallBack().convertResponse(response.body());
+
+        // 保存缓存
+        saveCache(response.headers(), t);
+
         return t;
     }
 

@@ -1,5 +1,6 @@
 package com.fungo.netgo.cache.policy;
 
+import com.fungo.netgo.cache.CacheEntity;
 import com.fungo.netgo.request.base.Request;
 import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.RxUtils;
@@ -22,12 +23,6 @@ public class FirstCacheRequestPolicy<T> extends BaseCachePolicy<T> {
     public FirstCacheRequestPolicy(Request<T, ? extends Request> request) {
         super(request);
     }
-
-    @Override
-    public T requestSync() {
-        return prepareSyncRequest();
-    }
-
 
     @Override
     public void requestAsync() {

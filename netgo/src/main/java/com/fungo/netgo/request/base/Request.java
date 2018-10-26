@@ -203,12 +203,6 @@ public abstract class Request<T, R extends Request> {
      * 同步请求
      */
     public T execute() {
-//        if (getMethod() == RequestMethod.GET) {
-//            return mApiService.getSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams()).execute().body();
-//        } else {
-//            return mApiService.postSync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody()).execute().body();
-//        }
-
         return preparePolicy().requestSync();
     }
 
@@ -218,27 +212,7 @@ public abstract class Request<T, R extends Request> {
      */
     public void execute(CallBack<T> callBack) {
         this.mCallBack = callBack;
-//        HttpUtils.checkNotNull(mApiService, "retrofit service not be null,please call NetGo.getApi() fist.");
-//
-//        Flowable<ResponseBody> flowable = null;
-//        switch (getMethod()) {
-//            case GET:
-//                flowable = mApiService.getAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams());
-//                break;
-//            case POST:
-//                flowable = mApiService.postAsync(mUrl, mHeaders.getHeaderParams(), mParams.getUrlParams(), generateRequestBody());
-//                break;
-//        }
-//
-//        if (flowable != null) {
-//            flowable.onErrorResumeNext(RxUtils.getErrorFuntion())
-//                    .compose(RxUtils.<ResponseBody>getScheduler())
-//                    .subscribe(new RxSubscriber<>(callBack));
-//        }
-
         preparePolicy().requestAsync();
-
-
     }
 
 
@@ -259,12 +233,12 @@ public abstract class Request<T, R extends Request> {
                 break;
             case DEFAULT:
                 policy = new DefaultCachePolicy<>(this);
+                break;
             case NO_CACHE:
             default:
                 policy = new NoCachePolicy<>(this);
                 break;
         }
-
         HttpUtils.checkNotNull(policy, "policy == null");
         return policy;
     }

@@ -1,8 +1,7 @@
 package com.fungo.sample.netgo
 
 import com.fungo.baselib.base.recycler.BaseRecyclerContract
-import com.fungo.netgo.callback.JsonCallBack
-import com.fungo.netgo.exception.ApiException
+import com.fungo.baselib.manager.ThreadManager
 
 /**
  * @author Pinger
@@ -13,16 +12,28 @@ class NetGoPresenter(private val netgoView: BaseRecyclerContract.View) : BaseRec
     override fun loadData(page: Int) {
 
         // 发起一个需要解析的请求
-        Api.getGankData(object : JsonCallBack<GankResults>() {
-            override fun onSuccess(t: GankResults?) {
-                netgoView.showContent(t?.results)
+//        Api.getGankData(object : JsonCallBack<GankResults>() {
+//            override fun onSuccess(t: GankResults?) {
+//                netgoView.showContent(t?.results)
+//            }
+//
+//            override fun onError(e: ApiException?) {
+//                netgoView.showPageError(e?.message)
+//
+//            }
+//
+//        })
+
+        ThreadManager.runOnSubThread(Runnable {
+            val data = Api.getGankData()
+
+            if (data == null) {
+                netgoView.showPageError()
             }
 
-            override fun onError(e: ApiException?) {
-                netgoView.showPageError(e?.message)
-
-            }
-
+            ThreadManager.runOnUIThread(Runnable {
+                netgoView.showContent(data.results)
+            })
         })
 
 

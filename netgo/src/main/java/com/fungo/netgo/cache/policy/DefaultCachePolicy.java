@@ -27,12 +27,6 @@ public class DefaultCachePolicy<T> extends BaseCachePolicy<T> {
     }
 
     @Override
-    public T requestSync() {
-        return prepareSyncRequest();
-    }
-
-
-    @Override
     public void requestAsync() {
         prepareAsyncRequestFlowable()
                 .compose(RxUtils.<T>getScheduler())

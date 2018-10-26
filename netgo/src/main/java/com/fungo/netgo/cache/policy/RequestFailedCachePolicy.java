@@ -32,12 +32,6 @@ public class RequestFailedCachePolicy<T> extends BaseCachePolicy<T> {
     }
 
     @Override
-    public T requestSync() {
-        return prepareSyncRequest();
-    }
-
-
-    @Override
     public void requestAsync() {
         Flowable
                 .concat(prepareAsyncRequestFlowable(), prepareCacheFlowable())

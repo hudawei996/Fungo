@@ -24,13 +24,6 @@ public class NoneCacheRequestPolicy<T> extends BaseCachePolicy<T> {
         super(request);
     }
 
-
-    @Override
-    public T requestSync() {
-        return prepareSyncRequest();
-    }
-
-
     @Override
     public void requestAsync() {
         Flowable.concat(prepareCacheFlowable(), prepareAsyncRequestFlowable())
