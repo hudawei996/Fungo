@@ -16,10 +16,6 @@ public abstract class BaseCallBack<T> implements CallBack<T> {
 
     }
 
-    @Override
-    public void onCacheSuccess(T t) {
-
-    }
 
     @Override
     public void onError(ApiException exception) {

@@ -2,6 +2,7 @@ package com.fungo.sample.netgo;
 
 
 import com.fungo.netgo.NetGo;
+import com.fungo.netgo.cache.CacheMode;
 import com.fungo.netgo.callback.JsonCallBack;
 import com.fungo.netgo.callback.StringCallBack;
 
@@ -20,7 +21,10 @@ public class Api {
 
     public static void getGankData(JsonCallBack<GankResults> callBack) {
         String url = "data/Android/30/1";
-        getApi().<GankResults>get(url).execute(callBack);
+        getApi()
+                .<GankResults>get(url)
+                .cacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST)
+                .execute(callBack);
     }
 
     public static void getGankString(StringCallBack callBack) {

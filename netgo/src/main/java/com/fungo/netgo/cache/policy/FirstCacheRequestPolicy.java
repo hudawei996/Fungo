@@ -1,18 +1,21 @@
 package com.fungo.netgo.cache.policy;
 
-import com.fungo.netgo.cache.CacheFlowable;
 import com.fungo.netgo.request.base.Request;
 import com.fungo.netgo.subscribe.RxSubscriber;
 import com.fungo.netgo.utils.RxUtils;
 
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
-import io.reactivex.MaybeSource;
-import io.reactivex.functions.Function;
 
 /**
  * @author Pinger
  * @since 18-10-25 上午10:08
+ * <p>
+ * 有缓存先读取缓存返回
+ * 然后再继续请求网络
+ * 没有缓存则继续请求网络
  */
 public class FirstCacheRequestPolicy<T> extends BaseCachePolicy<T> {
 
@@ -22,40 +25,27 @@ public class FirstCacheRequestPolicy<T> extends BaseCachePolicy<T> {
 
     @Override
     public T requestSync() {
-
-
-
-
-        return super.requestSync();
+        return prepareSyncRequest();
     }
 
 
     @Override
     public void requestAsync() {
-        Flowable
-                .concat(prepareCacheFlowable(), prepareAsyncRequestFlowable())
-                .firstElement()
-                .concatMap(new Function<CacheFlowable<T>, MaybeSource<T>>() {
-                    @Override
-                    public MaybeSource<T> apply(CacheFlowable<T> cacheFlowable) {
-
-
-                        System.out.println("-----------> 缓存之后，加载之前--------");
-
-
-                        return Maybe.just(cacheFlowable.data);
-                    }
-                })
-                .toFlowable()
+        Flowable.concat(prepareCacheFlowable(), prepareAsyncRequestFlowable())
                 .compose(RxUtils.<T>getScheduler())
                 .onErrorResumeNext(RxUtils.<T>getErrorFunction())
                 .subscribe(new RxSubscriber<>(mRequest.getCallBack()));
     }
 
+
     @Override
-    protected Flowable<CacheFlowable<T>> prepareCacheFlowable() {
-
-
-        return super.prepareCacheFlowable();
+    Flowable<T> prepareAsyncRequestFlowable() {
+        return super.prepareAsyncRequestFlowable().onErrorResumeNext(new Publisher<T>() {
+            @Override
+            public void subscribe(Subscriber<? super T> subscriber) {
+                // 如果有缓存，但是又网络请求失败了，就不去调用onError覆盖缓存，直接结束
+                subscriber.onComplete();
+            }
+        });
     }
 }

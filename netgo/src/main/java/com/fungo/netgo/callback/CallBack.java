@@ -22,11 +22,6 @@ public interface CallBack<T> extends Converter<T> {
     void onSuccess(T t);
 
     /**
-     * 缓存成功的回调,UI线程
-     */
-    void onCacheSuccess(T t);
-
-    /**
      * 请求失败，响应错误，数据解析错误等，都会回调该方法， UI线程
      */
     void onError(ApiException exception);

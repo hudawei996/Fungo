@@ -2,9 +2,6 @@ package com.fungo.netgo.subscribe;
 
 import com.fungo.netgo.callback.CallBack;
 import com.fungo.netgo.exception.ApiException;
-import com.fungo.netgo.exception.NetError;
-
-import okhttp3.ResponseBody;
 
 /**
  * @author Pinger
@@ -23,28 +20,24 @@ public class RxSubscriber<T> extends BaseSubscriber<T> {
     @Override
     protected void onError(ApiException e) {
         mCallBack.onError(e);
+        System.out.println("-----------> onError--------");
     }
 
     @Override
     protected void onStart() {
         mCallBack.onStart();
+        System.out.println("-----------> onStart--------");
     }
-
 
     @Override
     public void onNext(T t) {
-//        try {
-//            mCallBack.onSuccess(mCallBack.convertResponse(responseBody));
-//        } catch (Exception e) {
-//            mCallBack.onError(new ApiException(NetError.MSG_PARSE_ERROR, NetError.PARSE_ERROR));
-//            e.printStackTrace();
-//        }
-
         mCallBack.onSuccess(t);
+        System.out.println("-----------> onSuccess--------");
     }
 
     @Override
     public void onComplete() {
         mCallBack.onFinish();
+        System.out.println("-----------> onFinish--------");
     }
 }

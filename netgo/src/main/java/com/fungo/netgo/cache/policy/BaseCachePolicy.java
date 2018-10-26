@@ -3,12 +3,10 @@ package com.fungo.netgo.cache.policy;
 import android.graphics.Bitmap;
 
 import com.fungo.netgo.cache.CacheEntity;
-import com.fungo.netgo.cache.CacheFlowable;
 import com.fungo.netgo.cache.CacheManager;
 import com.fungo.netgo.cache.CacheMode;
 import com.fungo.netgo.request.base.Request;
 import com.fungo.netgo.utils.HttpUtils;
-import com.fungo.netgo.utils.RxUtils;
 
 import org.reactivestreams.Publisher;
 
@@ -33,6 +31,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         mRequest = request;
     }
 
+
     @Override
     public T requestSync() {
         return null;
@@ -50,16 +49,16 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
     /**
      * 构建缓存加载观察者
      */
-    protected Flowable<CacheFlowable<T>> prepareCacheFlowable() {
-        return Flowable.create(new FlowableOnSubscribe<CacheFlowable<T>>() {
+    protected Flowable<T> prepareCacheFlowable() {
+        return Flowable.create(new FlowableOnSubscribe<T>() {
             @Override
-            public void subscribe(FlowableEmitter<CacheFlowable<T>> emitter) {
+            public void subscribe(FlowableEmitter<T> emitter) {
                 if (!emitter.isCancelled()) {
                     CacheEntity<T> cacheEntity = prepareCache();
                     // TODO 缓存的回调
                     if (cacheEntity != null) {
                         System.out.println("-----------> 有缓存数据--------");
-                        emitter.onNext(new CacheFlowable<>(true, cacheEntity.getData()));
+                        emitter.onNext(cacheEntity.getData());
                     } else {
                         System.out.println("-----------> 无缓存数据--------");
                     }
@@ -73,7 +72,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
     /**
      * 构建异步网络请求加载观察者
      */
-    Flowable<CacheFlowable<T>> prepareAsyncRequestFlowable() {
+    Flowable<T> prepareAsyncRequestFlowable() {
         Flowable<Response<ResponseBody>> requestFlowable = null;
         switch (mRequest.getMethod()) {
             case GET:
@@ -84,23 +83,20 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
                 break;
         }
 
-        Flowable<CacheFlowable<T>> resultFlowable = null;
+        Flowable<T> resultFlowable = null;
         if (requestFlowable != null) {
             resultFlowable = requestFlowable
                     .flatMap(new Function<Response<ResponseBody>, Publisher<T>>() {
                         @Override
                         public Publisher<T> apply(Response<ResponseBody> response) throws Exception {
-
                             T t = mRequest.getCallBack().convertResponse(response.body());
                             System.out.println("-----------> 请求网络数据成功--------");
 
                             saveCache(response.headers(), t);
-                            System.out.println("-----------> 保存缓存成功--------");
 
                             return Flowable.just(t);
                         }
-                    })
-                    .flatMap(RxUtils.<T>getCacheFunction());
+                    });
         }
 
         return resultFlowable;
@@ -110,7 +106,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
     /**
      * 构建同步网络请求
      */
-    CacheFlowable<T> prepareSyncRequest() {
+    T prepareSyncRequest() {
         Response<ResponseBody> response = null;
         T t = null;
         try {
@@ -130,8 +126,9 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new CacheFlowable<>(false, t);
+        return t;
     }
+
 
     /**
      * 加载缓存
@@ -143,7 +140,7 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
             mRequest.cacheKey(HttpUtils.createUrlFromParams(mRequest.getUrl(), mRequest.getParams().getUrlParams()));
         }
         if (mRequest.getCacheMode() == null) {
-            mRequest.cacheMode(CacheMode.NO_CACHE);
+            mRequest.cacheMode(CacheMode.DEFAULT);
         }
 
         CacheMode cacheMode = mRequest.getCacheMode();
@@ -174,6 +171,10 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         if (mRequest.getCacheMode() == CacheMode.NO_CACHE) return;    //不需要缓存,直接返回
         if (data instanceof Bitmap) return;             //Bitmap没有实现Serializable,不能缓存
 
+        if (mRequest.getCacheKey() == null) {
+            mRequest.cacheKey(HttpUtils.createUrlFromParams(mRequest.getUrl(), mRequest.getParams().getUrlParams()));
+        }
+
         CacheEntity<T> cache = HttpUtils.createCacheEntity(headers, data, mRequest.getCacheMode(), mRequest.getCacheKey());
         if (cache == null) {
             //服务器不需要缓存，移除本地缓存
@@ -181,7 +182,10 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         } else {
             //缓存命中，更新缓存
             CacheManager.getInstance().replace(mRequest.getCacheKey(), cache);
+
+            System.out.println("-----------> 保存缓存成功--------");
         }
     }
+
 
 }

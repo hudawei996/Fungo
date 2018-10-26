@@ -54,11 +54,11 @@ public class RxUtils {
     /**
      * 网络数据转成缓存Flowable统一处理
      */
-    public static <T> Function<T, Publisher<CacheFlowable<T>>> getCacheFunction() {
-        return new Function<T, Publisher<CacheFlowable<T>>>() {
+    public static <T> Function<T, Publisher<T>> getCacheFunction() {
+        return new Function<T, Publisher<T>>() {
             @Override
-            public Publisher<CacheFlowable<T>> apply(T t) {
-                return Flowable.just(new CacheFlowable<>(false, t));
+            public Publisher<T> apply(T t) {
+                return Flowable.just(t);
             }
         };
     }

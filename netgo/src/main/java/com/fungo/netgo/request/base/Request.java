@@ -156,16 +156,18 @@ public abstract class Request<T, R extends Request> {
     }
 
 
-    public void cacheMode(CacheMode cacheMode) {
+    public R cacheMode(CacheMode cacheMode) {
         this.mCacheMode = cacheMode;
+        return (R) this;
     }
 
     public String getCacheKey() {
         return mCacheKey;
     }
 
-    public void cacheKey(String cacheKey) {
+    public R cacheKey(String cacheKey) {
         this.mCacheKey = cacheKey;
+        return (R) this;
     }
 
 
@@ -246,9 +248,6 @@ public abstract class Request<T, R extends Request> {
     private CachePolicy<T> preparePolicy() {
         CachePolicy<T> policy;
         switch (getCacheMode()) {
-            case NO_CACHE:
-                policy = new NoCachePolicy<>(this);
-                break;
             case IF_NONE_CACHE_REQUEST:
                 policy = new NoneCacheRequestPolicy<>(this);
                 break;
@@ -259,8 +258,10 @@ public abstract class Request<T, R extends Request> {
                 policy = new RequestFailedCachePolicy<>(this);
                 break;
             case DEFAULT:
-            default:
                 policy = new DefaultCachePolicy<>(this);
+            case NO_CACHE:
+            default:
+                policy = new NoCachePolicy<>(this);
                 break;
         }
 
