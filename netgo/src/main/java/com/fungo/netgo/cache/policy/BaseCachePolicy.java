@@ -31,7 +31,6 @@ public class BaseCachePolicy<T> implements CachePolicy<T> {
         mRequest = request;
     }
 
-
     @Override
     public T requestSync() {
         T t = null;
