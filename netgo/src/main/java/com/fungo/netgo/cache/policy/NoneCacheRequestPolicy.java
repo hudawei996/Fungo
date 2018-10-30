@@ -42,14 +42,11 @@ public class NoneCacheRequestPolicy<T> extends BaseCachePolicy<T> {
             public void subscribe(FlowableEmitter<T> emitter) {
                 if (!emitter.isCancelled()) {
                     CacheEntity<T> cacheEntity = prepareCache();
-
                     // 有缓存则直接返回缓存
                     if (cacheEntity != null) {
-                        System.out.println("-----------> 有缓存数据--------");
                         emitter.onNext(cacheEntity.getData());
                     } else {
                         // 没有缓存时才去请求网络
-                        System.out.println("-----------> 无缓存数据--------");
                     }
                     emitter.onComplete();
                 }

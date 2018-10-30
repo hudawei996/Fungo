@@ -67,7 +67,7 @@ public class NetGo {
 
         mRetryCount = 3;
         mCacheTime = CACHE_NEVER_EXPIRE;
-        mCacheMode = CacheMode.NO_CACHE;
+        mCacheMode = CacheMode.REQUEST_FAILED_READ_CACHE;
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 

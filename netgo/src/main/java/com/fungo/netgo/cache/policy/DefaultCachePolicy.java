@@ -43,12 +43,8 @@ public class DefaultCachePolicy<T> extends BaseCachePolicy<T> {
             public void subscribe(FlowableEmitter<T> emitter) {
                 if (!emitter.isCancelled()) {
                     CacheEntity<T> cacheEntity = prepareCache();
-                    // TODO 缓存的回调
                     if (cacheEntity != null) {
-                        System.out.println("-----------> 有缓存数据--------");
                         emitter.onNext(cacheEntity.getData());
-                    } else {
-                        System.out.println("-----------> 无缓存数据--------");
                     }
                     emitter.onComplete();
                 }
@@ -78,19 +74,13 @@ public class DefaultCachePolicy<T> extends BaseCachePolicy<T> {
                         @Override
                         public Publisher<T> apply(Response<ResponseBody> response) throws Exception {
                             T t = mRequest.getCallBack().convertResponse(response.body());
-                            System.out.println("-----------> 请求网络数据成功--------");
-
                             saveCache(response.headers(), t);
-                            System.out.println("-----------> 保存缓存成功--------");
-
                             return Flowable.just(t);
                         }
                     }).onErrorResumeNext(new Publisher<T>() {
                         @Override
                         public void subscribe(Subscriber<? super T> subscriber) {
-
-
-//                            subscriber.onComplete();
+                            subscriber.onComplete();
                         }
                     });
         }
