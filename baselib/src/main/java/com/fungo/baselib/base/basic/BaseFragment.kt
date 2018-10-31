@@ -24,9 +24,10 @@ import com.fungo.baselib.utils.ToastUtils
 abstract class BaseFragment : SupportFragment(), IView {
 
     private var mRootView: View? = null
+    abstract val layoutResID: Int
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (mRootView == null) mRootView = inflater.inflate(getLayoutResId(), container, false)
+        if (mRootView == null) mRootView = inflater.inflate(layoutResID, container, false)
         val parent = mRootView!!.parent as? ViewGroup?
         parent?.removeView(mRootView)
         return if (isSwipeBackEnable()) attachToSwipeBack(mRootView) else mRootView
@@ -45,11 +46,6 @@ abstract class BaseFragment : SupportFragment(), IView {
     protected open fun initView() {}
     protected open fun initEvent() {}
     protected open fun initData() {}
-
-    /**
-     * 获取资源ID
-     */
-    abstract fun getLayoutResId(): Int
 
     override fun <T : View> findView(id: Int): T {
         checkNotNull(mRootView)

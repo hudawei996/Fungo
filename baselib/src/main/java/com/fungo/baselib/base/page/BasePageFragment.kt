@@ -22,17 +22,13 @@ import kotlinx.android.synthetic.main.base_layout_toolbar.*
  * 还有将平时开发中用到的各种工具类进行封装，提供给子类调用。
  */
 
-abstract class BasePageFragment : BaseFragment() {
+abstract class BasePageFragment(final override val layoutResID: Int = R.layout.base_fragment_page) : BaseFragment() {
 
     private var mLoadingDialog: AlertDialog? = null
     private var mPageTitle: String? = null
 
     protected var isLoadingShowing = false
     protected var isLoadingDialogShowing = false
-
-    final override fun getLayoutResId(): Int {
-        return R.layout.base_fragment_page
-    }
 
     final override fun initView() {
         // 设置状态栏高度
@@ -241,7 +237,6 @@ abstract class BasePageFragment : BaseFragment() {
      * 获取子页面布局
      */
     abstract fun getPageLayoutResId(): Int
-
 
     /**
      * 获取填充menu菜单
