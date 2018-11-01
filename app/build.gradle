@@ -50,8 +50,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':baselib')
-    implementation project(':netgo')
-    implementation project(':imagego')
+
+    implementation 'com.github.PingerOne:NetGO:1.0.0'
+
+    implementation 'com.github.PingerOne.ImageGo:imagego_glide:2.0.4'
 
     implementation 'com.afollestad.material-dialogs:core:2.0.0-beta4'
     implementation 'com.afollestad.material-dialogs:color:2.0.0-beta4'
