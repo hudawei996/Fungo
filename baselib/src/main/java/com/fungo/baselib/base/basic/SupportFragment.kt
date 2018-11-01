@@ -2,7 +2,6 @@ package com.fungo.baselib.base.basic
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.animation.Animation
 import me.yokeyword.fragmentation.*
@@ -46,7 +45,7 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
         mSwipeBackDelegate.onCreate(savedInstanceState)
     }
 
-    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation {
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         return mDelegate.onCreateAnimation(transit, enter, nextAnim)
     }
 
@@ -185,7 +184,7 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
      *
      * @return FragmentAnimator
      */
-    override fun getFragmentAnimator(): FragmentAnimator {
+    override fun getFragmentAnimator(): FragmentAnimator? {
         return mDelegate.fragmentAnimator
     }
 
@@ -213,7 +212,7 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
      *
      * @see .startForResult
      */
-    override fun setFragmentResult(resultCode: Int, bundle: Bundle) {
+    override fun setFragmentResult(resultCode: Int, bundle: Bundle?) {
         mDelegate.setFragmentResult(resultCode, bundle)
     }
 
@@ -225,7 +224,7 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
      *
      * @see .startForResult
      */
-    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle) {
+    override fun onFragmentResult(requestCode: Int, resultCode: Int, data: Bundle?) {
         mDelegate.onFragmentResult(requestCode, resultCode, data)
     }
 
@@ -239,7 +238,7 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
      * @param args putNewBundle(Bundle newBundle)
      * @see .start
      */
-    override fun onNewBundle(args: Bundle) {
+    override fun onNewBundle(args: Bundle?) {
         mDelegate.onNewBundle(args)
     }
 
@@ -281,6 +280,33 @@ open class SupportFragment : androidx.fragment.app.Fragment(), ISupportFragment,
     fun loadRootFragment(containerId: Int, toFragment: ISupportFragment, addToBackStack: Boolean, allowAnim: Boolean) {
         mDelegate.loadRootFragment(containerId, toFragment, addToBackStack, allowAnim)
     }
+
+    /**
+     * 加载多个同级根Fragment,类似Wechat, QQ主页的场景
+     */
+    fun loadMultipleRootFragment(containerId: Int, showPosition: Int, vararg toFragments: ISupportFragment) {
+        mDelegate.loadMultipleRootFragment(containerId, showPosition, *toFragments)
+    }
+
+
+    /**
+     * show一个Fragment,hide其他同栈所有Fragment
+     * 使用该方法时，要确保同级栈内无多余的Fragment,(只有通过loadMultipleRootFragment()载入的Fragment)
+     *
+     *
+     * 建议使用更明确的[.showHideFragment]
+     */
+    fun showHideFragment(showFragment: ISupportFragment) {
+        showHideFragment(showFragment, null)
+    }
+
+    /**
+     * show一个Fragment,hide一个Fragment ; 主要用于类似微信主页那种 切换tab的情况
+     */
+    fun showHideFragment(showFragment: ISupportFragment, hideFragment: ISupportFragment?) {
+        mDelegate.showHideFragment(showFragment, hideFragment)
+    }
+
 
     fun start(toFragment: ISupportFragment) {
         mDelegate.start(toFragment)

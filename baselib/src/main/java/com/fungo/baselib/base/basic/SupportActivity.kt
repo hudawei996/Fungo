@@ -1,9 +1,9 @@
 package com.fungo.baselib.base.basic
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MotionEvent
 import com.fungo.baselib.base.page.anim.DefaultActivityHorizontalAnimator
 import me.yokeyword.fragmentation.*
 import me.yokeyword.fragmentation.anim.FragmentAnimator
@@ -134,6 +134,34 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
     fun loadRootFragment(containerId: Int, toFragment: ISupportFragment) {
         mDelegate.loadRootFragment(containerId, toFragment)
     }
+
+
+    /**
+     * 加载多个同级根Fragment,类似Wechat, QQ主页的场景
+     */
+    fun loadMultipleRootFragment(containerId: Int, showPosition: Int, vararg toFragments: ISupportFragment) {
+        mDelegate.loadMultipleRootFragment(containerId, showPosition, *toFragments)
+    }
+
+
+    /**
+     * show一个Fragment,hide其他同栈所有Fragment
+     * 使用该方法时，要确保同级栈内无多余的Fragment,(只有通过loadMultipleRootFragment()载入的Fragment)
+     *
+     *
+     * 建议使用更明确的[.showHideFragment]
+     */
+    fun showHideFragment(showFragment: ISupportFragment) {
+        showHideFragment(showFragment, null)
+    }
+
+    /**
+     * show一个Fragment,hide一个Fragment ; 主要用于类似微信主页那种 切换tab的情况
+     */
+    fun showHideFragment(showFragment: ISupportFragment, hideFragment: ISupportFragment?) {
+        mDelegate.showHideFragment(showFragment, hideFragment)
+    }
+
 
     fun start(toFragment: ISupportFragment) {
         mDelegate.start(toFragment)
