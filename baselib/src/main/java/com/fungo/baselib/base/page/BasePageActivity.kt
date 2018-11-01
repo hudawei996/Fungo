@@ -10,10 +10,7 @@ import com.fungo.baselib.base.basic.BaseActivity
  * 页面的中转Activity的基类
  */
 
-abstract class BasePageActivity : BaseActivity() {
-
-    override val layoutResID: Int
-        get() = R.layout.base_activity_page
+abstract class BasePageActivity(override val layoutResID: Int = R.layout.base_activity_page) : BaseActivity() {
 
 
     final override fun initView() {

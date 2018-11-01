@@ -8,7 +8,6 @@ import com.fungo.baselib.R
  */
 class EmptyFragment : BasePageFragment() {
 
-
     override fun getPageTitle(): String? {
         return "暂无数据"
     }
