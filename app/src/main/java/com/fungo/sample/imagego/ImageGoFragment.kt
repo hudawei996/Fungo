@@ -42,8 +42,6 @@ class ImageGoFragment : BasePageFragment() {
         rgType.setOnCheckedChangeListener { _, checkedId ->
             // 手动区分链接
             isGif = checkedId == R.id.rbGif
-            // 自动设置区分gif加载
-            ImageGoEngine.setAutoGif(checkedId == R.id.rbGif)
         }
 
         rbNormal.isChecked = true
