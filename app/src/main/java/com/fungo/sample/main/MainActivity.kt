@@ -11,6 +11,7 @@ import com.fungo.baselib.base.page.BasePageFragment
 
 class MainActivity : BasePageActivity() {
 
+
     override fun getPageFragment(): BasePageFragment {
         return MainFragment()
     }

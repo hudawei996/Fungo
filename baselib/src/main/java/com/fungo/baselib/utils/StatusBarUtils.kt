@@ -5,10 +5,10 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
-import androidx.annotation.IntDef
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.IntDef
 
 /**
  * @author Pinger
@@ -34,6 +34,8 @@ object StatusBarUtils {
      */
     @TargetApi(19)
     fun setStatusBarTranslucent(activity: Activity) {
+        // 先清除掉全屏模式
+        clearFullScreen(activity)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = activity.window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -78,7 +80,7 @@ object StatusBarUtils {
     /**
      * 设置全屏模式
      */
-    fun setFullScreenMode(activity: Activity) {
+    fun setFullScreen(activity: Activity) {
         activity.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
@@ -86,7 +88,7 @@ object StatusBarUtils {
     /**
      * 清除全屏模式
      */
-    fun clearFullScreenMode(activity: Activity) {
+    fun clearFullScreen(activity: Activity) {
         activity.window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 

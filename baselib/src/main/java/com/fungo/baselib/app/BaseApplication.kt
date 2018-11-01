@@ -30,6 +30,7 @@ abstract class BaseApplication : Application() {
         initFragmentation()
     }
 
+
     /**
      * 初始化环境
      */

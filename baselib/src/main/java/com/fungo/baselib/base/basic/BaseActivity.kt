@@ -38,10 +38,11 @@ abstract class BaseActivity : SupportActivity() {
     protected open fun initData() {}
 
     private fun initPre() {
-        // 主题
-        UiUtils.setCurrentTheme(this, UiUtils.getCurrentTheme())
         // 沉浸式
         if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
+        // 主题
+        UiUtils.setCurrentTheme(this, UiUtils.getCurrentTheme())
+
         // 设置状态栏背景颜色
         StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
 

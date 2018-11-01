@@ -22,6 +22,15 @@
         <item name="android:windowAnimationStyle">@style/BaseAppTheme.Right.Animation</item>
     </style>
 
+
+    <!--全屏的主题-->
+    <style name="BaseAppTheme.FullScreen" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/grey_f7</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/BaseAppTheme.Right.Animation</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!-- 右侧弹出和返回的主题-->
     <style name="BaseAppTheme.Right.Animation" mce_bogus="1" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/anim_slide_in_right</item>
