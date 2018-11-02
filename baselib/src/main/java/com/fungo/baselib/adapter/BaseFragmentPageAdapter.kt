@@ -1,4 +1,4 @@
-package com.fungo.baselib.base.page
+package com.fungo.baselib.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
