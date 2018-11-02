@@ -11,8 +11,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
 import android.widget.ProgressBar
-import com.fungo.baselib.base.page.BasePageFragment
-import com.fungo.baselib.utils.ViewUtils
+import com.fungo.baseuilib.fragment.BasePageFragment
+import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.baselib.web.sonic.SonicRuntimeImpl
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
 import com.tencent.sonic.sdk.SonicConfig

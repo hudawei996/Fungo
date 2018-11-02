@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
-import com.fungo.baselib.base.page.BasePageActivity
-import com.fungo.baselib.base.page.BasePageFragment
+import com.fungo.baseuilib.activity.BasePageActivity
+import com.fungo.baseuilib.fragment.BasePageFragment
 
 /**
  * @author Pinger

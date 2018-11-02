@@ -2,7 +2,7 @@ package com.fungo.sample.imagego
 
 import android.graphics.Bitmap
 import android.view.View
-import com.fungo.baselib.base.page.BasePageFragment
+import com.fungo.baseuilib.fragment.BasePageFragment
 import com.fungo.imagego.*
 import com.fungo.imagego.glide.GlideImageStrategy
 import com.fungo.imagego.listener.OnImageListener

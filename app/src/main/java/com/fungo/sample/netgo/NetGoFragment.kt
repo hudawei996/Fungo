@@ -1,7 +1,7 @@
 package com.fungo.sample.netgo
 
-import com.fungo.baselib.base.recycler.BaseRecyclerContract
-import com.fungo.baselib.base.recycler.BaseRecyclerFragment
+import com.fungo.baseuilib.recycler.BaseRecyclerContract
+import com.fungo.baseuilib.recycler.BaseRecyclerFragment
 import com.fungo.netgo.NetGo
 import com.fungo.sample.R
 

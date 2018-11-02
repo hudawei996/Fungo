@@ -1,6 +1,6 @@
 package com.fungo.sample.netgo
 
-import com.fungo.baselib.base.recycler.BaseRecyclerContract
+import com.fungo.baseuilib.recycler.BaseRecyclerContract
 import com.fungo.netgo.callback.JsonCallBack
 import com.fungo.netgo.exception.ApiException
 

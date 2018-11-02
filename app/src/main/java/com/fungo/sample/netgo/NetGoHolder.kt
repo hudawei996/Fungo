@@ -1,8 +1,8 @@
 package com.fungo.sample.netgo
 
 import android.view.ViewGroup
-import com.fungo.baselib.base.recycler.BaseViewHolder
-import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
+import com.fungo.baseuilib.recycler.BaseViewHolder
+import com.fungo.baseuilib.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baselib.web.WebActivity
 import com.fungo.sample.R
 

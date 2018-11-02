@@ -1,8 +1,8 @@
 package com.fungo.sample.main
 
 import android.view.ViewGroup
-import com.fungo.baselib.base.recycler.BaseViewHolder
-import com.fungo.baselib.base.recycler.multitype.MultiTypeViewHolder
+import com.fungo.baseuilib.recycler.BaseViewHolder
+import com.fungo.baseuilib.recycler.multitype.MultiTypeViewHolder
 import com.fungo.sample.R
 import com.fungo.sample.imagego.ImageGoFragment
 import com.fungo.sample.netgo.NetGoFragment

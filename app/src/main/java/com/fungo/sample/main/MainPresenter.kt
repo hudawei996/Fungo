@@ -1,6 +1,6 @@
 package com.fungo.sample.main
 
-import com.fungo.baselib.base.recycler.BaseRecyclerContract
+import com.fungo.baseuilib.recycler.BaseRecyclerContract
 import com.fungo.sample.R
 
 

@@ -2,9 +2,9 @@ package com.fungo.sample.main
 
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.color.colorChooser
-import com.fungo.baselib.base.recycler.BaseRecyclerContract
-import com.fungo.baselib.base.recycler.BaseRecyclerFragment
-import com.fungo.baselib.theme.UiUtils
+import com.fungo.baseuilib.recycler.BaseRecyclerContract
+import com.fungo.baseuilib.recycler.BaseRecyclerFragment
+import com.fungo.baseuilib.theme.UiUtils
 import com.fungo.sample.R
 import kotlinx.android.synthetic.main.fragment_main.*
 

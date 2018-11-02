@@ -3,7 +3,7 @@ package com.fungo.baselib.base.page
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.fungo.baselib.base.basic.BaseFragment
+import com.fungo.baseuilib.fragment.BaseFragment
 
 /**
  * @author Pinger
