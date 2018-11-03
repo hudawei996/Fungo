@@ -19,14 +19,18 @@ import com.fungo.baseuilib.basic.IView
 /**
  * @author pinger
  * @since 2018/1/13 23:52
+ *
+ * 基类Fragment，封装视图，将布局id抽取出来，让子类去实现。
+ * 提供初始化View,点击事件，数据加载的方法。
+ * 实现IView，提供操作View的基本方法。
  */
 abstract class BaseFragment : SupportFragment(), IView {
 
+    // 基类试图对象
     private var mRootView: View? = null
-    abstract val layoutResID: Int
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (mRootView == null) mRootView = inflater.inflate(layoutResID, container, false)
+        if (mRootView == null) mRootView = inflater.inflate(getLayoutResID(), container, false)
         val parent = mRootView!!.parent as? ViewGroup?
         parent?.removeView(mRootView)
         return if (isSwipeBackEnable()) attachToSwipeBack(mRootView) else mRootView
@@ -38,15 +42,49 @@ abstract class BaseFragment : SupportFragment(), IView {
         initEvent()
     }
 
+    /**
+     * Fragment提供的懒加载方法，使用final修饰，不让子类使用。
+     * 子类请使用[initData]加载使用
+     */
     final override fun onLazyInitView(savedInstanceState: Bundle?) {
         initData()
     }
 
+    /**
+     * 获取控件ID
+     * @return 控件ID，子类返回
+     */
+    abstract fun getLayoutResID(): Int
+
+    /**
+     * 初始化View，在Fragment的onViewCreated()方法中调用，
+     * 如果是在ViewPager中使用Fragment，则该方法在Fragment初始化时就会被调用。
+     * 子类可以在该方法中使用kotlin直接使用View的id引用。
+     * 也可以调用[findView]方法查找View的id。
+     */
     protected open fun initView() {}
+
+    /**
+     * 初始化事件，Fragment中所有的点击事件都可以在里面实现。
+     * 可以直接调用[setOnClick]方法，然后再重写[onClick]方法实现点击事件。
+     * 该方法在Fragment的onViewCreated()方法中调用。
+     */
     protected open fun initEvent() {}
+
+    /**
+     * 初始化数据，只有当前的Fragment第一次可见才会被调用，用于延迟加载数据。
+     * 在[onSupportVisible]方法之后调用。
+     * Fragment多次可见时，只有第一次才会加载数据。
+     */
     protected open fun initData() {}
 
-    override fun <T : View> findView(id: Int): T {
+    /**
+     * 是否支持侧滑返回
+     * 默认是不支持侧滑返回的
+     */
+    protected open fun isSwipeBackEnable() = false
+
+    override fun <T : View> findView(@IdRes id: Int): T {
         checkNotNull(mRootView)
         return mRootView!!.findViewById(id) as T
     }
@@ -64,8 +102,8 @@ abstract class BaseFragment : SupportFragment(), IView {
     }
 
     override fun setGone(view: View?) {
-        if (view != null && view.visibility != View.GONE) {
-            view.visibility = View.GONE
+        if (view?.visibility != View.GONE) {
+            view?.visibility = View.GONE
         }
     }
 
@@ -74,8 +112,8 @@ abstract class BaseFragment : SupportFragment(), IView {
     }
 
     override fun setVisible(view: View?) {
-        if (view != null && view.visibility != View.VISIBLE) {
-            view.visibility = View.VISIBLE
+        if (view?.visibility != View.VISIBLE) {
+            view?.visibility = View.VISIBLE
         }
     }
 
@@ -87,13 +125,21 @@ abstract class BaseFragment : SupportFragment(), IView {
         view?.visibility = visibility
     }
 
+    override fun setVisibility(id: Int, isVisible: Boolean) {
+        setVisibility(findView<View>(id), isVisible)
+    }
+
+    override fun setVisibility(view: View?, isVisible: Boolean) {
+        if (isVisible) setVisible(view)
+        else setGone(view)
+    }
+
     override fun setText(@IdRes id: Int, text: CharSequence?) {
-        val textView = findView<View>(id) as TextView
-        setText(textView, text)
+        setText(findView<TextView>(id), text)
     }
 
     override fun setText(@IdRes id: Int, @StringRes resId: Int) {
-        setText(findView<View>(id) as TextView, resId)
+        setText(findView<TextView>(id), resId)
     }
 
     override fun setText(textView: TextView?, @StringRes resId: Int) {
@@ -101,14 +147,7 @@ abstract class BaseFragment : SupportFragment(), IView {
     }
 
     override fun setText(textView: TextView?, text: CharSequence?) {
-        if (textView != null && !TextUtils.isEmpty(text)) {
-            textView.text = text
-        }
-    }
-
-    override fun setImage(imageView: ImageView?, url: String?) {
-        if (imageView != null && !TextUtils.isEmpty(url)) {
-        }
+        textView?.text = text
     }
 
     override fun setImageResource(imageView: ImageView?, @DrawableRes resId: Int) {
@@ -116,15 +155,11 @@ abstract class BaseFragment : SupportFragment(), IView {
     }
 
     override fun setImageBitmap(imageView: ImageView?, bitmap: Bitmap?) {
-        if (imageView != null && bitmap != null) {
-            imageView.setImageBitmap(bitmap)
-        }
+        imageView?.setImageBitmap(bitmap)
     }
 
     override fun setImageDrawable(imageView: ImageView?, drawable: Drawable?) {
-        if (imageView != null && drawable != null) {
-            imageView.setImageDrawable(drawable)
-        }
+        imageView?.setImageDrawable(drawable)
     }
 
     override fun showToast(content: String?) {
@@ -144,17 +179,7 @@ abstract class BaseFragment : SupportFragment(), IView {
         showLongToast(getString(resId))
     }
 
-    /**
-     * 子类自己实现点击事件
-     */
     override fun onClick(@NonNull view: View) {}
 
     override fun onClick(id: Int) {}
-
-    /**
-     * 是否支持侧滑返回
-     * 默认是可以侧滑返回的
-     */
-    protected open fun isSwipeBackEnable() = true
-
 }

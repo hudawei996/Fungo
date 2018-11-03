@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fungo.baseuilib.R
-import com.fungo.baseuilib.fragment.BasePageFragment
+import com.fungo.baseuilib.fragment.BaseNavFragment
 import com.fungo.baseuilib.recycler.multitype.MultiTypeAdapter
 import com.fungo.baseuilib.recycler.multitype.MultiTypeViewHolder
 import com.fungo.baseuilib.recycler.multitype.OneToManyFlow
@@ -19,7 +19,7 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter
  * 列表页面布局，封装SmartRefreshLayout，方便替换
  */
 
-abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.View {
+abstract class BaseRecyclerFragment : BaseNavFragment(), BaseRecyclerContract.View {
 
     private lateinit var mPresenter: BaseRecyclerContract.Presenter
     private lateinit var mAdapter: MultiTypeAdapter
@@ -34,11 +34,12 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
         mPresenter = getPresenter()
     }
 
-    override fun getPageLayoutResId(): Int {
+
+    override fun getNavContentResID(): Int {
         return R.layout.base_fragment_recycler
     }
 
-    final override fun initPageView() {
+    final override fun initContentView() {
         setSmartRefreshLayout(findView(R.id.smartRefreshLayout))
         setRecyclerView(findView(R.id.recyclerView))
         mSmartRefreshLayout?.refreshHeader = MaterialHeader(context)
@@ -61,7 +62,7 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
 
         setPageErrorRetryListener(View.OnClickListener { initData() })
 
-        initRecyView()
+        initPageView()
     }
 
     final override fun initData() {
@@ -299,5 +300,5 @@ abstract class BaseRecyclerFragment : BasePageFragment(), BaseRecyclerContract.V
     /**
      * 让子类重写，初始化页面
      */
-    protected open fun initRecyView() {}
+    protected open fun initPageView() {}
 }

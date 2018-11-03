@@ -2,7 +2,8 @@ package com.fungo.sample.imagego
 
 import android.graphics.Bitmap
 import android.view.View
-import com.fungo.baseuilib.fragment.BasePageFragment
+import com.fungo.baseuilib.fragment.BaseNavBackFragment
+import com.fungo.baseuilib.fragment.BaseNavFragment
 import com.fungo.imagego.*
 import com.fungo.imagego.glide.GlideImageStrategy
 import com.fungo.imagego.listener.OnImageListener
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_imagego.*
  * @author Pinger
  * @since 2018/10/16 1:40
  */
-class ImageGoFragment : BasePageFragment() {
+class ImageGoFragment : BaseNavBackFragment() {
 
     private val mUrl = "http://img.mp.itc.cn/upload/20161121/d30e0a4a1f8b418f92e973310885e4ee_th.jpg"
     private val mGif = "http://www.gaoxiaogif.com/d/file/201712/ac2cba0163c27c0f455c22df35794bc8.gif"
@@ -27,12 +28,11 @@ class ImageGoFragment : BasePageFragment() {
         return getString(R.string.main_imagego)
     }
 
-    override fun getPageLayoutResId(): Int {
+    override fun getNavContentResID(): Int {
         return R.layout.fragment_imagego
     }
 
-    override fun initPageView() {
-
+    override fun initContentView() {
         rgStrategy.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbGlide -> ImageGoEngine.setImageStrategy(GlideImageStrategy())

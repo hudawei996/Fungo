@@ -11,10 +11,10 @@ import android.view.KeyEvent
 import android.view.View
 import android.webkit.*
 import android.widget.ProgressBar
-import com.fungo.baseuilib.fragment.BasePageFragment
-import com.fungo.baseuilib.utils.ViewUtils
 import com.fungo.baselib.web.sonic.SonicRuntimeImpl
 import com.fungo.baselib.web.sonic.SonicSessionClientImpl
+import com.fungo.baseuilib.fragment.BaseNavFragment
+import com.fungo.baseuilib.utils.ViewUtils
 import com.tencent.sonic.sdk.SonicConfig
 import com.tencent.sonic.sdk.SonicEngine
 import com.tencent.sonic.sdk.SonicSession
@@ -27,7 +27,7 @@ import com.tencent.sonic.sdk.SonicSessionConfig
  * 提供两种加载展示方法，默认使用进度条的方法
  */
 
-abstract class BaseWebFragment : BasePageFragment() {
+abstract class BaseWebFragment : BaseNavFragment() {
 
     private var mSonicSession: SonicSession? = null
     private var mSonicSessionClient: SonicSessionClientImpl? = null
@@ -45,9 +45,9 @@ abstract class BaseWebFragment : BasePageFragment() {
     }
 
     private fun init() {
-//        if (Build.VERSION.SDK_INT > 19) {
-//            WebView.setWebContentsDebuggingEnabled(true)
-//        }
+        if (Build.VERSION.SDK_INT > 19) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
         mIntent = getIntent(arguments)
         mWebUrl = getWebUrl(mIntent)
         mWebTitle = getWebTitle(mIntent)
@@ -65,7 +65,7 @@ abstract class BaseWebFragment : BasePageFragment() {
         return intent
     }
 
-    override fun initPageView() {
+    override fun initContentView() {
         initWebView()
     }
 

@@ -1,7 +1,7 @@
 package com.fungo.sample.main
 
-import com.fungo.baseuilib.activity.BasePageActivity
-import com.fungo.baseuilib.fragment.BasePageFragment
+import com.fungo.baseuilib.activity.BaseContentActivity
+import com.fungo.baseuilib.fragment.BaseFragment
 
 /**
  * @author Pinger
@@ -9,14 +9,9 @@ import com.fungo.baseuilib.fragment.BasePageFragment
  * 填充一个主页
  */
 
-class MainActivity : BasePageActivity() {
+class MainActivity : BaseContentActivity() {
 
-
-    override fun getPageFragment(): BasePageFragment {
+    override fun getContentFragment(): BaseFragment {
         return MainFragment()
     }
-
-    override fun isSwipeBackEnable(): Boolean = false
-
-
 }

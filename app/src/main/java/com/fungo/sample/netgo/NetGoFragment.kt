@@ -20,8 +20,10 @@ class NetGoFragment : BaseRecyclerFragment() {
         return NetGoPresenter(this)
     }
 
-    override fun initRecyView() {
+    override fun initPageView() {
         setPageTitle(getString(R.string.main_netgo))
         register(GankResults.Item::class.java, NetGoHolder())
     }
+
+    override fun isShowBackIcon(): Boolean = true
 }

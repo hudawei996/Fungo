@@ -6,7 +6,7 @@ package com.fungo.baseuilib.basic
  * MVP的P层基类
  */
 
-interface IBasePresenter {
+interface IMVPPresenter {
 
 
     /**

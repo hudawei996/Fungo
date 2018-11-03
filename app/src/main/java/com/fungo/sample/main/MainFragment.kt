@@ -17,16 +17,15 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseRecyclerFragment() {
 
-
-    override fun getPageLayoutResId(): Int {
-        return R.layout.fragment_main
+    override fun getNavContentResID(): Int {
+        return  R.layout.fragment_main
     }
 
     override fun getPageTitle(): String? {
         return getString(R.string.app_name)
     }
 
-    override fun initRecyView() {
+    override fun initPageView() {
         setSmartRefreshLayout(smartRefreshLayout)
         setRecyclerView(recyclerView)
         register(MainBean::class.java, MainHolder())

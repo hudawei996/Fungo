@@ -5,7 +5,6 @@ package com.fungo.baseuilib.basic
  * @since 2018/4/1 15:12
  *
  * 页面展示的一些接口
- *
  */
 interface IPageView {
 

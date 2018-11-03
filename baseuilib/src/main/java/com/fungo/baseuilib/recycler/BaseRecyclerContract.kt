@@ -1,7 +1,7 @@
 package com.fungo.baseuilib.recycler
 
-import com.fungo.baseuilib.basic.IBasePresenter
-import com.fungo.baseuilib.basic.IBaseView
+import com.fungo.baseuilib.basic.IMVPPresenter
+import com.fungo.baseuilib.basic.IMVPView
 
 /**
  * @author Pinger
@@ -12,7 +12,7 @@ import com.fungo.baseuilib.basic.IBaseView
 class BaseRecyclerContract {
 
 
-    interface View : IBaseView {
+    interface View : IMVPView {
 
 
         /**
@@ -43,7 +43,7 @@ class BaseRecyclerContract {
     }
 
 
-    interface Presenter : IBasePresenter {
+    interface Presenter : IMVPPresenter {
 
         /**
          * 加载数据

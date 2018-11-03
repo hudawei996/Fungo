@@ -22,15 +22,15 @@ import kotlinx.android.synthetic.main.base_fragment_web.*
 
 class WebFragment : BaseWebFragment() {
 
+    override fun getNavContentResID(): Int {
+        return R.layout.base_fragment_web
+    }
+
     private var uploadMessage: ValueCallback<Uri>? = null
     private var uploadMessageAboveL: ValueCallback<Array<Uri>>? = null
 
     companion object {
         private const val FILE_CHOOSER_RESULT_CODE = 1001
-    }
-
-    override fun getPageLayoutResId(): Int {
-        return R.layout.base_fragment_web
     }
 
     override fun getWebView(): WebView {

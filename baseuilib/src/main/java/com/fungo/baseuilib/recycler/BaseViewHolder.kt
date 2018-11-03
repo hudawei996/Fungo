@@ -3,10 +3,6 @@ package com.fungo.baseuilib.recycler
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import androidx.annotation.DrawableRes
-import androidx.annotation.IdRes
-import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +10,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.fungo.baseuilib.activity.BasePageActivity
+import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import com.fungo.baseuilib.activity.BaseActivity
 import com.fungo.baseuilib.basic.IView
-import com.fungo.baseuilib.fragment.BasePageFragment
+import com.fungo.baseuilib.fragment.BaseFragment
 
 /**
  * @author pinger
@@ -86,11 +86,11 @@ abstract class BaseViewHolder<T> : androidx.recyclerview.widget.RecyclerView.Vie
     /**
      * 专门用于在Holder中跳转Fragment
      */
-    protected fun startFragment(fragment: BasePageFragment) {
-        if (getContext() is BasePageActivity) {
-            (getContext() as BasePageActivity).start(fragment)
-        }else {
-            throw IllegalStateException("current page activity not extend BasePageActivity or implement SupportActivity")
+    protected fun startFragment(fragment: BaseFragment) {
+        if (getContext() is BaseActivity) {
+            (getContext() as BaseActivity).start(fragment)
+        } else {
+            throw IllegalStateException("current page activity not extend BaseActivity or extend SupportActivity")
         }
     }
 
@@ -122,6 +122,15 @@ abstract class BaseViewHolder<T> : androidx.recyclerview.widget.RecyclerView.Vie
         view?.visibility = visibility
     }
 
+    override fun setVisibility(id: Int, isVisible: Boolean) {
+        setVisibility(findView<View>(id), isVisible)
+    }
+
+    override fun setVisibility(view: View?, isVisible: Boolean) {
+        if (isVisible) setVisible(view)
+        else setGone(view)
+    }
+
     override fun setText(@IdRes id: Int, text: CharSequence?) {
         val textView = findView<View>(id) as TextView
         setText(textView, text)
@@ -138,11 +147,6 @@ abstract class BaseViewHolder<T> : androidx.recyclerview.widget.RecyclerView.Vie
     override fun setText(textView: TextView?, text: CharSequence?) {
         if (textView != null && !TextUtils.isEmpty(text)) {
             textView.text = text
-        }
-    }
-
-    override fun setImage(imageView: ImageView?, url: String?) {
-        if (imageView != null && !TextUtils.isEmpty(url)) {
         }
     }
 

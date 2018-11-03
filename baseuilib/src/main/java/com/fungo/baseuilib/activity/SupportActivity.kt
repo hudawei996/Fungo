@@ -14,11 +14,11 @@ import me.yokeyword.fragmentation_swipeback.core.SwipeBackActivityDelegate
 /**
  * @author Pinger
  * @since 18-7-24 下午7:50
+ *
  * 兼容Fragmentation类库的基类Activity
  * 主动实现Fragmentation常用的方法，不需要强制
  */
-
-abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBackActivity {
+open class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBackActivity {
 
     private val mDelegate = SupportActivityDelegate(this)
     private val mSwipeBackDelegate = SwipeBackActivityDelegate(this)
@@ -63,7 +63,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
     /**
      * 不建议复写该方法,请使用 [.onBackPressedSupport] 代替
      */
-    override fun onBackPressed() {
+    final override fun onBackPressed() {
         onBackPressedSupport()
     }
 
@@ -111,7 +111,7 @@ abstract class SupportActivity : AppCompatActivity(), ISupportActivity, ISwipeBa
      * Fragmentation默认使用Theme的android:windowbackground作为Fragment的背景,
      * 可以通过该方法改变Fragment背景。
      */
-    protected open fun setDefaultFragmentBackground(@DrawableRes backgroundRes: Int) {
+    fun setDefaultFragmentBackground(@DrawableRes backgroundRes: Int) {
         mDelegate.defaultFragmentBackground = backgroundRes
     }
 
