@@ -30,7 +30,7 @@ class PlaceholderFragment : BaseNavFragment() {
         }
     }
 
-    override fun getNavContentResID(): Int {
+    override fun getContentResID(): Int {
         return R.layout.base_fragment_placeholder
     }
 

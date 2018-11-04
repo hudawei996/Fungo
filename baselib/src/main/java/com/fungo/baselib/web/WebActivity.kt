@@ -21,7 +21,7 @@ class WebActivity : BaseSwipeBackActivity() {
         window?.addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
     }
 
-    override fun getNavFragment(): BaseFragment {
+    override fun getContentFragment(): BaseFragment {
         return WebFragment()
     }
 

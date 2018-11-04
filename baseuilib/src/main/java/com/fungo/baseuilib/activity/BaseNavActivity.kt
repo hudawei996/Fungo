@@ -58,8 +58,8 @@ abstract class BaseNavActivity(override val layoutResID: Int = R.layout.base_act
         }
 
         // 设置内容容器的填充方式
-        if (getNavContentResID() == 0) {
-            val fragment = getNavFragment()
+        if (getContentResID() == 0) {
+            val fragment = getContentFragment()
             // 转移Activity的extras给Fragment
             if (fragment.arguments == null && intent.extras != null) {
                 fragment.arguments = intent.extras
@@ -68,7 +68,7 @@ abstract class BaseNavActivity(override val layoutResID: Int = R.layout.base_act
             }
             loadRootFragment(R.id.baseNavContent, fragment)
         } else {
-            layoutInflater.inflate(getNavContentResID(), baseNavContent)
+            layoutInflater.inflate(getContentResID(), baseNavContent)
         }
 
         // 初始化容器View
@@ -78,12 +78,12 @@ abstract class BaseNavActivity(override val layoutResID: Int = R.layout.base_act
     /**
      * 子类继续填充内容容器布局
      */
-    protected open fun getNavContentResID(): Int = 0
+    protected open fun getContentResID(): Int = 0
 
     /**
      *  子类填充Fragment
      */
-    protected open fun getNavFragment(): BaseFragment = PlaceholderFragment()
+    protected open fun getContentFragment(): BaseFragment = PlaceholderFragment()
 
     /**
      * 给子类初始化View使用

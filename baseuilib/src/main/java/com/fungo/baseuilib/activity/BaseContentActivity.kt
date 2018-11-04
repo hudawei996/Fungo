@@ -12,14 +12,10 @@ import com.fungo.baseuilib.fragment.BaseFragment
  */
 abstract class BaseContentActivity : BaseNavActivity() {
 
-    override fun getNavFragment(): BaseFragment {
-        return getContentFragment()
-    }
-
     /**
      * 获取跟节点的Fragment
      */
-    abstract fun getContentFragment(): BaseFragment
+    abstract override fun getContentFragment(): BaseFragment
 
     /**
      * 专用用来填充Fragment，禁用标题栏

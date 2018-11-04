@@ -9,7 +9,7 @@ import com.fungo.sample.R
  */
 class TestFragment : BaseNavFragment() {
 
-    override fun getNavContentResID(): Int = R.layout.fragment_main
+    override fun getContentResID(): Int = R.layout.fragment_main
 
     override fun initContentView() {
         showPageContent()

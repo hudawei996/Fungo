@@ -21,10 +21,4 @@ abstract class BaseSwipeBackFragment : BaseNavFragment() {
      * 是否展示返回按钮
      */
     override fun isShowBackIcon(): Boolean = false
-
-    override fun getNavContentResID(): Int {
-        return getContentResID()
-    }
-
-    abstract fun getContentResID(): Int
 }

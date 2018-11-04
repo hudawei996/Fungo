@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.fungo.baseuilib.R
 import com.fungo.baseuilib.utils.ViewUtils
-import com.mikepenz.fontawesome_typeface_library.FontAwesome
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
@@ -198,7 +197,7 @@ object UiUtils {
      * 添加
      */
     fun setAddIconFont(view: ImageView) {
-        setIconFont(view, FontAwesome.Icon.faw_github)
+        setIconFont(view, MaterialDesignIconic.Icon.gmi_github)
     }
 
 }

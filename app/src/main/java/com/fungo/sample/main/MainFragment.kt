@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 
 class MainFragment : BaseRecyclerFragment() {
 
-    override fun getNavContentResID(): Int {
+    override fun getContentResID(): Int {
         return  R.layout.fragment_main
     }
 

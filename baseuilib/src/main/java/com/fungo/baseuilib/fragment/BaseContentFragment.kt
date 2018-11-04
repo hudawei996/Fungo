@@ -6,7 +6,6 @@ package com.fungo.baseuilib.fragment
  *
  * 没有导航栏的Fragment页面，专门用来填充页面
  */
-
 abstract class BaseContentFragment : BaseNavFragment() {
 
     override fun isShowToolBar(): Boolean = false

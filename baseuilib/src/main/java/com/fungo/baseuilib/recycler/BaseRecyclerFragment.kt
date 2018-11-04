@@ -35,7 +35,7 @@ abstract class BaseRecyclerFragment : BaseNavFragment(), BaseRecyclerContract.Vi
     }
 
 
-    override fun getNavContentResID(): Int {
+    override fun getContentResID(): Int {
         return R.layout.base_fragment_recycler
     }
 

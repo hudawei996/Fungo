@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.pinger'
+group = 'com.github.PingerOne'
 
 android {
     compileSdkVersion Integer.valueOf(rootProject.getBuildProperty()["compileSdkVersion"])
@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion Integer.valueOf(rootProject.getBuildProperty()["minSdkVersion"])
         targetSdkVersion Integer.valueOf(rootProject.getBuildProperty()["targetSdkVersion"])
-        versionCode Integer.valueOf(rootProject.getBuildProperty()["baseLibVersionCode"])
-        versionName rootProject.getBuildProperty()["baseLibVersionName"]
+        versionCode Integer.valueOf(rootProject.getBuildProperty()["baseUiLibVersionCode"])
+        versionName rootProject.getBuildProperty()["baseUiLibVersionName"]
     }
 
     buildTypes {
@@ -45,9 +45,6 @@ dependencies {
     api rootProject.getDependenceProperty()['smartrefresh_header']
 
     // 字体图标
-    api "com.mikepenz:iconics-core:3.1.0"
-    api 'com.mikepenz:material-design-iconic-typeface:2.2.0.5@aar'
-    api 'com.mikepenz:fontawesome-typeface:5.3.1.1@aar'
-    api 'com.mikepenz:foundation-icons-typeface:3.0.0.5@aar'
-    api 'com.mikepenz:ionicons-typeface:+@aar'
+    api rootProject.getDependenceProperty()['iconics']
+    api rootProject.getDependenceProperty()['material_design_iconic']
 }

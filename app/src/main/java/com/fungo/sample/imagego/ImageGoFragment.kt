@@ -28,7 +28,7 @@ class ImageGoFragment : BaseNavBackFragment() {
         return getString(R.string.main_imagego)
     }
 
-    override fun getNavContentResID(): Int {
+    override fun getContentResID(): Int {
         return R.layout.fragment_imagego
     }
 

@@ -68,7 +68,7 @@ abstract class BaseNavFragment : BaseFragment() {
         if (baseNavContent.childCount > 0) {
             baseNavContent.removeAllViews()
         }
-        LayoutInflater.from(context).inflate(getNavContentResID(), baseNavContent)
+        LayoutInflater.from(context).inflate(getContentResID(), baseNavContent)
 
         // 初始化容器View
         initContentView()
@@ -77,7 +77,7 @@ abstract class BaseNavFragment : BaseFragment() {
     /**
      * 子类继续填充内容容器布局
      */
-    abstract fun getNavContentResID(): Int
+    abstract fun getContentResID(): Int
 
     /**
      * 给子类初始化View使用
