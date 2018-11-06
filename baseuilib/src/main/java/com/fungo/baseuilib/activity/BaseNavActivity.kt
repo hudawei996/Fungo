@@ -8,7 +8,6 @@ import com.fungo.baseuilib.theme.UiUtils
 import com.fungo.baseuilib.utils.StatusBarUtils
 import com.fungo.baseuilib.utils.ViewUtils
 import kotlinx.android.synthetic.main.base_activity_nav.*
-import kotlinx.android.synthetic.main.base_fragment_page.*
 
 /**
  * @author Pinger
@@ -136,7 +135,7 @@ abstract class BaseNavActivity(override val layoutResID: Int = R.layout.base_act
      * @param isShow 是否展示
      */
     protected open fun setShowToolBar(isShow: Boolean) {
-        ViewUtils.setVisible(toolBarContainer, isShow)
+        ViewUtils.setVisible(baseNavAppBar, isShow)
     }
 
     /**
