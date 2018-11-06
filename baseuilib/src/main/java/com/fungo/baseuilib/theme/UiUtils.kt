@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.fungo.baseuilib.R
 import com.fungo.baseuilib.utils.ViewUtils
+import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 
 
 /**
@@ -190,14 +190,14 @@ object UiUtils {
      * 返回键
      */
     fun getBackIconFont(context: Context): Drawable {
-        return getIconFont(context, MaterialDesignIconic.Icon.gmi_arrow_back)
+        return getIconFont(context, GoogleMaterial.Icon.gmd_arrow_back)
     }
 
     /**
      * 添加
      */
     fun setAddIconFont(view: ImageView) {
-        setIconFont(view, MaterialDesignIconic.Icon.gmi_github)
+        setIconFont(view, GoogleMaterial.Icon.gmd_add)
     }
 
 }
