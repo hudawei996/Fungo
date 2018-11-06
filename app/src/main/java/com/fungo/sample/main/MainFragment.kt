@@ -18,16 +18,19 @@ import kotlinx.android.synthetic.main.fragment_main.*
 class MainFragment : BaseRecyclerFragment() {
 
     override fun getContentResID(): Int {
-        return  R.layout.fragment_main
+        return R.layout.fragment_main
     }
 
     override fun getPageTitle(): String? {
         return getString(R.string.app_name)
     }
 
-    override fun initPageView() {
+    override fun initPrePageView() {
         setSmartRefreshLayout(smartRefreshLayout)
         setRecyclerView(recyclerView)
+    }
+
+    override fun initPageView() {
         register(MainBean::class.java, MainHolder())
         UiUtils.setAddIconFont(floatActionButton)
 
@@ -54,7 +57,7 @@ class MainFragment : BaseRecyclerFragment() {
         MaterialDialog(context!!)
                 .title(R.string.theme_choose)
                 .colorChooser(context!!.resources.getIntArray(R.array.colors), initialSelection = UiUtils.getCurrentThemeColor(context!!)) { dialog, color ->
-                  context!!.setTheme(color)
+                    context!!.setTheme(color)
                 }
                 .positiveButton(R.string.confirm)
                 .show()

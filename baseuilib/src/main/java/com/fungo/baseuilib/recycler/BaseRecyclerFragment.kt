@@ -40,6 +40,7 @@ abstract class BaseRecyclerFragment : BaseNavFragment(), BaseRecyclerContract.Vi
     }
 
     final override fun initContentView() {
+        initPrePageView()
         setSmartRefreshLayout(findView(R.id.smartRefreshLayout))
         setRecyclerView(findView(R.id.recyclerView))
         mSmartRefreshLayout?.refreshHeader = MaterialHeader(context)
@@ -64,6 +65,7 @@ abstract class BaseRecyclerFragment : BaseNavFragment(), BaseRecyclerContract.Vi
 
         initPageView()
     }
+
 
     final override fun initData() {
         mPage = 0
@@ -296,6 +298,11 @@ abstract class BaseRecyclerFragment : BaseNavFragment(), BaseRecyclerContract.Vi
      * 是否展示加载对话框
      */
     protected open fun isShowLoadingDialog() = false
+
+    /**
+     * 初始化父类UI之前调用的方法
+     */
+    protected open fun initPrePageView() {}
 
     /**
      * 让子类重写，初始化页面
