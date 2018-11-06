@@ -20,6 +20,7 @@ object FileUtils {
     private const val PATH_DATA = "Fungo"
     private const val PATH_IMAGE = "images"
     private const val PATH_VIDEO = "videos"
+    private const val PATH_MP3 = "mp3"
     private const val PATH_CACHE = "cache"
 
     /** 获取项目数据目录的路径字符串 */
@@ -55,6 +56,14 @@ object FileUtils {
     /** 获取视频存储的路径 */
     fun getVideoPatch(context: Context?): String {
         val path = getAppDataPath(context) + File.separator + PATH_VIDEO + File.separator
+        createOrExistsDir(path)
+        return path
+    }
+
+
+    /** 获取Mp3存储的路径 */
+    fun getMp3Patch(context: Context?): String {
+        val path = getAppDataPath(context) + File.separator + PATH_MP3 + File.separator
         createOrExistsDir(path)
         return path
     }
