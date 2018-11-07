@@ -10,6 +10,8 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.IntDef
+import com.fungo.baseuilib.R
+import com.fungo.baseuilib.theme.UiUtils
 
 /**
  * @author Pinger
@@ -53,6 +55,7 @@ object StatusBarUtils {
     /**
      * 修改状态栏颜色，支持4.4以上版本
      * 没有设置沉浸式的时候，通过这个方法可以修改状态栏颜色
+     * @param colorId 颜色的int ID
      */
     fun setStatusBarBackgroundColor(activity: Activity, colorId: Int) {
         // 只设置4.4以上的系统
@@ -61,6 +64,18 @@ object StatusBarUtils {
             window.statusBarColor = colorId
         }
     }
+
+    /**
+     * 设置默认的主题背景颜色
+     */
+    fun setStatusBarBackgroundColor(activity: Activity) {
+        // 只设置4.4以上的系统
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = activity.window
+            window.statusBarColor = UiUtils.getThemeColor(activity, R.attr.colorPrimaryDark)
+        }
+    }
+
 
     /**
      * 设置状态栏字体颜色

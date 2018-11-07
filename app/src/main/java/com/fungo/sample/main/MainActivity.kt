@@ -11,6 +11,7 @@ import com.fungo.baseuilib.fragment.BaseFragment
 
 class MainActivity : BaseContentActivity() {
 
+
     override fun getContentFragment(): BaseFragment {
         return MainFragment()
     }

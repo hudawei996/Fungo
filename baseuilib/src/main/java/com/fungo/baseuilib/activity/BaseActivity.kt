@@ -47,14 +47,23 @@ abstract class BaseActivity : SupportActivity(), IView {
      * 提前初始化状态栏和主题颜色等属性
      */
     private fun initPre() {
-        // 沉浸式
-        if (isStatusBarTranslate()) StatusBarUtils.setStatusBarTranslucent(this)
         // 主题
         UiUtils.setCurrentTheme(this, UiUtils.getCurrentTheme(this))
-        // 设置状态栏背景颜色
+
+        // 沉浸式
+        if (isStatusBarTranslate()) {
+            StatusBarUtils.setStatusBarTranslucent(this)
+        } else {
+            // 设置状态栏背景颜色
+            StatusBarUtils.setStatusBarBackgroundColor(this)
+        }
+
+        // 设置状态栏前景颜色
         StatusBarUtils.setStatusBarForegroundColor(this, isStatusBarForegroundBlack())
+
         // 设置是否可以滑动返回，默认可以
         setSwipeBackEnable(isSwipeBackEnable())
+
         // 设置Fragment的默认背景颜色
         setDefaultFragmentBackground(R.color.grey_f7)
     }
@@ -98,7 +107,7 @@ abstract class BaseActivity : SupportActivity(), IView {
     /**
      * 状态栏前景色是否是黑色
      */
-    protected open fun isStatusBarForegroundBlack(): Boolean = true
+    protected open fun isStatusBarForegroundBlack(): Boolean = false
 
     /**
      * 是否可以滑动返回，默认不可以，如果想滑动返回可以重写该方法
