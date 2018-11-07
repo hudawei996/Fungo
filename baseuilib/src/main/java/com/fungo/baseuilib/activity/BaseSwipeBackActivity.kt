@@ -7,20 +7,10 @@ package com.fungo.baseuilib.activity
  * 可以滑动返回的Activity
  * 默认带有导航栏，可以通过[isShowToolBar]方法移除
  */
-open class BaseSwipeBackActivity : BaseNavActivity() {
+open class BaseSwipeBackActivity : BaseNavBackActivity() {
 
     /**
      * 支持滑动返回
      */
     final override fun isSwipeBackEnable(): Boolean = true
-
-    /**
-     * 是否展示标题栏
-     */
-    override fun isShowToolBar(): Boolean = true
-
-    /**
-     * 是否展示返回按钮
-     */
-    override fun isShowBackIcon(): Boolean = false
 }
